@@ -1,0 +1,15 @@
+MARCO - player, nemici
+GUERRINI - mondo, salvataggio
+MIKE - mercato, powerup
+
+
+
+si può passare a un livello successivo solo se sono morti tutti i nemici.
+
+il player può solo sparare proiettili, che con i power up possono diventare più potenti.
+il nemico più semplice si muove avanti/indietro ignorando il player e se lo colpisce fa molto danno e scompare.
+il secondo nemico resta fermo e spara
+il nemico più forte è grande e può sparare laser a due altezze diverse.
+i laser sono istantanei ma visivamente impiegano tempo a caricarsi
+
+

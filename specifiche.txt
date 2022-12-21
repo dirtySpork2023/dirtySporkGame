@@ -3,13 +3,50 @@ GUERRINI - mondo, salvataggio
 MIKE - mercato, powerup
 
 
+	REGOLE
+# Man mano che si procede la difficoltà aumenta (più nemici, meno potenziamenti)
+# Devono essere presenti diversi tipi di nemici e una valuta
+# La valuta può essere utilizzata per acquistare potenziamenti (vita, poteri, armi)
+# c'è un punteggio
+# c'è una valuta
+-si può passare a un livello successivo solo se sono morti tutti i nemici.
 
-si può passare a un livello successivo solo se sono morti tutti i nemici.
+	MONDO
+# Le stanze e gli elementi in una stanza devono essere gestiti tramite strutture dati dinamiche (prevedendo, quindi, inserimento e rimozione)
+# La mappa deve avere una grafica ASCII, è possibile utilizzare solo le librerie curses/ncurses.h
+# Lo schema del livello è scelto random da un insieme di livelli pre-definiti (o generati random).
+# non si parte mai dallo stesso schema.
+# Non esistono traguardi
+# Durante la partita, il protagonista può tornare indietro di schema e trovare esattamente tutto come lo ha lasciato
+-set di mappe che si alternano casualmente (infinitamente)
+-funzione che ritorna un carattere per sapere cosa si trova a una certa coordinata
 
-il player può solo sparare proiettili, che con i power up possono diventare più potenti.
-il nemico più semplice si muove avanti/indietro ignorando il player e se lo colpisce fa molto danno e scompare.
-il secondo nemico resta fermo e spara
-il nemico più forte è grande e può sparare laser a due altezze diverse.
-i laser sono istantanei ma visivamente impiegano tempo a caricarsi
+	PLAYER
+# Game over quando la vita scende a 0
+# Il giocatore umano controlla il protagonista
+# Se il protagonista muore, mantiene i bonus, poteri e/o armi che ha acquistato e alla prossima partita partirà da uno schema random (vedi punto 2) e una difficoltà proporzionata ai potenziamenti che ha acquisito
+-grande 3*3 caselle
+-ha 100 di vita e un armatura
+ °armatura: copre da una percentuale dei danni
+-spara proiettili nella direzione in cui guarda
+ °pistola: possono variare di potenza e frequenza
+-salta
+-va avanti e indietro
+
+	NEMICI
+# Devono essere presenti diversi tipi di nemici e una valuta
+# Nel percorso il protagonista incontra nemici i quali possono togliere vita colpendo o entrando a contatto con il protagonista
+# I nemici sono controllati dal computer: si possono muovere e sparare, possono venire uccisi dal protagonista (es. sparando)
+1- si muove avanti/indietro ignorando il player e se lo colpisce fa molto danno e scompare.
+2- resta fermo e spara
+3- è grande e può sparare laser a due altezze diverse.
+ °i laser sono istantanei ma visivamente impiegano tempo a caricarsi
+
+
+	MERCATO
+# Il gioco deve quindi prevedere un livello market (e.g., a inizio partita) in cui acquisire vita aggiuntiva, poteri e/o armi.
+- livello 2
+- si può comprare tutto (armi, powerup)
+- powerup: armatura, guarigione, danno aggiuntivo, 
 
 

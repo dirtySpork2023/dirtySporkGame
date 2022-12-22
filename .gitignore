@@ -1,3 +1,4 @@
 # vengono caricati solo source code e l'eseguibile
 *.o
 *.out
+.idea

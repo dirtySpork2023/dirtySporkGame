@@ -14,10 +14,10 @@ player::player(int x, int y){
 }
 
 void player::print(){
-	for(int y=5 ; y<=7 ; y++){
-		for(int x=5 ; x<=7 ; x++){
+	for(int y=this->pos.y-1 ; y<=this->pos.y+1 ; y++){
+		for(int x=this->pos.x-1 ; x<=this->pos.x+1 ; x++){
 			move(y, x) ;
-			printw("%c", texture[y-5][x-5]) ;
+			printw("%c", texture[y-pos.y+1][x-pos.x+1]) ;
 		}
 	}
 }

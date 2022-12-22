@@ -8,8 +8,13 @@ long int deltaTime ; // durata in nanosecondi di ogni "ciclo" del gioco
 
 int main(){
 	initscr() ;
+	noecho() ; // così gli input non appaiono scritti
+	cbreak() ;
+	nodelay(stdscr, TRUE) ; // così getch() non ferma il programma
+
 	deltaTime = 0 ;
 	player P = player(6,6) ;
+	char input ;
 
 	while(true){
 		//carica il livello
@@ -18,10 +23,11 @@ int main(){
 			std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now() ; //tick
 
 			//  INPUT
-
+			input = getch() ;
 
 			//  calcoli
-
+			if(input=='a') P.pos.x--;
+			else if(input=='d') P.pos.x++;
 
 			double seconds = deltaTime/(double)1000000000 ; //da nanosecondi a secondi
 			double fps = 1/seconds ;

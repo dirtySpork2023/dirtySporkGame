@@ -15,6 +15,7 @@ int main(){
 
 	deltaTime = 0 ;
 	player P = player(20,5) ;
+	double projectile = 1 ;
 	char input ;
 	bool quit = false ;
 
@@ -30,7 +31,9 @@ int main(){
 			//  calcoli
 			P.move(input) ;
 			if( input=='m' ) quit = true ;
-			
+			if( input=='k' ) projectile = 6 ;
+			projectile += 1000.0/deltaTime ;
+
 			double seconds = deltaTime/(double)1000000000 ; //da nanosecondi a secondi
 			double fps = 1/seconds ;
 
@@ -40,6 +43,7 @@ int main(){
 			printw("-fps: %.0f ", fps) ;
 			printw("-seconds: %f ", seconds) ;//quanti secondi dura un ciclo
 			P.print() ;
+			mvprintw(P.pos.y, P.pos.x+(int)projectile-1, " #") ;
 			refresh() ;
 
 			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now() ; //tock

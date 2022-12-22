@@ -5,15 +5,16 @@ struct point {
 };
 
 struct hitBox {
-	point NE ; //nord-est
-	point SO ; //sud-ovest
+	point a ; // top left
+	point b ; // bottom right
 };
 
 class player{
 public:
-	point pos ;
+	point pos ; // relativa alla casella centrale, torso
+	double ySpeed ;
+	double yMod ;
 	hitBox box ;
-	int health ;
 	char texture[3][3] = {
 			{' ','O',' '},
 			{'/','W','\\'},

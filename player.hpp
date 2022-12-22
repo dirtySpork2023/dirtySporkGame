@@ -23,4 +23,5 @@ public:
 public:
 	player(int x, int y) ;
 	void print() ;
+	void move(char input) ;
 };

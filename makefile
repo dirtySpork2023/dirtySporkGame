@@ -1,7 +1,9 @@
-game: main.o main.cpp player.o player.cpp player.hpp
+all: game
+
+game: main.o player.o
 	g++ -o game.exe main.o player.o -lncurses
 
-main.o:
+main.o: main.cpp
 	g++ -c main.cpp
 
 player.o: player.cpp player.hpp

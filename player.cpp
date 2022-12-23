@@ -27,15 +27,30 @@ void player::print(){
 }
 
 void player::move(char input){
+	bool jump = false ;
+	bool left = false ;
+	bool right = false ;
+
+	if( input=='a' ) left = true ;
+	if( input=='d' ) right = true ;
+	if( input=='A' ){
+		left = true ;
+		jump = true ;
+	}
+	if( input=='D' ){
+		right = true ;
+		jump = true ;
+	}
+
+
 	// horizontal
-	if( input=='a' ){
+	if( left ){
 		this->pos.x -= 1 ;
 		//cleanup
 		for(int y=this->pos.y-1 ; y<=this->pos.y+1 ; y++){
 			mvprintw(y, this->pos.x+2, " ") ;
 		}
-	}
-	if( input=='d' ){
+	}else if( right ){
 		this->pos.x += 1 ;
 		// cleanup
 		for(int y=-1 ; y<=1 ; y++){
@@ -44,12 +59,12 @@ void player::move(char input){
 	}
 
 	// vertical
-	if( input=='w' ){
-		this->ySpeed = -0.0015 ; //jump vertical speed
+	if( jump ){
+		this->ySpeed = -0.005 ; //jump vertical speed
 	}
 
 
-	this->ySpeed += 0.0000001 ; //TODO deltaTime
+	this->ySpeed += 0.000001 ; // gravity //TODO deltaTime
 	this->yMod += this->ySpeed ;
 
 	if(this->yMod > 1){

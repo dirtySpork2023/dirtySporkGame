@@ -7,6 +7,7 @@ using namespace std ;
 long int deltaTime ; // durata in nanosecondi di ogni "ciclo" del gioco
 
 int main(){
+
 	initscr() ;
 	noecho() ;
 	cbreak() ;
@@ -48,8 +49,10 @@ int main(){
 			mvprintw(0, 12, "|delta: %d ", deltaTime) ;//quanti secondi dura un ciclo
 			mvprintw(0, 40, "|v: %f ", P.ySpeed) ;
 			mvprintw(0, 60, "|y: %d_%.2f", P.pos.y, P.yMod) ;
+			move(32, 0) ;
+			for(int i=0 ; i<120 ; i++){ printw("#"); }
 			P.print() ;
-			mvprintw(P.pos.y, P.pos.x+(int)projectile-1, " -") ;
+			mvprintw(P.pos.y, P.pos.x+(int)projectile-1, " #") ;
 			refresh() ;
 
 			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now() ; //tock

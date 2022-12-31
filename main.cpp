@@ -30,10 +30,11 @@ int main(){
 			input = getch() ;
 
 			//  CALCOLI
-			P.move(input) ;
+			P.move(input, deltaTime) ;
 			if( input=='q' ) quit = true ;
 			if( input=='f' ) projectile = 6 ;
-			projectile += 500.0/deltaTime ;
+			if( P.facing==true ) projectile += 500.0/deltaTime ;
+			else projectile -= 500.0/deltaTime ;
 			if( P.pos.y > 30 ) {
 				P.pos.y = 30 ;
 				P.ySpeed = 0 ;
@@ -52,7 +53,7 @@ int main(){
 			move(32, 0) ;
 			for(int i=0 ; i<120 ; i++){ printw("#"); }
 			P.print() ;
-			mvprintw(P.pos.y, P.pos.x+(int)projectile-1, " #") ;
+			mvprintw(P.pos.y, P.pos.x+(int)projectile-1, " # ") ;
 			refresh() ;
 
 			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now() ; //tock

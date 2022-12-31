@@ -1,8 +1,6 @@
 #include "player.hpp"
 #include "ncurses.h"
 
-extern long int deltaTime ;
-
 player::player(int y, int x){
 	// la posizione indica il torso del player
 	this->pos.x = x ;
@@ -16,17 +14,23 @@ player::player(int y, int x){
 	this->box.a.y = -1 ;
 	this->box.b.x = +1 ;
 	this->box.b.y = +1 ;
+
+	this->facing = true ; // destra
 }
 
 void player::print(){
 	for(int y=-1 ; y<=1 ; y++){
 		for(int x=-1 ; x<=1 ; x++){
-			mvprintw(y+this->pos.y, x+this->pos.x, "%c", texture[y+1][x+1]) ;
+			if( facing==true ){
+				mvprintw(y+this->pos.y, x+this->pos.x, "%c", texture[y+1][x+1]) ;
+			}else{
+				mvprintw(y+this->pos.y, x+this->pos.x, "%c", reverse[y+1][x+1]) ;
+			}
 		}
 	}
 }
 
-void player::move(char input){
+void player::move(char input, long int deltaTime){
 	bool jump = false ;
 	bool left = false ;
 	bool right = false ;
@@ -41,16 +45,21 @@ void player::move(char input){
 		right = true ;
 		jump = true ;
 	}
+	if( input=='w' ){
+		jump = true ;
+	}
 
 
 	// horizontal
 	if( left ){
+		facing = false ;
 		this->pos.x -= 1 ;
 		//cleanup
 		for(int y=this->pos.y-1 ; y<=this->pos.y+1 ; y++){
 			mvprintw(y, this->pos.x+2, " ") ;
 		}
 	}else if( right ){
+		facing = true ;
 		this->pos.x += 1 ;
 		// cleanup
 		for(int y=-1 ; y<=1 ; y++){
@@ -59,12 +68,12 @@ void player::move(char input){
 	}
 
 	// vertical
-	if( jump ){
-		this->ySpeed = -0.005 ; //jump vertical speed
+	if( jump && this->pos.y >= 30 ){
+		this->ySpeed = -0.0035 ; //jump vertical speed
 	}
 
 
-	this->ySpeed += 0.000001 ; // gravity //TODO deltaTime
+	this->ySpeed += 0.025 / deltaTime ;
 	this->yMod += this->ySpeed ;
 
 	if(this->yMod > 1){

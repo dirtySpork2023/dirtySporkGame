@@ -16,13 +16,19 @@ public:
 	double yMod ;
 	hitBox box ;
 	char texture[3][3] = {
-			{' ','O',' '},
-			{'/','W','\\'},
+			{'_','p',' '},
+			{'>','W','"'},
 			{'/','"','\\'},
 	};
+	char reverse[3][3] = {
+			{' ','q','_'},
+			{'"','W','<'},
+			{'/','"','\\'},
+	};
+	bool facing ; //true = detra / false = sinistra
 
 public:
 	player(int x, int y) ;
 	void print() ;
-	void move(char input) ;
+	void move(char input, long int deltaTime) ;
 };

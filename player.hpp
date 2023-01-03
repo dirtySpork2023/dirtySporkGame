@@ -1,13 +1,15 @@
+#include "bullet.hpp"
+
 
 struct point {
 	int x ;
 	int y ;
 };
-
 struct hitBox {
 	point a ; // top left
 	point b ; // bottom right
 };
+
 
 class player{
 public:
@@ -26,6 +28,7 @@ public:
 			{'/','"','\\'},
 	};
 	bool facing ; //true = detra / false = sinistra
+	bullet B ;
 
 public:
 	player(int x, int y) ;

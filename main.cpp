@@ -16,7 +16,6 @@ int main(){
 
 	deltaTime = 0 ;
 	player P = player(3,10) ;
-	double projectile = 1 ;
 	char input ;
 	bool quit = false ;
 
@@ -32,9 +31,9 @@ int main(){
 			//  CALCOLI
 			P.move(input, deltaTime) ;
 			if( input=='q' ) quit = true ;
-			if( input=='f' ) projectile = 6 ;
-			if( P.facing==true ) projectile += 500.0/deltaTime ;
-			else projectile -= 500.0/deltaTime ;
+			if( input=='f' ){
+				//TODO shoot new projectile
+			}
 			if( P.pos.y > 30 ) {
 				P.pos.y = 30 ;
 				P.ySpeed = 0 ;
@@ -53,7 +52,6 @@ int main(){
 			move(32, 0) ;
 			for(int i=0 ; i<120 ; i++){ printw("#"); }
 			P.print() ;
-			mvprintw(P.pos.y, P.pos.x+(int)projectile-1, " # ") ;
 			refresh() ;
 
 			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now() ; //tock

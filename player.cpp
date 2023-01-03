@@ -1,5 +1,6 @@
+#include <ncurses.h>
+
 #include "player.hpp"
-#include "ncurses.h"
 
 player::player(int y, int x){
 	// la posizione indica il torso del player
@@ -16,12 +17,14 @@ player::player(int y, int x){
 	this->box.b.y = +1 ;
 
 	this->facing = true ; // destra
+
+	B = bullet();
 }
 
 void player::print(){
 	for(int y=-1 ; y<=1 ; y++){
 		for(int x=-1 ; x<=1 ; x++){
-			if( facing==true ){
+			if( facing ){
 				mvprintw(y+this->pos.y, x+this->pos.x, "%c", texture[y+1][x+1]) ;
 			}else{
 				mvprintw(y+this->pos.y, x+this->pos.x, "%c", reverse[y+1][x+1]) ;
@@ -35,6 +38,7 @@ void player::move(char input, long int deltaTime){
 	bool left = false ;
 	bool right = false ;
 
+
 	if( input=='a' ) left = true ;
 	if( input=='d' ) right = true ;
 	if( input=='A' ){
@@ -46,6 +50,9 @@ void player::move(char input, long int deltaTime){
 		jump = true ;
 	}
 	if( input=='w' ){
+		jump = true ;
+	}
+	if( input=='F' ){
 		jump = true ;
 	}
 
@@ -90,5 +97,10 @@ void player::move(char input, long int deltaTime){
 		for(int x=this->pos.x-1 ; x<=this->pos.x+1 ; x++){
 			mvprintw(this->pos.y+2, x, " ") ;
 		}
+	}
+
+	// shoot
+	if( input=='f' || input=='F' ){
+		//B.add(this.pos.x, this.pos.y, 500) ;
 	}
 }

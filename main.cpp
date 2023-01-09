@@ -32,8 +32,11 @@ int main(){
 			P.move(input, deltaTime) ;
 			if( input=='q' ) quit = true ;
 			if( input=='f' ){
-				//TODO shoot new projectile
+				P.shoot(true, deltaTime) ;
+			}else{
+				P.shoot(false, deltaTime) ;
 			}
+
 			if( P.pos.y > 30 ) {
 				P.pos.y = 30 ;
 				P.ySpeed = 0 ;

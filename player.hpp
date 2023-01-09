@@ -1,15 +1,5 @@
+#include "lib.hpp"
 #include "bullet.hpp"
-
-
-struct point {
-	int x ;
-	int y ;
-};
-struct hitBox {
-	point a ; // top left
-	point b ; // bottom right
-};
-
 
 class player{
 public:
@@ -18,20 +8,21 @@ public:
 	double yMod ;
 	hitBox box ;
 	char texture[3][3] = {
-			{'_','p',' '},
-			{'>','W','"'},
+			{' ','p',' '},
+			{'>','W','='},
 			{'/','"','\\'},
 	};
 	char reverse[3][3] = {
-			{' ','q','_'},
-			{'"','W','<'},
+			{' ','q',' '},
+			{'=','W','<'},
 			{'/','"','\\'},
 	};
-	bool facing ; //true = detra / false = sinistra
+	bool facing ; //true = destra / false = sinistra
 	bullet B ;
 
 public:
 	player(int x, int y) ;
 	void print() ;
 	void move(char input, long int deltaTime) ;
+	void shoot(bool input, long int deltaTime) ;
 };

@@ -1,6 +1,8 @@
 #include <ncurses.h>
 
+#include "lib.hpp"
 #include "player.hpp"
+#include "bullet.hpp"
 
 player::player(int y, int x){
 	// la posizione indica il torso del player
@@ -22,6 +24,10 @@ player::player(int y, int x){
 }
 
 void player::print(){
+	//bullets
+	B.print();
+
+	//player
 	for(int y=-1 ; y<=1 ; y++){
 		for(int x=-1 ; x<=1 ; x++){
 			if( facing ){
@@ -98,9 +104,15 @@ void player::move(char input, long int deltaTime){
 			mvprintw(this->pos.y+2, x, " ") ;
 		}
 	}
+}
 
-	// shoot
-	if( input=='f' || input=='F' ){
-		//B.add(this.pos.x, this.pos.y, 500) ;
+void player::shoot(bool input, long int deltaTime){
+	if( input==true ){
+		if( facing==true ){
+			B.add(this->pos.x, this->pos.y, +500) ;
+		}else{
+			B.add(this->pos.x, this->pos.y, -500) ;
+		}
 	}
+	B.update(deltaTime) ;
 }

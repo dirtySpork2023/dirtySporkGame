@@ -22,16 +22,20 @@ MIKE - mercato, powerup
 -funzione che ritorna un carattere per sapere cosa si trova a una certa coordinata
 
 	PLAYER
-# Game over quando la vita scende a 0
 # Il giocatore umano controlla il protagonista
-# Se il protagonista muore, mantiene i bonus, poteri e/o armi che ha acquistato e alla prossima partita partirà da uno schema random (vedi punto 2) e una difficoltà proporzionata ai potenziamenti che ha acquisito
 -grande 3*3 caselle
--ha 100 di vita e un armatura
- °armatura: copre da una percentuale dei danni
--spara proiettili nella direzione in cui guarda
- °pistola: possono variare di potenza e frequenza
 -salta
 -va avanti e indietro
+-spara proiettili nella direzione in cui guarda
+ °frequenza variabile
+ °danno variabile
+
+# Game over quando la vita scende a 0
+# Se il protagonista muore, mantiene i bonus, poteri e/o armi che ha acquistato
+  e alla prossima partita partirà da uno schema random (vedi punto 2)
+  e una difficoltà proporzionata ai potenziamenti che ha acquisito
+-ha 100 di vita e un armatura
+ °armatura: copre da una percentuale dei danni
 
 	NEMICI
 # Devono essere presenti diversi tipi di nemici e una valuta

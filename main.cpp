@@ -1,10 +1,11 @@
 #include <ncurses.h>
 #include <chrono>
-
 #include "player.hpp"
 using namespace std ;
 
-long int deltaTime ; // durata in nanosecondi di ogni "ciclo" del gioco
+#define TIME_POINT std::chrono::steady_clock::time_point
+#define NOW std::chrono::steady_clock::now
+#define NANOSECONDS std::chrono::duration_cast<std::chrono::nanoseconds>
 
 int main(){
 
@@ -14,8 +15,8 @@ int main(){
 	nodelay(stdscr, TRUE) ;
 	curs_set(0) ;
 
-	deltaTime = 0 ;
-	player P = player(3,10) ;
+	long int deltaTime = 0 ; // durata in nanosecondi di ogni "ciclo" del gioco
+	player P = player(3,10,0.3,10,100) ;
 	char input ;
 	bool quit = false ;
 
@@ -23,7 +24,7 @@ int main(){
 		//carica il livello
 
 		while( !quit ){
-			std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now() ; //tick
+			TIME_POINT begin = NOW() ; //tick
 
 			//  INPUT
 			input = getch() ;
@@ -31,18 +32,16 @@ int main(){
 			//  CALCOLI
 			P.move(input, deltaTime) ;
 			if( input=='q' ) quit = true ;
-			if( input=='f' ){
+			if( input=='f' || input=='F' ){
 				P.shoot(true, deltaTime) ;
 			}else{
 				P.shoot(false, deltaTime) ;
 			}
-
 			if( P.pos.y > 30 ) {
 				P.pos.y = 30 ;
 				P.ySpeed = 0 ;
 				P.yMod = 0 ;
 			}
-
 			double seconds = deltaTime/(double)1000000000 ; //da nanosecondi a secondi
 			double fps = 1/seconds ;
 
@@ -57,8 +56,8 @@ int main(){
 			P.print() ;
 			refresh() ;
 
-			std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now() ; //tock
-			deltaTime = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() ;
+			TIME_POINT end = NOW() ; //tock
+			deltaTime = NANOSECONDS(end - begin).count() ;
 			// milli > micro > nano
 			// deltaTime viene calcolato in nanosecondi -> 1*10^-9 secondi
 		}

@@ -1,25 +1,28 @@
 #ifndef BULLET_HPP
 #define BULLET_HPP
 
+#include "lib.hpp"
+
 struct node {
-	double x ;
-	double y ;
-	double speed ;
-	node* next ;
+	vector pos;
+	double speed;
+	int damage;
+	node* next;
 };
 
 class bullet {
 protected:
-	node* head ; //lista di proiettili
-	node* tail ; //proiettile più recente
-	int num ; //numero di proiettili
-	char texture ;
-	void remove() ;
+	node* head; //lista di proiettili
+	node* tail; //proiettile più recente
+	int num; //numero di proiettili
+	void remove();
 
 public:
+	char texture;
 	bullet();
-	void add(int x, int y, double speed );
+	void add(point p, double speed, int damage);
 	void update(long int deltaTime);
+	int check(hitBox box);
 	void print();
 };
 

@@ -7,20 +7,20 @@ struct node {
 	vector pos;
 	double speed;
 	int damage;
+	char texture;
 	node* next;
 };
 
-class bullet {
-protected:
+class bulletManager {
+private:
 	node* head; //lista di proiettili
 	node* tail; //proiettile più recente
 	int num; //numero di proiettili
 	void remove();
 
 public:
-	char texture;
-	bullet();
-	void add(point p, double speed, int damage);
+	bulletManager();
+	void add(point p, double speed, int damage, char texture);
 	void update(long int deltaTime);
 	int check(hitBox box);
 	void print();

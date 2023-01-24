@@ -9,14 +9,13 @@ using namespace std;
 
 #define MAX_BULLETS 50
 
-bullet::bullet(){
+bulletManager::bulletManager(){
 	this->head = NULL;
 	this->tail = NULL;
 	this->num = 0;
-	this->texture = '@';
 }
 
-void bullet::add(point p, double speed, int damage){
+void bulletManager::add(point p, double speed, int damage, char texture){
 	//postCondition: aggiunge un elemento in coda
 	node* tmp = new node;
 	tmp->next = NULL;
@@ -29,6 +28,7 @@ void bullet::add(point p, double speed, int damage){
  	tmp->pos = v;
 	tmp->speed = speed;
 	tmp->damage = damage;
+	tmp->texture = texture;
 	this->num++;
 
 	if( this->num > MAX_BULLETS ){ //TODO verificare se i proiettili sono fuori dallo schermo
@@ -36,7 +36,7 @@ void bullet::add(point p, double speed, int damage){
 	}
 }
 
-void bullet::remove(){
+void bulletManager::remove(){
 	//preCondition: num > 2  <=>  head!=NULL && head->next!=NULL
 	//postCondition: rimuove l'elemento in testa
 	node* tmp = this->head->next;
@@ -45,7 +45,7 @@ void bullet::remove(){
 	this->num--;
 }
 
-void bullet::update(long int deltaTime){
+void bulletManager::update(long int deltaTime){
 	node* tmp = this->head;
 	while( tmp!=NULL ) {
 		tmp->pos.x += tmp->speed / deltaTime;
@@ -54,26 +54,29 @@ void bullet::update(long int deltaTime){
 	}
 }
 
-int bullet::check(hitBox box){
+int bulletManager::check(hitBox box){
 	//postCondition: ritorna -1 se non ci sono collisioni, altrimenti ritorna il danno del proiettile
 	node* tmp = this->head;
 	int result = -1;
 	while( tmp!=NULL ){
 		if( collisionHV(box, tmp->pos) ){
 			result = tmp->damage;
+			//TODO REMOVE BULLET BECAUSE IT HIT SMTH
 		}
 		tmp = tmp->next;
 	}
 	return result;
 }
 
-void bullet::print(){
+void bulletManager::print(){
 	node* tmp = this->head;
 	while( tmp!=NULL ){
+		mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c", tmp->texture );
+		// cleanup
 		if( tmp->speed>0 ){
-			mvprintw((int)tmp->pos.y, (int)tmp->pos.x-1, " %c", this->texture );
+			mvprintw((int)tmp->pos.y, (int)tmp->pos.x-1, " ");
 		}else{
-			mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c ", this->texture );
+			mvprintw((int)tmp->pos.y, (int)tmp->pos.x+1, " ");
 		}
 		tmp = tmp->next;
 	}

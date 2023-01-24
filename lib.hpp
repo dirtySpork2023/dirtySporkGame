@@ -2,18 +2,18 @@
 #define LIB_HPP
 
 struct point {
-	int x ;
-	int y ;
+	int x;
+	int y;
 };
 
 struct vector {
-	double x ;
-	double y ;
+	double x;
+	double y;
 };
 
 struct hitBox {
-	point a ; // top left
-	point b ; // bottom right
+	point a; // top left
+	point b; // bottom right
 };
 
 /*

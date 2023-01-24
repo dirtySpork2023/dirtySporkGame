@@ -5,11 +5,12 @@
 #include "bullet.hpp"
 
 class player{
-public:
+private:
 	int hp ;
 	point pos ; // relativa alla casella centrale, torso
 	double ySpeed ; // velocità verticale
 	double yMod ; // parte decimale di pos.y
+	bool isGrounded; // true se il player è sopra qualcosa di solido
 	hitBox box ;
 	char texture[3][3] = {
 			{' ','p',' '},
@@ -21,18 +22,19 @@ public:
 			{'=','W','<'},
 			{'/','"','\\'},
 	};
-	bool facing; //true = destra / false = sinistra
-	bullet B;
+	bool facing; //true==destra / false==sinistra
+	bulletManager* bM;
 	double fireRate; // proiettili massimi al secondo
 	int damage;
+	double elapsedSinceLastShot; // secondi
 
 public:
-	player(int x, int y, double gunFireRate, int gunDamage, int health) ;
+	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health) ;
 	void print() ;
-	void move(char input, long int deltaTime) ;
-	void shoot(bool input, long int deltaTime) ;
-	int checkCollisions(hitBox enemy);
+	void update(char input, long int deltaTime) ;
+	void shoot(long int deltaTime) ;
 	int getHealth();
+	void setGrounded(bool playerGrounded);
 };
 
 #endif //PLAYER_HPP

@@ -33,7 +33,10 @@ public:
 	void print() ;
 	void update(char input, long int deltaTime) ;
 	void shoot(long int deltaTime) ;
+	bool hurt(int value);
 	int getHealth();
+	point getPos();
+	hitBox getHitBox();
 	void setGrounded(bool playerGrounded);
 };
 

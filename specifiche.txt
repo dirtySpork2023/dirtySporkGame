@@ -41,10 +41,12 @@ MIKE - mercato, powerup
 # Devono essere presenti diversi tipi di nemici e una valuta
 # Nel percorso il protagonista incontra nemici i quali possono togliere vita colpendo o entrando a contatto con il protagonista
 # I nemici sono controllati dal computer: si possono muovere e sparare, possono venire uccisi dal protagonista (es. sparando)
-1- si muove avanti/indietro ignorando il player e se lo colpisce fa molto danno e scompare.
-2- resta fermo e spara
-3- è grande e può sparare laser a due altezze diverse.
- °i laser sono istantanei ma visivamente impiegano tempo a caricarsi
+1- Ruota: i muove avanti/indietro ignorando il player e se lo colpisce fa molto danno e scompare.
+1- la texture è un pò animata per far vedere che gira
+2- Scheletro: resta fermo e spara
+2- i proiettili che spara risentono della gravità
+3- Golem: è grande e può sparare brevi raffiche di proiettili da altezze diverse.
+
 
 
 	MERCATO

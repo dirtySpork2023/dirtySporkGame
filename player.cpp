@@ -60,23 +60,19 @@ void player::update(char input, long int deltaTime){
 
 
 	// vertical movement
-	if( this->pos.y==30 ) isGrounded=true; // temporaneo
+	if( this->pos.y==30 && ySpeed>=0 ) isGrounded=true; // temporaneo
 	else isGrounded=false;
-	if(isGrounded){
+
+	if(isGrounded ){
 		this->pos.y = 30;
 		this->ySpeed = 0;
 		this->yMod = 0;
-		if( (int)'A'<input && input<(int)'Z' || input=='w'){
-			this->ySpeed = -0.0035 ; //jump vertical speed
-			//this->isGrounded = false;
-			this->pos.y -= 1;
-			// cleanup
-			for(int x=this->pos.x-1 ; x<=this->pos.x+1 ; x++){
-				mvprintw(this->pos.y+2, x, " ");
-			}
+		if( (int)'A'<=input && input<=(int)'Z' || input=='w'){
+			this->ySpeed = -0.004 ; //jump vertical speed
+			this->isGrounded = false;
 		}
 	}else{
-		this->ySpeed += 0.025 / deltaTime; //gravity
+		this->ySpeed += 0.03 / deltaTime ; // gravity
 		this->yMod += this->ySpeed;
 		if(this->yMod > 1){
 			this->yMod -= 1;
@@ -104,23 +100,46 @@ void player::update(char input, long int deltaTime){
 }
 
 void player::shoot(long int deltaTime){
-	//static long elapsed = 0;
-	//double secondsElapsed = elapsed/(double)1000000000;
 	if( this->elapsedSinceLastShot > this->fireRate ){
 		this->elapsedSinceLastShot = 0;
-		int speed = 300;
-		if( facing==false ) speed *= -1;
-		this->bM->add(this->pos, speed, this->damage, 'o');
+		vector speed;
+		speed.x = 600;
+		speed.y = 0;
+		if( facing==false ) speed.x *= -1;
+		this->bM->add(this->pos, speed, false, this->damage, 'o');
 	}
-	//elapsed += deltaTime;
 }
 
+// danneggia il player e ritorna true se è morto
+bool player::hurt(int value){
+	this->hp -= value;
+	if(this->hp <= 0){
+		this->hp = 0;
+		return true;
+	}else{
+		return false;
+	}
+}
+
+// ritorna i punti vita del player
 int player::getHealth(){
 	return this->hp;
 }
 
+point player::getPos(){
+	return this->pos;
+}
+
+hitBox player::getHitBox(){
+	return this->box;
+}
+
 void player::setGrounded(bool playerGrounded){
-	this->isGrounded = playerGrounded;
+	if(playerGrounded && ySpeed>=0 ){
+		this->isGrounded = true;
+	}else{
+		this->isGrounded = false;
+	}
 }
 
 #endif //PLAYER_CPP

@@ -5,7 +5,8 @@
 
 struct node {
 	vector pos;
-	double speed;
+	vector speed;
+	bool gravity;
 	int damage;
 	char texture;
 	node* next;
@@ -16,11 +17,12 @@ private:
 	node* head; //lista di proiettili
 	node* tail; //proiettile più recente
 	int num; //numero di proiettili
-	void remove();
+	void removeOldest();
+	node* removeNode(hitBox target, node* p, int &damage);
 
 public:
 	bulletManager();
-	void add(point p, double speed, int damage, char texture);
+	void add(point p, vector speed, bool gravity, int damage, char texture);
 	void update(long int deltaTime);
 	int check(hitBox box);
 	void print();

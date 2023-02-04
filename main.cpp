@@ -20,10 +20,12 @@ int main(){
 	player P = player(3, 10, &B, 0.1, 10, 100);
 
 	hitBox prova;
-	prova.a.x = 40;
+	prova.a.x = 100;
 	prova.a.y = 28;
-	prova.b.x = 45;
+	prova.b.x = 102;
 	prova.b.y = 31;
+	mvprintw(prova.a.y, prova.a.x, "A");
+	mvprintw(prova.b.y, prova.b.x, "B");
 
 	char input;
 	bool quit = false;
@@ -35,7 +37,22 @@ int main(){
 			//  INPUT E CALCOLI
 			input = getch();
 			P.update(input, deltaTime);
+			if( input=='k' ){
+				point tmp;
+				tmp.x = prova.a.x;
+				tmp.y = prova.a.y;
+				vector speed;
+				speed.x = -180;
+				speed.y = -200;
+				B.add(tmp,speed,true,20,'G');
+			}
+			int pCheck = B.check(P.getHitBox());
+			quit = P.hurt(pCheck);
+
+
+			B.check(prova);
 			if( input=='q' ) quit = true;
+
 
 			B.update(deltaTime);
 			double seconds = deltaTime/(double)1000000000; //da nanosecondi a secondi
@@ -44,7 +61,8 @@ int main(){
 			//clear(); //è meglio stampare solo ciò che cambia
 			mvprintw(0, 1, "fps: %.0f ", 1/seconds);
 			mvprintw(0, 12, "|delta: %d ", deltaTime) ;//quanti secondi dura un ciclo
-			mvprintw(0, 40, "|hb: %d ", B.check(prova));
+			mvprintw(1, 1, "health: %d", P.getHealth());
+			if(pCheck != 0) mvprintw(2,1, "lastHurt: %d", pCheck);
 			move(32, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 

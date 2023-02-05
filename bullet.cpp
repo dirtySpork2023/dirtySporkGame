@@ -1,9 +1,5 @@
-#ifndef BULLET_CPP
-#define BULLET_CPP
-
 #include <ncurses.h>
 #include "lib.hpp"
-#include "lib.cpp" //senza di questo non compila per qualche motivo
 #include "bullet.hpp"
 using namespace std;
 
@@ -61,11 +57,14 @@ void bulletManager::update(long int deltaTime){
 	}
 }
 
+// rimuove ricorsivamente tutti i nodi in cui avviene una collisione, sommando i danni dei proiettili nella variabile damage.
 node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( p==NULL ) return NULL;
 	else if( collisionHV(target, p->pos) ){
 		damage += p->damage;
-		mvprintw(4,0,"damage: %d", damage);
+
+		// cleanup
+		mvprintw((int)p->pos.y, (int)p->pos.x, " ");
 
 		this->num--;
 		if( p==this->head ){
@@ -84,11 +83,10 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	}
 }
 
-// ritorna 0 se non ci sono collisioni, altrimenti ritorna il danno del proiettile [ed elimina il proiettile dalla lista]
+// ritorna 0 se non ci sono collisioni, altrimenti ritorna il danno del proiettile (ed elimina il proiettile dalla lista)
 int bulletManager::check(hitBox target){
 	int result = 0;
 	this->head = this->removeNode(target, this->head, result);
-	mvprintw(5,0,"result: %d", result);
 	return result;
 }
 
@@ -115,5 +113,3 @@ void bulletManager::print(){
 	//mvprintw(2,0,"head: %d\t\t\t", this->head);
 	//mvprintw(3,0,"tail: %d\t\t\t", this->tail);
 }
-
-#endif //BULLET_CPP

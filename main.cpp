@@ -15,20 +15,18 @@ int main(){
 	nodelay(stdscr, TRUE);
 	curs_set(0);
 
-	long int deltaTime = 0 ; // durata in nanosecondi di ogni "ciclo" del gioco
-	bulletManager B = bulletManager();
-	player P = player(3, 10, &B, 0.1, 10, 100);
+	long int deltaTime = 0 ; // durata in nanosecondi di ogni ciclo del gioco
 
-	hitBox prova;
-	prova.a.x = 100;
-	prova.a.y = 28;
-	prova.b.x = 102;
-	prova.b.y = 31;
-	mvprintw(prova.a.y, prova.a.x, "A");
-	mvprintw(prova.b.y, prova.b.x, "B");
+	bulletManager B = bulletManager();
+
+	player P = player(10, 5, &B, 0.1, 10, 100);
+
+	player enemy = player(100, 5, &B, 0.3, 30, 50); //temporaneo
 
 	char input;
 	bool quit = false;
+	bool playerDead = false;
+	bool enemyDead = false;
 
 	while( !quit ){
 		while( !quit ){
@@ -36,38 +34,43 @@ int main(){
 
 			//  INPUT E CALCOLI
 			input = getch();
+			if( P.getPos().y==30 ) P.setGrounded(true);
+			else P.setGrounded(false);
 			P.update(input, deltaTime);
-			if( input=='k' ){
-				point tmp;
-				tmp.x = prova.a.x;
-				tmp.y = prova.a.y;
+			if( enemy.getPos().y==30 ) enemy.setGrounded(true);
+			else enemy.setGrounded(false);
+			enemy.update(input, deltaTime);
+			B.update(deltaTime);
+			if( input=='k' ){ //temporaneo
+				point muzzle;
+				muzzle.x = 120;
+				muzzle.y = 30;
 				vector speed;
 				speed.x = -180;
 				speed.y = -200;
-				B.add(tmp,speed,true,20,'G');
+				B.add(muzzle,speed,true,20,'G');
 			}
-			int pCheck = B.check(P.getHitBox());
-			quit = P.hurt(pCheck);
+			int playerDamage = B.check(P.getHitBox());
+			int enemyDamage = B.check(enemy.getHitBox());
+			playerDead = P.hurt(playerDamage);
+			enemyDead = enemy.hurt(enemyDamage);
 
+			if( input=='q' || playerDead ) quit = true;
 
-			B.check(prova);
-			if( input=='q' ) quit = true;
-
-
-			B.update(deltaTime);
 			double seconds = deltaTime/(double)1000000000; //da nanosecondi a secondi
 
 			//  OUTPUT
 			//clear(); //è meglio stampare solo ciò che cambia
 			mvprintw(0, 1, "fps: %.0f ", 1/seconds);
 			mvprintw(0, 12, "|delta: %d ", deltaTime) ;//quanti secondi dura un ciclo
-			mvprintw(1, 1, "health: %d", P.getHealth());
-			if(pCheck != 0) mvprintw(2,1, "lastHurt: %d", pCheck);
+			mvprintw(1, 1, "health: %3d", P.getHealth());
+			mvprintw(2, 1, "enemy: %3d", enemy.getHealth());
 			move(32, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 
 			B.print();
 			P.print();
+			enemy.print();
 			refresh();
 
 			TIME_POINT end = NOW(); //tock

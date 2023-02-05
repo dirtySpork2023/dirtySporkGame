@@ -16,7 +16,7 @@ class bulletManager {
 private:
 	node* head; //lista di proiettili
 	node* tail; //proiettile più recente
-	int num; //numero di proiettili
+	int num; //numero di proiettili in lista
 	void removeOldest();
 	node* removeNode(hitBox target, node* p, int &damage);
 

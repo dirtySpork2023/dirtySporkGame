@@ -22,11 +22,12 @@ private:
 			{'=','W','<'},
 			{'/','"','\\'},
 	};
-	bool facing; //true==destra / false==sinistra
+	bool facingRight; //true==destra / false==sinistra
 	bulletManager* bM;
-	double fireRate; // proiettili massimi al secondo
-	int damage;
-	double elapsedSinceLastShot; // secondi
+	double fireRate;
+	int dmg;
+	double elapsedSinceLastShot; // in secondi
+	void kill();
 
 public:
 	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health) ;

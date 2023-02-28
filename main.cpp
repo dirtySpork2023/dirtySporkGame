@@ -21,12 +21,12 @@ int main(){
 
 	player P = player(10, 5, &B, 0.1, 10, 100);
 
-	player enemy = player(100, 5, &B, 0.3, 30, 50); //temporaneo
+	//player enemy = player(100, 5, &B, 0.3, 30, 50); //temporaneo
 
 	char input;
 	bool quit = false;
 	bool playerDead = false;
-	bool enemyDead = false;
+	//bool enemyDead = false;
 
 	while( !quit ){
 		while( !quit ){
@@ -37,9 +37,9 @@ int main(){
 			if( P.getPos().y==30 ) P.setGrounded(true);
 			else P.setGrounded(false);
 			P.update(input, deltaTime);
-			if( enemy.getPos().y==30 ) enemy.setGrounded(true);
+/*			if( enemy.getPos().y==30 ) enemy.setGrounded(true);
 			else enemy.setGrounded(false);
-			enemy.update(input, deltaTime);
+			enemy.update(input, deltaTime);*/
 			B.update(deltaTime);
 			if( input=='k' ){ //temporaneo
 				point muzzle;
@@ -51,9 +51,9 @@ int main(){
 				B.add(muzzle,speed,true,20,'G');
 			}
 			int playerDamage = B.check(P.getHitBox());
-			int enemyDamage = B.check(enemy.getHitBox());
+			//int enemyDamage = B.check(enemy.getHitBox());
 			playerDead = P.hurt(playerDamage);
-			enemyDead = enemy.hurt(enemyDamage);
+			//enemyDead = enemy.hurt(enemyDamage);
 
 			if( input=='q' || playerDead ) quit = true;
 
@@ -64,13 +64,13 @@ int main(){
 			mvprintw(0, 1, "fps: %.0f ", 1/seconds);
 			mvprintw(0, 12, "|delta: %d ", deltaTime) ;//quanti secondi dura un ciclo
 			mvprintw(1, 1, "health: %3d", P.getHealth());
-			mvprintw(2, 1, "enemy: %3d", enemy.getHealth());
+			//mvprintw(2, 1, "enemy: %3d", enemy.getHealth());
 			move(32, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 
 			B.print();
 			P.print();
-			enemy.print();
+			//enemy.print();
 			refresh();
 
 			TIME_POINT end = NOW(); //tock

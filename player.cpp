@@ -1,7 +1,8 @@
 #include <ncurses.h>
 #include "lib.hpp"
-#include "bullet.hpp"
 #include "player.hpp"
+#include "bulletManager.hpp"
+using namespace std;
 
 player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health){
 	this->hp = health;
@@ -23,6 +24,7 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 	this->dmg = gunDamage;
 }
 
+//stampa il player nella posizione corrente
 void player::print(){
 	//player
 	for(int y=-1 ; y<=1 ; y++){
@@ -36,6 +38,7 @@ void player::print(){
 	}
 }
 
+//aggiorna la posizione del player e/o spara
 void player::update(char input, long int deltaTime){
 	// horizontal movement
 	if( input=='a' || input=='A' ){
@@ -43,7 +46,7 @@ void player::update(char input, long int deltaTime){
 		this->pos.x -= 1;
 		this->box.a.x -= 1;
 		this->box.b.x -= 1;
-		//cleanup //da spostare nel metodo print ?
+		//cleanup
 		for(int y=this->pos.y-1 ; y<=this->pos.y+1 ; y++){
 			mvprintw(y, this->pos.x+2, " ");
 		}
@@ -52,18 +55,14 @@ void player::update(char input, long int deltaTime){
 		this->pos.x += 1;
 		this->box.a.x += 1;
 		this->box.b.x += 1;
-		// cleanup //da spostare nel metodo print ?
+		// cleanup
 		for(int y=-1 ; y<=1 ; y++){
 			mvprintw(y+this->pos.y, this->pos.x-2, " ");
 		}
 	}
 
 
-
 	// vertical movement
-	//if( this->pos.y==30 && ySpeed>=0 ) isGrounded=true; // temporaneo
-	//else isGrounded=false;
-
 	if(isGrounded ){
 		this->pos.y = 30;
 		this->ySpeed = 0;
@@ -73,7 +72,7 @@ void player::update(char input, long int deltaTime){
 			this->isGrounded = false;
 		}
 	}else{
-		this->ySpeed += 0.03 / deltaTime ; // gravity
+		this->ySpeed += 0.03 / deltaTime ; // GRAVITY
 		this->yMod += this->ySpeed;
 		if(this->yMod > 1){
 			this->yMod -= 1;
@@ -96,26 +95,28 @@ void player::update(char input, long int deltaTime){
 		}
 	}
 
-
 	if( input=='f' || input=='F'){
 		this->shoot(deltaTime);
+	}else{
+		this->elapsedSinceLastShot += deltaTime/(double)1000000000;
 	}
-
-	this->elapsedSinceLastShot += deltaTime/(double)1000000000;
 }
 
 void player::shoot(long int deltaTime){
 	if( this->elapsedSinceLastShot > this->fireRate ){
 		this->elapsedSinceLastShot = 0;
+
 		vector speed;
 		speed.x = 500;
 		speed.y = 0;
 		if( !facingRight ) speed.x *= -1;
+
 		point muzzle;
-		if( facingRight )
-			muzzle.x = this->pos.x + 2;
-		else muzzle.x = this->pos.x - 2;
+		muzzle.x = this->pos.x;
 		muzzle.y = this->pos.y;
+		if( facingRight ) muzzle.x += 2;
+		else muzzle.x -= 2;
+
 		this->bM->add(muzzle, speed, false, this->dmg, 'o');
 	}
 }
@@ -124,13 +125,14 @@ void player::shoot(long int deltaTime){
 bool player::hurt(int value){
 	this->hp -= value;
 	if(this->hp <= 0){
-		this->kill();
+		this->hp = 0;
 		return true;
 	}else{
 		return false;
 	}
 }
 
+/* WIP non utilizzato
 void player::kill(){
 	this->hp = 0;
 
@@ -139,21 +141,24 @@ void player::kill(){
 			mvprintw(y+this->pos.y, x+this->pos.x, " ");
 		}
 	}
-}
+}*/
 
 // ritorna i punti vita del player
 int player::getHealth(){
 	return this->hp;
 }
 
+// ritorna la posizione del player
 point player::getPos(){
 	return this->pos;
 }
 
+// ritorna la hitBox del player
 hitBox player::getHitBox(){
 	return this->box;
 }
 
+// quando il player è a terra (o sopra un nemico), bisogna invocare questo metodo.
 void player::setGrounded(bool playerGrounded){
 	if(playerGrounded && ySpeed>=0 ){
 		this->isGrounded = true;

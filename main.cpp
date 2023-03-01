@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <chrono>
 #include "player.hpp"
+#include "bulletManager.hpp"
 using namespace std;
 
 #define TIME_POINT std::chrono::steady_clock::time_point
@@ -9,27 +10,43 @@ using namespace std;
 
 int main(){
 
-	initscr();
+	initscr(); // inizializza ncurses
+	start_color(); // permette di usare i colori attraverso gli attributi di ncurses
+	init_pair(1, COLOR_WHITE, COLOR_BLACK);
+	attrset(COLOR_PAIR(1));
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
 	curs_set(0);
 
-	long int deltaTime = 0 ; // durata in nanosecondi di ogni ciclo del gioco
+	long int deltaTime = 0; // durata in nanosecondi di ogni ciclo del gioco
+	double tmp_deltaTime = 0; // durata in secondi
 
 	bulletManager B = bulletManager();
 
 	player P = player(10, 5, &B, 0.1, 10, 100);
 
-	//player enemy = player(100, 5, &B, 0.3, 30, 50); //temporaneo
-
 	char input;
 	bool quit = false;
 	bool playerDead = false;
-	//bool enemyDead = false;
+
+	//init_pair(1, COLOR_RED, COLOR_BLUE);
+	//attrset(COLOR_PAIR(1));
+	//attrset(A_NORMAL);
+	//if(has_colors()) printw("DOES HAVE COLORS");
+
 
 	while( !quit ){
+
+		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
+
+			auto thisTimePoint = std::chrono::high_resolution_clock::now();
+			auto elapsed = thisTimePoint - lastTimePoint;
+			lastTimePoint = thisTimePoint;
+
+			tmp_deltaTime = std::chrono::duration<double>(elapsed).count();
+
 			TIME_POINT begin = NOW(); //tick
 
 			//  INPUT E CALCOLI
@@ -37,23 +54,18 @@ int main(){
 			if( P.getPos().y==30 ) P.setGrounded(true);
 			else P.setGrounded(false);
 			P.update(input, deltaTime);
-/*			if( enemy.getPos().y==30 ) enemy.setGrounded(true);
-			else enemy.setGrounded(false);
-			enemy.update(input, deltaTime);*/
 			B.update(deltaTime);
-			if( input=='k' ){ //temporaneo
+			if( input=='k' ){ // crea un proiettile a partire dal punto 'muzzle'
 				point muzzle;
 				muzzle.x = 120;
 				muzzle.y = 30;
 				vector speed;
-				speed.x = -180;
-				speed.y = -200;
+				speed.x = -200;
+				speed.y = -300;
 				B.add(muzzle,speed,true,20,'G');
 			}
 			int playerDamage = B.check(P.getHitBox());
-			//int enemyDamage = B.check(enemy.getHitBox());
 			playerDead = P.hurt(playerDamage);
-			//enemyDead = enemy.hurt(enemyDamage);
 
 			if( input=='q' || playerDead ) quit = true;
 
@@ -63,8 +75,9 @@ int main(){
 			//clear(); //è meglio stampare solo ciò che cambia
 			mvprintw(0, 1, "fps: %.0f ", 1/seconds);
 			mvprintw(0, 12, "|delta: %d ", deltaTime) ;//quanti secondi dura un ciclo
+			mvprintw(2, 1, "fps2: %.0f ", 1/tmp_deltaTime);
+			mvprintw(2, 12, "|delta2: %f ", tmp_deltaTime);
 			mvprintw(1, 1, "health: %3d", P.getHealth());
-			//mvprintw(2, 1, "enemy: %3d", enemy.getHealth());
 			move(32, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 

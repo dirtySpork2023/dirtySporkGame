@@ -1,6 +1,6 @@
 #include <ncurses.h>
 #include "lib.hpp"
-#include "bullet.hpp"
+#include "bulletManager.hpp"
 using namespace std;
 
 #define MAX_BULLETS 50
@@ -20,12 +20,13 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
 	this->tail = tmp;
 	if( this->head==NULL )
 		this->head = tmp;
+
 	vector v;
  	v.x = (double)p.x;
  	v.y = (double)p.y;
  	tmp->pos = v;
 	tmp->speed.x = speed.x;
-	tmp->speed.y = speed.y;
+	tmp->speed.y = speed.y/1.5;
 	tmp->gravity = gravity;
 	tmp->damage = damage;
 	tmp->texture = texture;
@@ -38,11 +39,12 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
 
 // rimuove l'elemento in testa
 void bulletManager::removeOldest(){
-	//preCondition: num > 2  <=>  head!=NULL && head->next!=NULL
-	node* tmp = this->head->next;
-	delete this->head;
-	this->head = tmp;
-	this->num--;
+	if(head!=NULL && head->next!=NULL){
+		node* tmp = this->head->next;
+		delete this->head;
+		this->head = tmp;
+		this->num--;
+	}
 }
 
 void bulletManager::update(long int deltaTime){
@@ -52,7 +54,7 @@ void bulletManager::update(long int deltaTime){
 			tmp->speed.y += 9.81 / deltaTime * 100; //gravity
 		}
 		tmp->pos.x += tmp->speed.x / deltaTime;
-		tmp->pos.y += tmp->speed.y /deltaTime;
+		tmp->pos.y += tmp->speed.y / deltaTime;
 		tmp = tmp->next;
 	}
 }

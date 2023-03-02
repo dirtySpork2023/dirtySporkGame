@@ -23,7 +23,7 @@ private:
 public:
 	bulletManager();
 	void add(point p, vector speed, bool gravity, int damage, char texture);
-	void update(long int deltaTime);
+	void update(double deltaTime);
 	int check(hitBox box);
 	void print();
 };

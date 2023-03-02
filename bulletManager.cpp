@@ -47,14 +47,14 @@ void bulletManager::removeOldest(){
 	}
 }
 
-void bulletManager::update(long int deltaTime){
+void bulletManager::update(double deltaTime){
 	node* tmp = this->head;
 	while( tmp!=NULL ) {
 		if( tmp->gravity ){
-			tmp->speed.y += 9.81 / deltaTime * 100; //gravity
+			tmp->speed.y += 9.81 * deltaTime * 10; //gravity
 		}
-		tmp->pos.x += tmp->speed.x / deltaTime;
-		tmp->pos.y += tmp->speed.y / deltaTime;
+		tmp->pos.x += tmp->speed.x * deltaTime;
+		tmp->pos.y += tmp->speed.y * deltaTime;
 		tmp = tmp->next;
 	}
 }

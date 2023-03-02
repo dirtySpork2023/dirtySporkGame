@@ -33,8 +33,8 @@ private:
 public:
 	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health);
 	void print();
-	void update(char input, long int deltaTime);
-	void shoot(long int deltaTime);
+	void update(char input, double deltaTime);
+	void shoot();
 	bool hurt(int value);
 	int getHealth();
 	point getPos();

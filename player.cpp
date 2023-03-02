@@ -39,7 +39,7 @@ void player::print(){
 }
 
 //aggiorna la posizione del player e/o spara
-void player::update(char input, long int deltaTime){
+void player::update(char input, double deltaTime){
 	// horizontal movement
 	if( input=='a' || input=='A' ){
 		facingRight = false;
@@ -68,11 +68,11 @@ void player::update(char input, long int deltaTime){
 		this->ySpeed = 0;
 		this->yMod = 0;
 		if( (int)'A'<=input && input<=(int)'Z' || input=='w'){
-			this->ySpeed = -0.004 ; //jump vertical speed
+			this->ySpeed = -0.005 ; //jump vertical speed
 			this->isGrounded = false;
 		}
 	}else{
-		this->ySpeed += 0.03 / deltaTime ; // GRAVITY
+		this->ySpeed += 9.81 * deltaTime * 0.002 ; // GRAVITY
 		this->yMod += this->ySpeed;
 		if(this->yMod > 1){
 			this->yMod -= 1;
@@ -96,13 +96,13 @@ void player::update(char input, long int deltaTime){
 	}
 
 	if( input=='f' || input=='F'){
-		this->shoot(deltaTime);
+		this->shoot();
 	}else{
-		this->elapsedSinceLastShot += deltaTime/(double)1000000000;
+		this->elapsedSinceLastShot += deltaTime;
 	}
 }
 
-void player::shoot(long int deltaTime){
+void player::shoot(){
 	if( this->elapsedSinceLastShot > this->fireRate ){
 		this->elapsedSinceLastShot = 0;
 

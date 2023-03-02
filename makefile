@@ -1,7 +1,7 @@
 all: game
 
 game: main.o lib.o player.o bulletManager.o
-	g++ -o game.exe main.o lib.o player.o bulletManager.o -lncurses
+	g++ -o game main.o lib.o player.o bulletManager.o -lncurses
 
 main.o: main.cpp
 	g++ -c main.cpp

@@ -68,11 +68,11 @@ void player::update(char input, double deltaTime){
 		this->ySpeed = 0;
 		this->yMod = 0;
 		if( (int)'A'<=input && input<=(int)'Z' || input=='w'){
-			this->ySpeed = -0.005 ; //jump vertical speed
+			this->ySpeed -= 2 * 9.81; //jump vertical speed
 			this->isGrounded = false;
 		}
 	}else{
-		this->ySpeed += 9.81 * deltaTime * 0.002 ; // GRAVITY
+		this->ySpeed += 9.81 * deltaTime; // GRAVITY
 		this->yMod += this->ySpeed;
 		if(this->yMod > 1){
 			this->yMod -= 1;

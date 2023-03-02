@@ -20,6 +20,7 @@ int main(){
 	curs_set(0);
 
 	double deltaTime = 0; // durata in secondi di ogni ciclo del gioco
+	double realSeconds = 0;
 
 	bulletManager B = bulletManager();
 
@@ -71,6 +72,10 @@ int main(){
 			//  OUTPUT
 			//mvprintw(0, 1, "fps: %.0f ", 1/seconds);
 			//mvprintw(0, 12, "|delta: %d ", deltaTime) ;//quanti secondi dura un ciclo
+			realSeconds += deltaTime;
+			mvprintw(3,1, "%.2f", realSeconds);
+			mvprintw(4,1, "pos.y= %d", P.getPos().y);
+
 			mvprintw(2, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(2, 12, "|deltaTime: %f ", deltaTime);
 			mvprintw(1, 1, "health: %3d", P.getHealth());

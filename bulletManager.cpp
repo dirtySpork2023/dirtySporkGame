@@ -4,6 +4,7 @@
 using namespace std;
 
 #define MAX_BULLETS 50
+#define GRAVITY 120
 
 bulletManager::bulletManager(){
 	this->head = NULL;
@@ -51,7 +52,7 @@ void bulletManager::update(double deltaTime){
 	node* tmp = this->head;
 	while( tmp!=NULL ) {
 		if( tmp->gravity ){
-			tmp->speed.y += 9.81 * deltaTime * 30; //gravity
+			tmp->speed.y += GRAVITY * deltaTime;
 		}
 		tmp->pos.x += tmp->speed.x * deltaTime;
 		tmp->pos.y += tmp->speed.y * deltaTime;

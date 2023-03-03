@@ -1,16 +1,21 @@
 #include <ncurses.h>
+#include <cmath>
 #include "lib.hpp"
 #include "player.hpp"
 #include "bulletManager.hpp"
 using namespace std;
 
-player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health){
+#define GRAVITY 120
+
+player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health, float jumpHeight){
 	this->hp = health;
 	// la posizione indica il torso del player
 	this->pos.x = x;
 	this->pos.y = y;
 	this->yMod = 0;
 	this->ySpeed = 0;
+	this->isGrounded = false;
+	this->jumpSpeed = -sqrt((jumpHeight+1) * GRAVITY * 2);
 
 	// hitbox 3x3
 	this->box.a.x = x-1;
@@ -22,9 +27,10 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 	this->bM = b;
 	this->fireRate = gunFireRate; // 0.25 = 1/4 --> 4 colpi al secondo
 	this->dmg = gunDamage;
+	this->elapsedSinceLastShot = 0;
 }
 
-//stampa il player nella posizione corrente
+//stampa il player
 void player::print(){
 	//player
 	for(int y=-1 ; y<=1 ; y++){
@@ -68,12 +74,12 @@ void player::update(char input, double deltaTime){
 		this->ySpeed = 0;
 		this->yMod = 0;
 		if( (int)'A'<=input && input<=(int)'Z' || input=='w'){
-			this->ySpeed -= 2 * 9.81; //jump vertical speed
+			this->ySpeed = this->jumpSpeed; //jump vertical speed
 			this->isGrounded = false;
 		}
 	}else{
-		this->ySpeed += 9.81 * deltaTime; // GRAVITY
-		this->yMod += this->ySpeed;
+		this->ySpeed += GRAVITY * deltaTime;
+		this->yMod += this->ySpeed * deltaTime;
 		if(this->yMod > 1){
 			this->yMod -= 1;
 			this->pos.y += 1;

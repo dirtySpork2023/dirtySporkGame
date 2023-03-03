@@ -24,7 +24,7 @@ int main(){
 
 	bulletManager B = bulletManager();
 
-	player P = player(10, 5, &B, 0.1, 10, 100);
+	player P = player(10, 5, &B, 0.1, 10, 100, 10);
 
 	char input;
 	bool quit = false;

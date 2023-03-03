@@ -22,6 +22,7 @@ private:
 	double ySpeed; // velocità verticale
 	double yMod; // parte decimale di pos.y
 	bool isGrounded; // true se il player è sopra qualcosa di solido ( ==> può saltare)
+	double jumpSpeed;
 	hitBox box;
 	bool facingRight;
 	bulletManager* bM;
@@ -31,13 +32,14 @@ private:
 	//void kill(); //WIP
 
 public:
-	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health);
+	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int health, float jumpHeight);
 	void print();
 	void update(char input, double deltaTime);
 	void shoot();
 	bool hurt(int value);
 	int getHealth();
 	point getPos();
+	void moveTmp(int height);
 	hitBox getHitBox();
 	void setGrounded(bool playerGrounded);
 };

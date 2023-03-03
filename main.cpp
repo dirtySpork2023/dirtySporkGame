@@ -25,7 +25,7 @@ int main(){
 
 	bulletManager B = bulletManager();
 
-	player P = player(10, 5, &B, 0.1, 10, 100, 20);
+	player P = player(10, 5, &B, 0.1, 10, 100, 12);
 
 	char input;
 	bool quit = false;
@@ -48,7 +48,7 @@ int main(){
 			B.update(deltaTime);
 			if( input=='k' ){ // crea un proiettile a partire dal punto 'muzzle'
 				point muzzle;
-				muzzle.x = 120;
+				muzzle.x = COLS - 20;
 				muzzle.y = 30;
 				vector speed;
 				speed.x = -100;

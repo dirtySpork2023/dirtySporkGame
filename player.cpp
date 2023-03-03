@@ -26,15 +26,17 @@ void player::print(){
 	//player
 	//if(this->recentDamage) attrset(COLOR_PAIR(2));
 	//else attrset(COLOR_PAIR(1));
-	for(int y=-1 ; y<=1 ; y++){
-		for(int x=-1 ; x<=1 ; x++){
-			if( facingRight ){
-				mvprintw(y+this->pos.y, x+this->pos.x, "%c", texture[y+1][x+1]);
-			}else{
-				mvprintw(y+this->pos.y, x+this->pos.x, "%c", reverse[y+1][x+1]);
-			}
-		}
+
+	if( facingRight ){
+		mvprintw(this->pos.y-1, this->pos.x-1, " p ");
+		mvprintw(this->pos.y  , this->pos.x-1, ">W=");
+		mvprintw(this->pos.y+1, this->pos.x-1, "/\"\\");
+	}else{
+		mvprintw(this->pos.y-1, this->pos.x-1, " q ");
+		mvprintw(this->pos.y  , this->pos.x-1, "=W<");
+		mvprintw(this->pos.y+1, this->pos.x-1, "/\"\\");
 	}
+	
 	//attrset(COLOR_PAIR(1));
 }
 
@@ -61,7 +63,6 @@ void player::update(char input, double deltaTime){
 		}
 	}
 
-
 	// vertical movement
 	entity::update(deltaTime);
 
@@ -70,7 +71,7 @@ void player::update(char input, double deltaTime){
 		this->isGrounded = false;
 	}
 
-	if( input=='f' || input=='F'){
+	if( (input=='f'||input=='F') && this->elapsedSinceLastShot > this->fireRate ){
 		this->shoot();
 	}else{
 		this->elapsedSinceLastShot += deltaTime;
@@ -78,20 +79,18 @@ void player::update(char input, double deltaTime){
 }
 
 void player::shoot(){
-	if( this->elapsedSinceLastShot > this->fireRate ){
-		this->elapsedSinceLastShot = 0;
+	this->elapsedSinceLastShot = 0;
 
-		vector speed;
-		speed.x = 200;
-		speed.y = 0;
-		if( !facingRight ) speed.x *= -1;
+	vector speed;
+	speed.x = 200;
+	speed.y = 0;
+	if( !facingRight ) speed.x *= -1;
 
-		point muzzle;
-		muzzle.x = this->pos.x;
-		muzzle.y = this->pos.y;
-		if( facingRight ) muzzle.x += 2;
-		else muzzle.x -= 2;
+	point muzzle;
+	muzzle.x = this->pos.x;
+	muzzle.y = this->pos.y;
+	if( facingRight ) muzzle.x += 2;
+	else muzzle.x -= 2;
 
-		this->bM->add(muzzle, speed, false, this->dmg, 'o');
-	}
+	this->bM->add(muzzle, speed, false, this->dmg, 'o');
 }

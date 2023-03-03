@@ -5,17 +5,6 @@
 #include "entity.hpp"
 #include "bulletManager.hpp"
 
-const char texture[3][3] = {
-	{' ','p',' '},
-	{'>','W','='},
-	{'/','"','\\'},
-};
-const char reverse[3][3] = {
-	{' ','q',' '},
-	{'=','W','<'},
-	{'/','"','\\'},
-};
-
 class player: public entity {
 protected:
 	double jumpSpeed;

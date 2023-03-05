@@ -18,6 +18,8 @@ protected:
 	bool isGrounded; // true se il player è sopra qualcosa di solido ( ==> non sta cadendo <=> può saltare)
 
 	void applyGravity(double deltaTime);
+	void move(char input);
+
 public:
 	entity(int x, int y, int health, bulletManager* bM);
 	void update(double deltaTime);

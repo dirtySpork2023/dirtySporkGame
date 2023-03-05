@@ -3,8 +3,8 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-#define MAX_BULLETS 50
-#define GRAVITY 120
+#define MAX_BULLETS 100
+#define GRAVITY 150
 
 bulletManager::bulletManager(){
 	this->head = NULL;
@@ -26,6 +26,7 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
  	v.x = (double)p.x;
  	v.y = (double)p.y;
  	tmp->pos = v;
+	tmp->oldPos = p;
 	tmp->speed.x = speed.x;
 	tmp->speed.y = speed.y/1.5;
 	tmp->gravity = gravity;
@@ -98,18 +99,14 @@ void bulletManager::print(){
 	while( tmp!=NULL ){
 		mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c", tmp->texture );
 		// cleanup
-		if( tmp->speed.x>0 ){
-			mvprintw((int)tmp->pos.y, (int)tmp->pos.x-1, " ");
-		}else{
-			mvprintw((int)tmp->pos.y, (int)tmp->pos.x+1, " ");
-		}
-		if( tmp->speed.y>0 ){
-			mvprintw((int)tmp->pos.y-1, (int)tmp->pos.x, " ");
-		}else{
-			mvprintw((int)tmp->pos.y+1, (int)tmp->pos.x, " ");
+		if(tmp->oldPos.x != (int)tmp->pos.x || tmp->oldPos.y != (int)tmp->pos.y){
+			mvprintw(tmp->oldPos.y, tmp->oldPos.x, " ");
+			tmp->oldPos.x = (int)tmp->pos.x;
+			tmp->oldPos.y = (int)tmp->pos.y;
 		}
 		tmp = tmp->next;
 	}
+
 
 
 	//mvprintw(1,0,"num: %d\t", num);

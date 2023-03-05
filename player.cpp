@@ -5,7 +5,7 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, int h, float jumpHeight): entity(x,y,h,b){
+player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): entity(x,y,HEALTH,b){
 	this->jumpSpeed = -sqrt(jumpHeight * GRAVITY * 2.1);
 
 	this->facingRight = true;
@@ -13,19 +13,25 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 	this->bM = b;
 	this->fireRate = gunFireRate; // 0.25 = 1/4 --> 4 colpi al secondo
 	this->dmg = gunDamage;
-	this->elapsedSinceLastShot = 0;
 
-/*	this->elapsedSinceLastDamage = 0;
-	if(has_colors()){
-		init_pair(2, COLOR_RED, COLOR_BLACK);
-	}*/
+	this->armor = armor; // 0-1 moltiplica i danni subiti
 }
 
 //stampa il player
-void player::print(){
-	//player
-	//if(this->recentDamage) attrset(COLOR_PAIR(2));
-	//else attrset(COLOR_PAIR(1));
+void player::print(double deltaTime){
+	static double elapsedSinceLastDamage = 0; //in secondi
+	static int lastHP = HEALTH;
+
+	if( lastHP != this->hp ){
+		attrset(COLOR_PAIR(2));
+		elapsedSinceLastDamage += deltaTime;
+		if(elapsedSinceLastDamage >= 0.10){
+			lastHP=this->hp;
+			elapsedSinceLastDamage = 0;
+		}
+	}
+
+	//TODO stampa barra della vita
 
 	if( facingRight ){
 		mvprintw(this->pos.y-1, this->pos.x-1, " p ");
@@ -36,51 +42,47 @@ void player::print(){
 		mvprintw(this->pos.y  , this->pos.x-1, "=W<");
 		mvprintw(this->pos.y+1, this->pos.x-1, "/\"\\");
 	}
-	
-	//attrset(COLOR_PAIR(1));
+
+	attrset(COLOR_PAIR(1));
 }
 
 //aggiorna la posizione del player e/o spara
 void player::update(char input, double deltaTime){
+	static double elapsedSinceLastShot = 0; //in secondi
+
 	// horizontal movement
 	if( input=='a' || input=='A' ){
 		facingRight = false;
-		this->pos.x -= 1;
-		this->box.a.x -= 1;
-		this->box.b.x -= 1;
-		//cleanup
-		for(int y=this->pos.y-1 ; y<=this->pos.y+1 ; y++){
-			mvprintw(y, this->pos.x+2, " ");
-		}
+		entity::move('a');
 	}else if( input=='d' || input=='D' ){
 		facingRight = true;
-		this->pos.x += 1;
-		this->box.a.x += 1;
-		this->box.b.x += 1;
-		// cleanup
-		for(int y=-1 ; y<=1 ; y++){
-			mvprintw(y+this->pos.y, this->pos.x-2, " ");
-		}
+		entity::move('d');
 	}
 
 	// vertical movement
-	entity::update(deltaTime);
+	entity::applyGravity(deltaTime);
 
 	if( isGrounded && ((int)'A'<=input && input<=(int)'Z' || input=='w')){
 		this->ySpeed = this->jumpSpeed; //jump vertical speed
 		this->isGrounded = false;
 	}
 
-	if( (input=='f'||input=='F') && this->elapsedSinceLastShot > this->fireRate ){
+	// applica danno se collide con proiettili
+	this->hurt(bM->check(this->box));
+
+	if( (input=='f'||input=='F') && elapsedSinceLastShot > this->fireRate ){
 		this->shoot();
+		elapsedSinceLastShot = 0;
 	}else{
-		this->elapsedSinceLastShot += deltaTime;
+		elapsedSinceLastShot += deltaTime;
 	}
 }
 
-void player::shoot(){
-	this->elapsedSinceLastShot = 0;
+bool player::hurt(int value){
+	return entity::hurt(value * (1-this->armor));
+}
 
+void player::shoot(){
 	vector speed;
 	speed.x = 200;
 	speed.y = 0;

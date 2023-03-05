@@ -38,22 +38,46 @@ void entity::applyGravity(double deltaTime){
 		this->yMod += this->ySpeed * deltaTime;
 		if(this->yMod > 1){
 			this->yMod -= 1;
-			this->pos.y += 1;
-			this->box.a.y += 1;
-			this->box.b.y += 1;
-			// cleanup
-			for(int x=this->pos.x-1 ; x<=this->pos.x+1 ; x++){
-				mvprintw(this->pos.y-2, x, " ");
-			}
+			this->move('s');
 		}else if(this->yMod < -1){
 			this->yMod += 1;
-			this->pos.y -= 1;
-			this->box.a.y -= 1;
-			this->box.b.y -= 1;
-			// cleanup
-			for(int x=this->pos.x-1 ; x<=this->pos.x+1 ; x++){
-				mvprintw(this->pos.y+2, x, " ");
-			}
+			this->move('w');
+		}
+	}
+}
+
+void entity::move(char input){
+	if( input=='a' ){
+		this->pos.x -= 1;
+		this->box.a.x -= 1;
+		this->box.b.x -= 1;
+		// cleanup
+		for(int y=this->pos.y-1 ; y<=this->pos.y+1 ; y++){
+			mvprintw(y, this->pos.x+2, " ");
+		}
+	}else if( input=='d' ){
+		this->pos.x += 1;
+		this->box.a.x += 1;
+		this->box.b.x += 1;
+		// cleanup
+		for(int y=-1 ; y<=1 ; y++){
+			mvprintw(y+this->pos.y, this->pos.x-2, " ");
+		}
+	}else if( input=='w' ){
+		this->pos.y -= 1;
+		this->box.a.y -= 1;
+		this->box.b.y -= 1;
+		// cleanup
+		for(int x=this->pos.x-1 ; x<=this->pos.x+1 ; x++){
+			mvprintw(this->pos.y+2, x, " ");
+		}
+	}else if( input=='s' ){
+		this->pos.y += 1;
+		this->box.a.y += 1;
+		this->box.b.y += 1;
+		// cleanup
+		for(int x=this->pos.x-1 ; x<=this->pos.x+1 ; x++){
+			mvprintw(this->pos.y-2, x, " ");
 		}
 	}
 }

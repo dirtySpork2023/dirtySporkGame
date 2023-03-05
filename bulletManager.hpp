@@ -9,6 +9,7 @@ struct node {
 	bool gravity;
 	int damage;
 	char texture;
+	point oldPos;
 	node* next;
 };
 

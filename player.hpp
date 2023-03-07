@@ -17,8 +17,8 @@ protected:
 
 public:
 	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor);
-	void print(double deltaTime);
-	void update(char input, double deltaTime);
+	void print(timeSpan deltaTime);
+	void update(char input, timeSpan deltaTime);
 	bool hurt(int value);
 	void shoot();
 };

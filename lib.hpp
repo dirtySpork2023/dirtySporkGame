@@ -1,6 +1,8 @@
 #ifndef LIB_HPP
 #define LIB_HPP
 
+typedef double timeSpan;
+
 struct point {
 	int x;
 	int y;

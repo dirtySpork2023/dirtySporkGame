@@ -21,12 +21,12 @@ int main(){
 	attrset(COLOR_PAIR(1));
 	//if(has_colors()) printw("DOES HAVE COLORS");
 
-	double deltaTime = 0; // durata in secondi di ogni ciclo del gioco
+	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 
 	bulletManager B = bulletManager();
 
 	player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
-	kuba K = kuba(100, 5, 50, &B, 0.1);
+	kuba K = kuba(100, 5, 50, &B, 0.1, 5);
 
 	char input;
 	bool quit = false;
@@ -48,7 +48,7 @@ int main(){
 			if( K.getPos().y==30 ) K.setGrounded(true);
 			else K.setGrounded(false);
 			P.update(input, deltaTime);
-			K.update(P.getPos(), deltaTime);
+			K.update(&P, deltaTime);
 			B.update(deltaTime);
 			if( input=='k' ){ // crea un proiettile a partire dal punto 'muzzle'
 				point target = P.getPos();

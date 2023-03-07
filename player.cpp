@@ -18,7 +18,7 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 }
 
 //stampa il player
-void player::print(double deltaTime){
+void player::print(timeSpan deltaTime){
 	static double elapsedSinceLastDamage = 0; //in secondi
 	static int lastHP = HEALTH;
 
@@ -47,7 +47,7 @@ void player::print(double deltaTime){
 }
 
 //aggiorna la posizione del player e/o spara
-void player::update(char input, double deltaTime){
+void player::update(char input, timeSpan deltaTime){
 	static double elapsedSinceLastShot = 0; //in secondi
 
 	// horizontal movement

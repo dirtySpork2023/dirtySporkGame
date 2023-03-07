@@ -21,14 +21,14 @@ entity::entity(int x, int y, int health, bulletManager* b){
 	this->box.b.y = y+1;
 }
 
-void entity::update(double deltaTime){
+void entity::update(timeSpan deltaTime){
 	// applica danno se collide con proiettili
 	this->hurt(bM->check(this->box));
 
 	this->applyGravity(deltaTime);
 }
 
-void entity::applyGravity(double deltaTime){
+void entity::applyGravity(timeSpan deltaTime){
 	if( this->isGrounded ){
 		this->pos.y = 30;
 		this->ySpeed = 0;

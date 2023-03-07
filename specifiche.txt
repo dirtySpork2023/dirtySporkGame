@@ -27,22 +27,21 @@ MIKE - mercato, powerup
 -salta
 -va avanti e indietro
 -spara proiettili nella direzione in cui guarda
- °frequenza variabile
- °danno variabile
+-ha 100 di vita e un armatura
+ °armatura: copre da una percentuale dei danni
 
 # Game over quando la vita scende a 0
 # Se il protagonista muore, mantiene i bonus, poteri e/o armi che ha acquistato
   e alla prossima partita partirà da uno schema random (vedi punto 2)
   e una difficoltà proporzionata ai potenziamenti che ha acquisito
--ha 100 di vita e un armatura
- °armatura: copre da una percentuale dei danni
 
 	NEMICI
 # Devono essere presenti diversi tipi di nemici e una valuta
 # Nel percorso il protagonista incontra nemici i quali possono togliere vita colpendo o entrando a contatto con il protagonista
 # I nemici sono controllati dal computer: si possono muovere e sparare, possono venire uccisi dal protagonista (es. sparando)
-1- Ruota: i muove avanti/indietro ignorando il player e se lo colpisce fa molto danno e scompare.
+1- RUOTA: i muove avanti/indietro ignorando il player e se lo colpisce fa molto danno e scompare.
 1- la texture è un pò animata per far vedere che gira
+1.5- KUBA: si muove verso il player e se lo colpisce fa danno e scompare.
 2- Scheletro: resta fermo e spara
 2- i proiettili che spara risentono della gravità
 3- Golem: è grande e può sparare brevi raffiche di proiettili da altezze diverse.
@@ -51,7 +50,7 @@ MIKE - mercato, powerup
 
 	MERCATO
 # Il gioco deve quindi prevedere un livello market (e.g., a inizio partita) in cui acquisire vita aggiuntiva, poteri e/o armi.
-- livello 2
+- livello 2 oppure a metà tra ogni livello
 - si può comprare tutto (armi, powerup)
 - powerup: armatura, guarigione, danno aggiuntivo, 
 

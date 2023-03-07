@@ -17,12 +17,12 @@ protected:
 	double yMod; // parte decimale di pos.y
 	bool isGrounded; // true se il player è sopra qualcosa di solido ( ==> non sta cadendo <=> può saltare)
 
-	void applyGravity(double deltaTime);
+	void applyGravity(timeSpan deltaTime);
 	void move(char input);
 
 public:
 	entity(int x, int y, int health, bulletManager* bM);
-	void update(double deltaTime);
+	void update(timeSpan deltaTime);
 	point getPos();
 	hitBox getHitBox();
 	int getHealth();

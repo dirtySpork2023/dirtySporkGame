@@ -9,7 +9,7 @@
 // sente la gravità ma non può saltare.
 class entity {
 protected:
-	point pos;
+	point pos; // TODO remove pos and rewrite getPos()
 	hitBox box;
 	int hp;
 	bulletManager* bM;
@@ -28,6 +28,7 @@ public:
 	int getHealth();
 	bool hurt(int value);
 	void setGrounded(bool grounded);
+	void kill();
 };
 
 #endif //ENTITY_HPP

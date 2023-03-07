@@ -17,7 +17,7 @@ int main(){
 	start_color(); // permette di usare i colori attraverso gli attributi di ncurses
 	init_color(COLOR_BLACK, 100, 100, 100);
 	init_pair(1, COLOR_WHITE, COLOR_BLACK); //default
-	init_pair(2, COLOR_RED, COLOR_BLACK); //player received damage
+	init_pair(2, COLOR_RED, COLOR_BLACK); //damaged entity
 	attrset(COLOR_PAIR(1));
 	//if(has_colors()) printw("DOES HAVE COLORS");
 
@@ -26,7 +26,7 @@ int main(){
 	bulletManager B = bulletManager();
 
 	player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
-	kuba K = kuba(100, 5, 50, &B, 0.1, 5);
+	kuba* K = new kuba(100, 5, 50, &B, 0.1, 20);
 
 	char input;
 	bool quit = false;
@@ -45,10 +45,10 @@ int main(){
 			input = getch();
 			if( P.getPos().y==30 ) P.setGrounded(true);
 			else P.setGrounded(false);
-			if( K.getPos().y==30 ) K.setGrounded(true);
-			else K.setGrounded(false);
+			if( K!=NULL && K->getPos().y==30 ) K->setGrounded(true);
+			else if(K!=NULL) K->setGrounded(false);
 			P.update(input, deltaTime);
-			K.update(&P, deltaTime);
+			if(K!=NULL) K->update(&P, deltaTime);
 			B.update(deltaTime);
 			if( input=='k' ){ // crea un proiettile a partire dal punto 'muzzle'
 				point target = P.getPos();
@@ -66,18 +66,24 @@ int main(){
 				B.add(p,speed,true,4,'G');
 			}
 			if( input=='q' ) quit = true;
+			if(K!=NULL && K->getHealth()==0){
+				K->kill();
+				delete K;
+				K = NULL;
+				mvprintw(2, 1, "kuba: dead");
+			}
 
 			//  OUTPUT
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
 			mvprintw(1, 1, "health: %3d", P.getHealth());
-			mvprintw(2, 1, "kuba: %3d", K.getHealth());
+			if(K!=NULL) mvprintw(2, 1, "kuba: %3d", K->getHealth());
 			move(32, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 
 			B.print();
 			P.print(deltaTime);
-			K.print(deltaTime);
+			if(K!=NULL) K->print(deltaTime);
 
 			refresh();
 		}

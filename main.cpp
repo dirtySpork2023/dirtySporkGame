@@ -6,9 +6,9 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-int main(){
-
-	initscr(); // inizializza ncurses
+//inizializza ncurses
+void init(){
+	initscr();
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
@@ -19,21 +19,28 @@ int main(){
 	init_pair(1, COLOR_WHITE, COLOR_BLACK); //default
 	init_pair(2, COLOR_RED, COLOR_BLACK); //damaged entity
 	attrset(COLOR_PAIR(1));
-	//if(has_colors()) printw("DOES HAVE COLORS");
+	//if(!has_colors()) printw("TERMINAL DOES NOT HAVE COLORS");
+}
+
+int main(){
+
+	init();
 
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 
 	bulletManager B = bulletManager();
 
-	player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
-	kuba* K = new kuba(100, 5, 50, &B, 0.1, 20);
-
 	char input;
 	bool quit = false;
 
 	while( !quit ){
+		//level setup here
+
+		player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
+		kuba* K = new kuba(100, 5, 50, &B, 0.1, 20);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
+
 		while( !quit ){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
@@ -43,26 +50,27 @@ int main(){
 
 			//  INPUT E CALCOLI
 			input = getch();
-			if( P.getPos().y==30 ) P.setGrounded(true);
+			if( P.getPos().y==35 ) P.setGrounded(true); // da spostare dentro entity
 			else P.setGrounded(false);
-			if( K!=NULL && K->getPos().y==30 ) K->setGrounded(true);
+			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true); // da spostare dentro entity
 			else if(K!=NULL) K->setGrounded(false);
 			P.update(input, deltaTime);
 			if(K!=NULL) K->update(&P, deltaTime);
 			B.update(deltaTime);
 			if( input=='k' ){ // crea un proiettile a partire dal punto 'muzzle'
-				point target = P.getPos();
-				//mvprintw(target.y, target.x, "X");
-
 				point p;
 				p.x = COLS-5;
-				p.y = 30;
+				p.y = 35;
 				vector speed;
 				speed.x = -150;
 				//speed.y = -100;
-				speed.y = -112*(target.x-p.x)/speed.x  +  (target.y-p.y)*speed.x/(target.x-p.x);
-				//POV hai trovato un equazione utilizzando la fisica ma non è precisa
-				// :C
+				int Dx = P.getPos().x -p.x -1;
+				int Dy = P.getPos().y -p.y -1;
+
+				speed.y = -112 * Dx / speed.x  +  Dy * speed.x / Dx;
+				// velocità verticale esatta necessaria per colpire il player. (imprecisa su distanze più lunghe del terminale)
+				// yeah mista white
+				// yeah SCIENCE
 				B.add(p,speed,true,4,'G');
 			}
 			if( input=='q' ) quit = true;
@@ -78,7 +86,7 @@ int main(){
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
 			mvprintw(1, 1, "health: %3d", P.getHealth());
 			if(K!=NULL) mvprintw(2, 1, "kuba: %3d", K->getHealth());
-			move(32, 0);
+			move(36, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 
 			B.print();

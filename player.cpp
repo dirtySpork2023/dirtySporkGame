@@ -18,15 +18,15 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 }
 
 //stampa il player
-void player::print(timeSpan deltaTime){
+void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
 	static double elapsedSinceLastDamage = 0; //in secondi
-	static int lastHP = HEALTH;
+	static int lastHP = this->health;
 
-	if( lastHP != this->hp ){
+	if( lastHP != this->health ){
 		attrset(COLOR_PAIR(2));
 		elapsedSinceLastDamage += deltaTime;
 		if(elapsedSinceLastDamage >= 0.10){
-			lastHP=this->hp;
+			lastHP=this->health;
 			elapsedSinceLastDamage = 0;
 		}
 	}
@@ -34,13 +34,13 @@ void player::print(timeSpan deltaTime){
 	//TODO stampa barra della vita
 
 	if( facingRight ){
-		mvprintw(this->pos.y-1, this->pos.x-1, " p ");
-		mvprintw(this->pos.y  , this->pos.x-1, ">W=");
-		mvprintw(this->pos.y+1, this->pos.x-1, "/\"\\");
+		mvprintw(this->box.a.y,   this->box.a.x, " p ");
+		mvprintw(this->box.a.y+1, this->box.a.x, ">W=");
+		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
 	}else{
-		mvprintw(this->pos.y-1, this->pos.x-1, " q ");
-		mvprintw(this->pos.y  , this->pos.x-1, "=W<");
-		mvprintw(this->pos.y+1, this->pos.x-1, "/\"\\");
+		mvprintw(this->box.a.y,   this->box.a.x, " q ");
+		mvprintw(this->box.a.y+1, this->box.a.x, "=W<");
+		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
 	}
 
 	attrset(COLOR_PAIR(1));
@@ -89,8 +89,8 @@ void player::shoot(){
 	if( !facingRight ) speed.x *= -1;
 
 	point muzzle;
-	muzzle.x = this->pos.x;
-	muzzle.y = this->pos.y;
+	muzzle.x = this->box.a.x+1;
+	muzzle.y = this->box.a.y+1;
 	if( facingRight ) muzzle.x += 2;
 	else muzzle.x -= 2;
 

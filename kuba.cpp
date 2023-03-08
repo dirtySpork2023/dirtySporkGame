@@ -18,18 +18,19 @@ void kuba::update(player* target, timeSpan deltaTime){
 
 	entity::update(deltaTime);
 
+	// WIP
 	if( lastMove>=xSpeed ){
-		if(this->pos.x > target->getPos().x+3){
+		if(this->box.b.x > target->getPos().x+3){
 			entity::move('a');
 			lastMove = 0;
-		}else if(this->pos.x < target->getPos().x-3){
+		}else if(this->box.b.x < target->getPos().x-3){
 			entity::move('d');
 			lastMove = 0;
-		}else if(this->pos.x == target->getPos().x+3 && this->pos.y == target->getPos().y){
+		}else if(this->box.b.x == target->getPos().x+3 && this->box.b.y == target->getPos().y){
 			target->hurt(this->damage);
 			entity::move('d');
 			lastMove = -xSpeed*2;
-		}else if(this->pos.x == target->getPos().x-3 && this->pos.y == target->getPos().y){
+		}else if(this->box.b.x == target->getPos().x-3 && this->box.b.y == target->getPos().y){
 			target->hurt(this->damage);
 			entity::move('a');
 			lastMove = -xSpeed*2;
@@ -41,21 +42,21 @@ void kuba::update(player* target, timeSpan deltaTime){
 
 void kuba::print(timeSpan deltaTime){
 	static timeSpan lastDamage = 0; //in secondi
-	static int lastHP = HEALTH;
+	static int lastHP = this->health;
 
-	if( lastHP != this->hp ){
+	if( lastHP != this->health ){ //TODO da generalizzare in entity
 		attrset(COLOR_PAIR(2));
 		lastDamage += deltaTime;
 		if(lastDamage >= 0.10){
-			lastHP=this->hp;
+			lastHP=this->health;
 			lastDamage = 0;
 		}
 	}
 
 	//TODO stampa barra della vita
 
-	mvprintw(this->pos.y  , this->pos.x-1, "<O>");
-	mvprintw(this->pos.y+1, this->pos.x-1, "/-\\");
+	mvprintw(this->box.a.y, this->box.a.x, "<O>");
+	mvprintw(this->box.b.y, this->box.a.x, "/-\\");
 
 
 	attrset(COLOR_PAIR(1));

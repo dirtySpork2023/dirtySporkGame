@@ -9,9 +9,8 @@
 // sente la gravità ma non può saltare.
 class entity {
 protected:
-	point pos; // TODO remove pos and rewrite getPos()
 	hitBox box;
-	int hp;
+	int health;
 	bulletManager* bM;
 	double ySpeed; // velocità verticale
 	double yMod; // parte decimale di pos.y
@@ -21,7 +20,7 @@ protected:
 	void move(char input);
 
 public:
-	entity(int x, int y, int health, bulletManager* bM);
+	entity(int x, int y, int hp, bulletManager* bM);
 	void update(timeSpan deltaTime);
 	point getPos();
 	hitBox getHitBox();

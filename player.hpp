@@ -5,7 +5,7 @@
 #include "entity.hpp"
 #include "bulletManager.hpp"
 
-#define HEALTH 100
+#define MAX_HEALTH 100
 
 class player: public entity {
 protected:

@@ -118,8 +118,8 @@ void entity::setGrounded(bool grounded){
 	}
 }
 
-// cancella l'entity solo graficamente. ipotizzando che hitbox e grafica coincidano
-void entity::kill(){
+// distruttore: cancella l'entity solo graficamente. ipotizzando che hitbox e grafica coincidano
+entity::~entity(){
 	for(int x=box.a.x ; x<=box.b.x ; x++){
 		for(int y=box.a.y ; y<=box.b.y ; y++){
 			mvprintw(y,x," ");

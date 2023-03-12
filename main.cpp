@@ -75,7 +75,6 @@ int main(){
 			}
 			if( input=='q' ) quit = true;
 			if(K!=NULL && K->getHealth()==0){
-				K->kill();
 				delete K;
 				K = NULL;
 				mvprintw(2, 1, "kuba: dead");
@@ -84,7 +83,6 @@ int main(){
 			//  OUTPUT
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
-			mvprintw(1, 1, "health: %3d", P.getHealth());
 			if(K!=NULL) mvprintw(2, 1, "kuba: %3d", K->getHealth());
 			move(36, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }

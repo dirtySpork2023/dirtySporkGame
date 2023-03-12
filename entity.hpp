@@ -28,6 +28,7 @@ public:
 	bool hurt(int value);
 	void setGrounded(bool grounded);
 	void kill();
+	~entity();
 };
 
 #endif //ENTITY_HPP

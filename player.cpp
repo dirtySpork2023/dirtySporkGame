@@ -5,7 +5,9 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): entity(x,y,HEALTH,b){
+#define HEALTH_LENGTH 20
+
+player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): entity(x,y,MAX_HEALTH,b){
 	this->jumpSpeed = -sqrt(jumpHeight * GRAVITY * 2.1);
 
 	this->facingRight = true;
@@ -25,14 +27,13 @@ void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
 	if( lastHP != this->health ){
 		attrset(COLOR_PAIR(2));
 		elapsedSinceLastDamage += deltaTime;
-		if(elapsedSinceLastDamage >= 0.10){
+		if(elapsedSinceLastDamage >= 0.05){
 			lastHP=this->health;
 			elapsedSinceLastDamage = 0;
 		}
 	}
 
-	//TODO stampa barra della vita
-
+	// body
 	if( facingRight ){
 		mvprintw(this->box.a.y,   this->box.a.x, " p ");
 		mvprintw(this->box.a.y+1, this->box.a.x, ">W=");
@@ -42,6 +43,16 @@ void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
 		mvprintw(this->box.a.y+1, this->box.a.x, "=W<");
 		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
 	}
+
+	// health bar
+	mvprintw(1, 1, "health: |", this->health);
+	for(int i=0 ; i<HEALTH_LENGTH ; i++){
+		if(this->health - i*MAX_HEALTH/HEALTH_LENGTH > 0)
+			printw("M");
+		else
+			printw(".");
+	}
+	printw("|");
 
 	attrset(COLOR_PAIR(1));
 }

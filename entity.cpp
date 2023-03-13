@@ -92,7 +92,6 @@ hitBox entity::getHitBox(){
 	return this->box;
 }
 
-
 // ritorna i punti vita
 int entity::getHealth(){
 	return this->health;

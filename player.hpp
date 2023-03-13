@@ -7,7 +7,7 @@
 
 #define MAX_HEALTH 100
 
-class player: public entity {
+class player: public entity { //TODO public shooter
 protected:
 	float armor; // 0-1 moltiplica i danni subiti
 	double jumpSpeed;

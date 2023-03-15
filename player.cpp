@@ -44,6 +44,8 @@ void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
 		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
 	}
 
+	attrset(COLOR_PAIR(1));
+
 	// health bar
 	mvprintw(1, 1, "health: |", this->health);
 	for(int i=0 ; i<HEALTH_LENGTH ; i++){
@@ -53,8 +55,6 @@ void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
 			printw(".");
 	}
 	printw("|");
-
-	attrset(COLOR_PAIR(1));
 }
 
 //aggiorna la posizione del player e/o spara

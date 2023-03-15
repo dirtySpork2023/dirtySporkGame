@@ -13,8 +13,8 @@ protected:
 	int health;
 	bulletManager* bM;
 	double ySpeed; // velocità verticale
-	double yMod; // parte decimale di pos.y
-	bool isGrounded; // true se il player è sopra qualcosa di solido ( ==> non sta cadendo <=> può saltare)
+	double yMod; // parte decimale della posizione in verticale
+	bool isGrounded; // true se il player è sopra qualcosa di solido ( => non sta cadendo <=> può saltare)
 
 	void applyGravity(timeSpan deltaTime);
 	void move(char input);
@@ -27,7 +27,6 @@ public:
 	int getHealth();
 	bool hurt(int value);
 	void setGrounded(bool grounded);
-	void kill();
 	~entity();
 };
 

@@ -4,6 +4,7 @@
 #include "entity.hpp"
 #include "player.hpp"
 #include "kuba.hpp"
+#include "shooter.hpp"
 #include "bulletManager.hpp"
 using namespace std;
 
@@ -38,7 +39,8 @@ int main(){
 		//level setup here
 
 		player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
-		kuba* K = new kuba(100, 5, 50, &B, 0.1, 20);
+		kuba* K = new kuba(COLS-30, 5, 50, &B, 0.1, 20);
+		shooter* S = new shooter(COLS-10, 5, 50, &B, 1.5, 2);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 
@@ -49,39 +51,36 @@ int main(){
 			deltaTime = std::chrono::duration<double>(elapsed).count();
 
 
-			//  INPUT E CALCOLI
 			input = getch();
+
+			// setGrounded
 			if( P.getPos().y==35 ) P.setGrounded(true); // da spostare dentro entity
 			else P.setGrounded(false);
 			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true); // da spostare dentro entity
 			else if(K!=NULL) K->setGrounded(false);
+			if( S!=NULL && S->getPos().y==35 ) S->setGrounded(true);
+			else if(S!=NULL) S->setGrounded(false);
+
+			// update
 			P.update(input, deltaTime);
 			if(K!=NULL) K->update(&P, deltaTime);
+			if(S!=NULL) S->update(&P, deltaTime);
 			B.update(deltaTime);
-			if( input=='k' ){ // crea un proiettile a partire dal punto 'muzzle'
-				point p;
-				p.x = COLS-5;
-				p.y = 35;
-				vector speed;
-				speed.x = -150;
-				//speed.y = -100;
-				int Dx = P.getPos().x -p.x -1;
-				int Dy = P.getPos().y -p.y -1;
 
-				speed.y = -112 * Dx / speed.x  +  Dy * speed.x / Dx;
-				// velocità verticale esatta necessaria per colpire il player. (imprecisa su distanze più lunghe del terminale)
-				// yeah mista white
-				// yeah SCIENCE
-				B.add(p,speed,true,4,'G');
-			}
+			// death
 			if( input=='q' ) quit = true;
 			if(K!=NULL && K->getHealth()==0){
 				delete K;
 				K = NULL;
 				mvprintw(2, 1, "kuba: dead");
 			}
+			if(S!=NULL && S->getHealth()==0){
+				delete S;
+				S = NULL;
+				mvprintw(3, 1, "shooter: dead");
+			}
 
-			//  OUTPUT
+			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
 			if(K!=NULL) mvprintw(2, 1, "kuba: %3d", K->getHealth());
@@ -91,6 +90,7 @@ int main(){
 			B.print();
 			P.print(deltaTime);
 			if(K!=NULL) K->print(deltaTime);
+			if(S!=NULL) S->print(deltaTime);
 
 			refresh();
 		}

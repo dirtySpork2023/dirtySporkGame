@@ -14,6 +14,7 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 
 	this->bM = b;
 	this->fireRate = gunFireRate; // 0.25 = 1/4 --> 4 colpi al secondo
+	this->lastShot = 0;
 	this->dmg = gunDamage;
 
 	this->armor = armor; // 0-1 moltiplica i danni subiti
@@ -48,7 +49,6 @@ void player::print(timeSpan deltaTime){
 
 //aggiorna la posizione del player e/o spara
 void player::update(char input, timeSpan deltaTime){
-	static double elapsedSinceLastShot = 0; //in secondi
 
 	// horizontal movement
 	if( input=='a' || input=='A' ){
@@ -76,11 +76,11 @@ void player::update(char input, timeSpan deltaTime){
 		this->hurt(damageAmount);
 	}
 
-	if( (input=='f'||input=='F') && elapsedSinceLastShot > this->fireRate ){
+	if( (input=='f'||input=='F') && this->lastShot > this->fireRate ){
 		this->shoot();
-		elapsedSinceLastShot = 0;
+		this->lastShot = 0;
 	}else{
-		elapsedSinceLastShot += deltaTime;
+		this->lastShot += deltaTime;
 	}
 }
 

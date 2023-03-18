@@ -9,7 +9,7 @@ entity::entity(int x, int y, int hp, bulletManager* b){
 	this->isGrounded = false;
 
 	this->health = hp;
-	this->lastDamage = 1.0;
+	this->lastDamage = 0;
 
 	this->bM = b;
 
@@ -21,13 +21,9 @@ entity::entity(int x, int y, int hp, bulletManager* b){
 }
 
 void entity::update(timeSpan deltaTime){
-	int damageAmount = bM->check(this->box);
-	if( damageAmount==0 ){
-		this->lastDamage += deltaTime;
-	}else{
-		this->lastDamage = 0;
-		this->hurt(damageAmount);
-	}
+	this->hurt(bM->check(this->box));
+
+	this->lastDamage += deltaTime;
 
 	this->applyGravity(deltaTime);
 }
@@ -89,7 +85,6 @@ void entity::setPrintColor(){
 	}
 }
 
-// deprecated
 point entity::getPos(){
 	return this->box.b;
 }
@@ -106,7 +101,11 @@ int entity::getHealth(){
 
 // danneggia entity e ritorna se è morto
 bool entity::hurt(int value){
-	this->health -= value;
+	if( value!=0 ){
+		this->lastDamage = 0;
+		this->health -= value;
+	}
+
 	if(this->health <= 0){
 		this->health = 0;
 		return true;

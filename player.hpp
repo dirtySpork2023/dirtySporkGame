@@ -13,6 +13,7 @@ protected:
 	double jumpSpeed;
 	bool facingRight;
 	double fireRate;
+	timeSpan lastShot;
 	int dmg; // danno di ogni proiettile
 
 public:

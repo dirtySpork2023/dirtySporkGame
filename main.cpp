@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <chrono>
+#include "lib.hpp"
 #include "entity.hpp"
 #include "player.hpp"
 #include "kuba.hpp"

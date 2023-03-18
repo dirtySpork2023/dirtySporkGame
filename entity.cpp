@@ -9,7 +9,7 @@ entity::entity(int x, int y, int hp, bulletManager* b){
 	this->isGrounded = false;
 
 	this->health = hp;
-	this->lastDamage = 0;
+	this->lastDamage = 1.0;
 
 	this->bM = b;
 
@@ -22,7 +22,6 @@ entity::entity(int x, int y, int hp, bulletManager* b){
 
 void entity::update(timeSpan deltaTime){
 	int damageAmount = bM->check(this->box);
-
 	if( damageAmount==0 ){
 		this->lastDamage += deltaTime;
 	}else{
@@ -83,7 +82,7 @@ void entity::move(char input){
 }
 
 void entity::setPrintColor(){
-	if(this->lastDamage >= 0.5){
+	if(this->lastDamage >= 0.05){
 		attrset(COLOR_PAIR(1));
 	}else{
 		attrset(COLOR_PAIR(2));
@@ -105,7 +104,7 @@ int entity::getHealth(){
 	return this->health;
 }
 
-// danneggia entity e ritorna true se è morto
+// danneggia entity e ritorna se è morto
 bool entity::hurt(int value){
 	this->health -= value;
 	if(this->health <= 0){

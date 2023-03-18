@@ -45,4 +45,6 @@ void kuba::print(timeSpan deltaTime){
 
 	mvprintw(this->box.a.y, this->box.a.x, "<O>");
 	mvprintw(this->box.b.y, this->box.a.x, "/-\\");
+
+	attrset(COLOR_PAIR(1));
 }

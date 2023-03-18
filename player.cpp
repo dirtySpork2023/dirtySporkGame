@@ -68,7 +68,13 @@ void player::update(char input, timeSpan deltaTime){
 	}
 
 	// applica danno se collide con proiettili
-	this->hurt(bM->check(this->box));
+	int damageAmount = bM->check(this->box);
+	if( damageAmount==0 ){
+		this->lastDamage += deltaTime;
+	}else{
+		this->lastDamage = 0;
+		this->hurt(damageAmount);
+	}
 
 	if( (input=='f'||input=='F') && elapsedSinceLastShot > this->fireRate ){
 		this->shoot();

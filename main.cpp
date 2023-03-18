@@ -64,7 +64,7 @@ int main(){
 			// update
 			P.update(input, deltaTime);
 			if(K!=NULL) K->update(&P, deltaTime);
-			if(S!=NULL) S->update(&P, deltaTime);
+			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			B.update(deltaTime);
 
 			// death

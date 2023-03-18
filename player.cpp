@@ -7,17 +7,40 @@ using namespace std;
 
 #define HEALTH_LENGTH 20
 
-player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): entity(x,y,MAX_HEALTH,b){
+player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): shooter(x,y,MAX_HEALTH,b,gunFireRate,gunDamage){
 	this->jumpSpeed = -sqrt(jumpHeight * GRAVITY * 2.1);
-
-	this->facingRight = true;
-
-	this->bM = b;
-	this->fireRate = gunFireRate; // 0.25 = 1/4 --> 4 colpi al secondo
-	this->lastShot = 0;
-	this->dmg = gunDamage;
-
 	this->armor = armor; // 0-1 moltiplica i danni subiti
+}
+
+//aggiorna la posizione del player e/o spara
+void player::update(char input, timeSpan deltaTime){
+
+	// horizontal movement
+	if( input=='a' || input=='A' ){
+		facingRight = false;
+		entity::move('a');
+	}else if( input=='d' || input=='D' ){
+		facingRight = true;
+		entity::move('d');
+	}
+
+	// vertical movement
+	entity::applyGravity(deltaTime);
+
+	if( isGrounded && ((int)'A'<=input && input<=(int)'Z' || input=='w')){
+		this->ySpeed = this->jumpSpeed; //jump vertical speed
+		this->isGrounded = false;
+	}
+
+	this->hurt(bM->check(this->box));
+	this->lastDamage += deltaTime;
+
+	if( (input=='f'||input=='F') && this->lastShot > this->fireRate ){
+		this->shoot();
+		this->lastShot = 0;
+	}else{
+		this->lastShot += deltaTime;
+	}
 }
 
 //stampa il player
@@ -45,43 +68,6 @@ void player::print(timeSpan deltaTime){
 			printw(".");
 	}
 	printw("|");
-}
-
-//aggiorna la posizione del player e/o spara
-void player::update(char input, timeSpan deltaTime){
-
-	// horizontal movement
-	if( input=='a' || input=='A' ){
-		facingRight = false;
-		entity::move('a');
-	}else if( input=='d' || input=='D' ){
-		facingRight = true;
-		entity::move('d');
-	}
-
-	// vertical movement
-	entity::applyGravity(deltaTime);
-
-	if( isGrounded && ((int)'A'<=input && input<=(int)'Z' || input=='w')){
-		this->ySpeed = this->jumpSpeed; //jump vertical speed
-		this->isGrounded = false;
-	}
-
-	// applica danno se collide con proiettili
-	int damageAmount = bM->check(this->box);
-	if( damageAmount==0 ){
-		this->lastDamage += deltaTime;
-	}else{
-		this->lastDamage = 0;
-		this->hurt(damageAmount);
-	}
-
-	if( (input=='f'||input=='F') && this->lastShot > this->fireRate ){
-		this->shoot();
-		this->lastShot = 0;
-	}else{
-		this->lastShot += deltaTime;
-	}
 }
 
 bool player::hurt(int value){

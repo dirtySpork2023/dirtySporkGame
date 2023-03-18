@@ -4,13 +4,12 @@
 using namespace std;
 
 entity::entity(int x, int y, int hp, bulletManager* b){
-	//this->pos.x = x;
-	//this->pos.y = y;
 	this->yMod = 0;
 	this->ySpeed = 0;
 	this->isGrounded = false;
 
 	this->health = hp;
+	this->lastDamage = 0;
 
 	this->bM = b;
 
@@ -22,15 +21,20 @@ entity::entity(int x, int y, int hp, bulletManager* b){
 }
 
 void entity::update(timeSpan deltaTime){
-	// applica danno se collide con proiettili
-	this->hurt(bM->check(this->box));
+	int damageAmount = bM->check(this->box);
+
+	if( damageAmount==0 ){
+		this->lastDamage += deltaTime;
+	}else{
+		this->lastDamage = 0;
+		this->hurt(damageAmount);
+	}
 
 	this->applyGravity(deltaTime);
 }
 
 void entity::applyGravity(timeSpan deltaTime){
 	if( this->isGrounded ){
-		//this->pos.y = 30;
 		this->ySpeed = 0;
 		this->yMod = 0;
 	}else{
@@ -48,7 +52,6 @@ void entity::applyGravity(timeSpan deltaTime){
 
 void entity::move(char input){
 	if( input=='a' ){
-		//this->pos.x -= 1;
 		this->box.a.x -= 1;
 		this->box.b.x -= 1;
 		// cleanup
@@ -56,7 +59,6 @@ void entity::move(char input){
 			mvprintw(y, this->box.b.x+1, " ");
 		}
 	}else if( input=='d' ){
-		//this->pos.x += 1;
 		this->box.a.x += 1;
 		this->box.b.x += 1;
 		// cleanup
@@ -64,7 +66,6 @@ void entity::move(char input){
 			mvprintw(y, this->box.a.x-1, " ");
 		}
 	}else if( input=='w' ){
-		//this->pos.y -= 1;
 		this->box.a.y -= 1;
 		this->box.b.y -= 1;
 		// cleanup
@@ -72,13 +73,20 @@ void entity::move(char input){
 			mvprintw(this->box.b.y+1, x, " ");
 		}
 	}else if( input=='s' ){
-		//this->pos.y += 1;
 		this->box.a.y += 1;
 		this->box.b.y += 1;
 		// cleanup
 		for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
 			mvprintw(this->box.a.y-1, x, " ");
 		}
+	}
+}
+
+void entity::setPrintColor(){
+	if(this->lastDamage >= 0.5){
+		attrset(COLOR_PAIR(1));
+	}else{
+		attrset(COLOR_PAIR(2));
 	}
 }
 

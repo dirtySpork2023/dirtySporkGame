@@ -20,18 +20,8 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 }
 
 //stampa il player
-void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
-	static double elapsedSinceLastDamage = 0; //in secondi
-	static int lastHP = this->health;
-
-	if( lastHP != this->health ){
-		attrset(COLOR_PAIR(2));
-		elapsedSinceLastDamage += deltaTime;
-		if(elapsedSinceLastDamage >= 0.05){
-			lastHP=this->health;
-			elapsedSinceLastDamage = 0;
-		}
-	}
+void player::print(timeSpan deltaTime){
+	entity::setPrintColor();
 
 	// body
 	if( facingRight ){
@@ -44,9 +34,8 @@ void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
 		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
 	}
 
-	attrset(COLOR_PAIR(1));
-
 	// health bar
+	attrset(COLOR_PAIR(1));
 	mvprintw(1, 1, "health: |", this->health);
 	for(int i=0 ; i<HEALTH_LENGTH ; i++){
 		if(this->health - i*MAX_HEALTH/HEALTH_LENGTH > 0)

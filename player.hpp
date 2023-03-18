@@ -7,7 +7,7 @@
 
 #define MAX_HEALTH 100
 
-class player: public entity { //TODO public shooter
+class player: public entity {
 protected:
 	float armor; // 0-1 moltiplica i danni subiti
 	double jumpSpeed;
@@ -17,8 +17,8 @@ protected:
 
 public:
 	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor);
-	void print(timeSpan deltaTime);
 	void update(char input, timeSpan deltaTime);
+	void print(timeSpan deltaTime);
 	bool hurt(int value);
 	void shoot();
 };

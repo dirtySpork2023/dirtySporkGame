@@ -6,11 +6,11 @@
 
 #define GRAVITY 175
 
-// sente la gravità ma non può saltare.
 class entity {
 protected:
 	hitBox box;
 	int health;
+	timeSpan lastDamage; // time in seconds elapsed since entity was hurt
 	bulletManager* bM;
 	double ySpeed; // velocità verticale
 	double yMod; // parte decimale della posizione in verticale
@@ -18,6 +18,7 @@ protected:
 
 	void applyGravity(timeSpan deltaTime);
 	void move(char input);
+	void setPrintColor();
 
 public:
 	entity(int x, int y, int hp, bulletManager* bM);

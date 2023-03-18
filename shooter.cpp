@@ -7,11 +7,15 @@ shooter::shooter(int x, int y, int h, bulletManager* b, double fireRate, int dam
 	this->dmg = damage;
 }
 
-void shooter::print(){
+void shooter::print(timeSpan deltaTime){
+	entity::setPrintColor();
 
+	mvprintw(this->box.a.y,   this->box.a.x, "\\\\ ");
+	mvprintw(this->box.a.y+1, this->box.a.x, "qWW");
+	mvprintw(this->box.b.y,   this->box.a.x, "O=O");
 }
 
-void shooter::update(){
+void shooter::update(player* target, timeSpan deltaTime){
 
 }
 

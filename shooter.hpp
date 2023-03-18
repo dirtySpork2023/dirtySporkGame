@@ -2,6 +2,7 @@
 #define SHOOTER_HPP
 
 #include "entity.hpp"
+#include "player.hpp"
 
 class shooter: public entity{
 protected:
@@ -9,8 +10,8 @@ protected:
 	int dmg; // danno di ogni proiettile
 public:
 	shooter(int x, int y, int h, bulletManager* b, double fireRate, int damage);
-	void print();
-	void update();
+	void update(player* target, timeSpan deltaTime);
+	void print(timeSpan deltaTime);
 	void shoot();
 };
 

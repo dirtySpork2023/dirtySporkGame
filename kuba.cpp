@@ -41,23 +41,8 @@ void kuba::update(player* target, timeSpan deltaTime){
 }
 
 void kuba::print(timeSpan deltaTime){
-	static timeSpan lastDamage = 0; //in secondi
-	static int lastHP = this->health;
-
-	if( lastHP != this->health ){ //TODO da generalizzare in entity
-		attrset(COLOR_PAIR(2));
-		lastDamage += deltaTime;
-		if(lastDamage >= 0.10){
-			lastHP=this->health;
-			lastDamage = 0;
-		}
-	}
-
-	//TODO stampa barra della vita
+	entity::setPrintColor();
 
 	mvprintw(this->box.a.y, this->box.a.x, "<O>");
 	mvprintw(this->box.b.y, this->box.a.x, "/-\\");
-
-
-	attrset(COLOR_PAIR(1));
 }

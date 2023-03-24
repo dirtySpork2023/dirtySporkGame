@@ -3,7 +3,7 @@
 #include "entity.hpp"
 using namespace std;
 
-entity::entity(int x, int y, int hp, bulletManager* b){
+entity::entity(int x, int y, bulletManager* b, int hp){
 	this->yMod = 0;
 	this->ySpeed = 0;
 	this->isGrounded = false;
@@ -14,10 +14,10 @@ entity::entity(int x, int y, int hp, bulletManager* b){
 	this->bM = b;
 
 	//default hitbox. da sovrascrivere se necessario
-	this->box.a.x = x-1;
-	this->box.a.y = y-1;
-	this->box.b.x = x+1;
-	this->box.b.y = y+1;
+	this->box.a.x = x-2;
+	this->box.a.y = y-2;
+	this->box.b.x = x;
+	this->box.b.y = y;
 }
 
 void entity::update(timeSpan deltaTime){
@@ -77,11 +77,11 @@ void entity::move(char input){
 	}
 }
 
-void entity::setPrintColor(){
-	if(this->lastDamage >= 0.05){
-		attrset(COLOR_PAIR(1));
+void entity::setPrintColor(int paint){
+	if(this->lastDamage <= DAMAGE_TIMESPAN){
+		attrset(COLOR_PAIR( PAINT_DAMAGE ));
 	}else{
-		attrset(COLOR_PAIR(2));
+		attrset(COLOR_PAIR( paint ));
 	}
 }
 

@@ -1,6 +1,18 @@
 #ifndef LIB_HPP
 #define LIB_HPP
 
+// colori da 8 a 255 (i colori 0-7 sono predefiniti ma modificabili)
+#define COLOR_PLAYER 8
+#define COLOR_ENEMY 9
+
+// palette da 1 a 255
+#define PAINT_DEFAULT 1
+#define PAINT_DAMAGE 2
+#define PAINT_PLAYER 3
+#define PAINT_ENEMY 4
+
+
+
 typedef double timeSpan;
 
 struct point {

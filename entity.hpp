@@ -5,6 +5,7 @@
 #include "bulletManager.hpp"
 
 #define GRAVITY 175
+#define DAMAGE_TIMESPAN 0.10
 
 class entity {
 protected:
@@ -18,10 +19,10 @@ protected:
 
 	void applyGravity(timeSpan deltaTime);
 	void move(char input);
-	void setPrintColor();
+	void setPrintColor(int paint = PAINT_DEFAULT);
 
 public:
-	entity(int x, int y, int hp, bulletManager* bM);
+	entity(int x, int y, bulletManager* b, int hp);
 	void update(timeSpan deltaTime);
 	point getPos();
 	hitBox getHitBox();

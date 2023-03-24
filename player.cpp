@@ -7,7 +7,7 @@ using namespace std;
 
 #define HEALTH_LENGTH 20
 
-player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): shooter(x,y,MAX_HEALTH,b,gunFireRate,gunDamage){
+player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): shooter(x,y,b,MAX_HEALTH,gunFireRate,gunDamage){
 	this->jumpSpeed = -sqrt(jumpHeight * GRAVITY * 2.1);
 	this->armor = armor; // 0-1 moltiplica i danni subiti
 }
@@ -45,7 +45,7 @@ void player::update(char input, timeSpan deltaTime){
 
 //stampa il player
 void player::print(timeSpan deltaTime){
-	entity::setPrintColor();
+	entity::setPrintColor(PAINT_PLAYER);
 
 	// body
 	if( facingRight ){
@@ -60,14 +60,15 @@ void player::print(timeSpan deltaTime){
 
 	// health bar
 	attrset(COLOR_PAIR(1));
-	mvprintw(1, 1, "health: |", this->health);
+	mvprintw(1, 1, "health: %3d |", this->health);
 	for(int i=0 ; i<HEALTH_LENGTH ; i++){
 		if(this->health - i*MAX_HEALTH/HEALTH_LENGTH > 0)
-			printw("M");
+			printw("#");
 		else
 			printw(".");
 	}
 	printw("|");
+	mvprintw(2, 1, "armor: %3.0f%%", this->armor*100);
 }
 
 bool player::hurt(int value){

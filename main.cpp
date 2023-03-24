@@ -11,17 +11,36 @@ using namespace std;
 //inizializza ncurses
 void init(){
 	initscr();
+	start_color();
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
 	curs_set(0);
 
-	start_color(); // permette di usare i colori attraverso gli attributi di ncurses
+	/*	COLOR_BLACK
+		COLOR_RED
+		COLOR_GREEN
+		COLOR_YELLOW
+		COLOR_BLUE
+		COLOR_MAGENTA
+		COLOR_CYAN
+		COLOR_WHITE
+
+	 	COLORS numero tot di colori
+	 	COLOR_PAIRS numero tot di coppie di colori
+	 */
+
 	init_color(COLOR_BLACK, 100, 100, 100);
-	init_pair(1, COLOR_WHITE, COLOR_BLACK); //default
-	init_pair(2, COLOR_RED, COLOR_BLACK); //damaged entity
-	attrset(COLOR_PAIR(1));
-	//if(!has_colors()) printw("TERMINAL DOES NOT HAVE COLORS");
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
+	init_color(COLOR_RED, 1000, 0, 0);
+	init_color(COLOR_PLAYER, 500, 800, 700);
+	init_color(COLOR_ENEMY, 500, 700, 800);
+
+	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
+	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
+	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
+	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
 int main(){
@@ -39,8 +58,8 @@ int main(){
 		//level setup here
 
 		player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
-		kuba* K = new kuba(COLS-30, 5, 50, &B, 0.1, 20);
-		shooter* S = new shooter(COLS-10, 5, 50, &B, 1.5, 2);
+		kuba* K = new kuba(COLS-30, 5, &B, 2);
+		shooter* S = new shooter(COLS-10, 5, &B, 50, 1.5, 20);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 
@@ -54,9 +73,9 @@ int main(){
 			input = getch();
 
 			// setGrounded
-			if( P.getPos().y==35 ) P.setGrounded(true); // da spostare dentro entity
+			if( P.getPos().y==35 ) P.setGrounded(true);
 			else P.setGrounded(false);
-			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true); // da spostare dentro entity
+			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true);
 			else if(K!=NULL) K->setGrounded(false);
 			if( S!=NULL && S->getPos().y==35 ) S->setGrounded(true);
 			else if(S!=NULL) S->setGrounded(false);
@@ -72,18 +91,15 @@ int main(){
 			if(K!=NULL && K->getHealth()==0){
 				delete K;
 				K = NULL;
-				mvprintw(2, 1, "kuba: dead");
 			}
 			if(S!=NULL && S->getHealth()==0){
 				delete S;
 				S = NULL;
-				mvprintw(3, 1, "shooter: dead");
 			}
 
 			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
-			if(K!=NULL) mvprintw(2, 1, "kuba: %3d", K->getHealth());
 			move(36, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 

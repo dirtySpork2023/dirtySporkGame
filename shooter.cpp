@@ -2,7 +2,7 @@
 #include "entity.hpp"
 #include "shooter.hpp"
 
-shooter::shooter(int x, int y, int h, bulletManager* b, double fireRate, int damage): entity(x,y,h,b){
+shooter::shooter(int x, int y, bulletManager* b, int h, double fireRate, int damage): entity(x,y,b,h){
 	this->fireRate = fireRate;
 	this->lastShot = 0;
 	this->dmg = damage;
@@ -24,7 +24,7 @@ void shooter::update(point target, timeSpan deltaTime){
 }
 
 void shooter::print(timeSpan deltaTime){
-	entity::setPrintColor();
+	entity::setPrintColor(PAINT_ENEMY);
 
 	if( facingRight ){
 		mvprintw(this->box.a.y,   this->box.a.x, "_//");
@@ -54,5 +54,5 @@ void shooter::shoot(point p){
 	// velocità verticale esatta necessaria per colpire il player. (imprecisa su distanze più lunghe del terminale)
 	// yeah mista white
 	// yeah SCIENCE
-	this->bM->add(muzzle,speed,true,4,'G');
+	this->bM->add(muzzle,speed,true,this->dmg,'G');
 }

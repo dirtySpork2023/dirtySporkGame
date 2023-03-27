@@ -6,6 +6,7 @@
 #include "kuba.hpp"
 #include "shooter.hpp"
 #include "bulletManager.hpp"
+#include "level.hpp"
 using namespace std;
 
 //inizializza ncurses
@@ -57,11 +58,11 @@ int main(){
 	while( !quit ){
 		//level setup here
 
-		int level = 1; //provvisorio per testing
+		int lvl = 1; //provvisorio per testing
 
 		player P = player(10, 10, &B, 0.1, 10, 12, 0.5);
-		kuba* K = new kuba(80, 10, &B, level);
-		shooter* S = new shooter(120, 10, &B, level);
+		kuba* K = new kuba(80, 10, &B, lvl);
+		shooter* S = new shooter(120, 10, &B, lvl);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 
@@ -99,15 +100,15 @@ int main(){
 				S = NULL;
 			}
 			if(S==NULL && K==NULL){
-				level++;
-				K = new kuba(80, 10, &B, level);
-				S = new shooter(120, 10, &B, level);
+				lvl++;
+				K = new kuba(80, 10, &B, lvl);
+				S = new shooter(120, 10, &B, lvl);
 			}
 
 			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
-			mvprintw(0, 30, "|level: %d", level);
+			mvprintw(0, 30, "|level: %d", lvl);
 			move(36, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 

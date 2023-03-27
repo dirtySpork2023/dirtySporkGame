@@ -4,7 +4,7 @@
 #include "lib.hpp"
 
 #define MAX_BULLETS 100
-#define GRAVITY 100
+#define BULLET_G 100
 
 struct node {
 	vector pos;

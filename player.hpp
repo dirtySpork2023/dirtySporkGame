@@ -6,6 +6,7 @@
 #include "bulletManager.hpp"
 
 #define MAX_HEALTH 100
+#define HEALTH_BAR_LENGTH 20
 
 class player: public shooter {
 protected:
@@ -13,7 +14,7 @@ protected:
 	double jumpSpeed;
 
 public:
-	player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor);
+	player(int x, int y, level* l, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor);
 	void update(char input, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	bool hurt(int value);

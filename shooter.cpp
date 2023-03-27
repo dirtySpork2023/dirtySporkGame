@@ -2,14 +2,14 @@
 #include "entity.hpp"
 #include "shooter.hpp"
 
-shooter::shooter(int x, int y, bulletManager* b, int h, double fireRate, int damage): entity(x,y,b,h){
+shooter::shooter(int x, int y, level* l, bulletManager* b, int h, double fireRate, int damage): entity(x,y,l,b,h){
 	this->fireRate = fireRate;
 	this->lastShot = 0;
 	this->damage = damage;
 	this->facingRight = true;
 }
 
-shooter::shooter(int x, int y, bulletManager* b, int level): entity(x,y,b,0){
+shooter::shooter(int x, int y, level* l, bulletManager* b, int level): entity(x,y,l,b,0){
 	this->health = 20 + 5*level;
 
 	this->damage = 20 + 10*level;
@@ -60,8 +60,8 @@ void shooter::shoot(point p){
 
 	//int Dx = (p.x-muzzle.x-1);
 	//int Dy = (p.y-muzzle.y-1);
-	speed.y = -10*(p.x-muzzle.x-1) / 2*speed.x  +  (p.y-muzzle.y-1)*speed.x / (p.x-muzzle.x-1);
-	// velocità verticale esatta necessaria per colpire il player. (imprecisa su distanze più lunghe del terminale)
+	speed.y = -0.75*BULLET_G*(p.x-muzzle.x-1) / speed.x  +  (p.y-muzzle.y-1)*speed.x / (p.x-muzzle.x-1);
+	// velocità verticale esatta necessaria per colpire il player.
 	// yeah mista white
 	// yeah SCIENCE
 	this->bM->add(muzzle,speed,true,this->damage,'G');

@@ -3,7 +3,7 @@
 #include "entity.hpp"
 using namespace std;
 
-entity::entity(int x, int y, bulletManager* b, int hp){
+entity::entity(int x, int y, level* l, bulletManager* b, int hp){
 	this->yMod = 0;
 	this->ySpeed = 0;
 	this->isGrounded = false;
@@ -12,6 +12,7 @@ entity::entity(int x, int y, bulletManager* b, int hp){
 	this->lastDamage = 0;
 
 	this->bM = b;
+	this->lM = l;
 
 	//default hitbox. da sovrascrivere se necessario
 	this->box.a.x = x-2;
@@ -33,7 +34,7 @@ void entity::applyGravity(timeSpan deltaTime){
 		this->ySpeed = 0;
 		this->yMod = 0;
 	}else{
-		this->ySpeed += GRAVITY * deltaTime;
+		this->ySpeed += ENTITY_G * deltaTime;
 		this->yMod += this->ySpeed * deltaTime;
 		if(this->yMod > 1){
 			this->yMod -= 1;
@@ -46,33 +47,35 @@ void entity::applyGravity(timeSpan deltaTime){
 }
 
 void entity::move(char input){
-	if( input=='a' ){
-		this->box.a.x -= 1;
-		this->box.b.x -= 1;
-		// cleanup
-		for(int y=this->box.a.y ; y<=this->box.b.y ; y++){
-			mvprintw(y, this->box.b.x+1, " ");
-		}
-	}else if( input=='d' ){
-		this->box.a.x += 1;
-		this->box.b.x += 1;
-		// cleanup
-		for(int y=this->box.a.y ; y<=this->box.b.y ; y++){
-			mvprintw(y, this->box.a.x-1, " ");
-		}
-	}else if( input=='w' ){
-		this->box.a.y -= 1;
-		this->box.b.y -= 1;
-		// cleanup
-		for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
-			mvprintw(this->box.b.y+1, x, " ");
-		}
-	}else if( input=='s' ){
-		this->box.a.y += 1;
-		this->box.b.y += 1;
-		// cleanup
-		for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
-			mvprintw(this->box.a.y-1, x, " ");
+	if( this->lM->check(this->box, input).tipe == 'n'){
+		if( input=='a' ){
+			this->box.a.x -= 1;
+			this->box.b.x -= 1;
+			// cleanup
+			for(int y=this->box.a.y ; y<=this->box.b.y ; y++){
+				mvprintw(y, this->box.b.x+1, " ");
+			}
+		}else if( input=='d' ){
+			this->box.a.x += 1;
+			this->box.b.x += 1;
+			// cleanup
+			for(int y=this->box.a.y ; y<=this->box.b.y ; y++){
+				mvprintw(y, this->box.a.x-1, " ");
+			}
+		}else if( input=='w' ){
+			this->box.a.y -= 1;
+			this->box.b.y -= 1;
+			// cleanup
+			for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
+				mvprintw(this->box.b.y+1, x, " ");
+			}
+		}else if( input=='s' ){
+			this->box.a.y += 1;
+			this->box.b.y += 1;
+			// cleanup
+			for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
+				mvprintw(this->box.a.y-1, x, " ");
+			}
 		}
 	}
 }

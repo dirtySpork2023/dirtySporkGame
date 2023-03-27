@@ -12,8 +12,8 @@ protected:
 	bool facingRight;
 
 public:
-	shooter(int x, int y, bulletManager* b, int h, double fireRate, int damage);
-	shooter(int x, int y, bulletManager* b, int level);
+	shooter(int x, int y, level* l, bulletManager* b, int h, double fireRate, int damage);
+	shooter(int x, int y, level* l, bulletManager* b, int level);
 	void update(point target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	void shoot(point p);

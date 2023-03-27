@@ -5,10 +5,8 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-#define HEALTH_LENGTH 20
-
-player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): shooter(x,y,b,MAX_HEALTH,gunFireRate,gunDamage){
-	this->jumpSpeed = -sqrt(jumpHeight * GRAVITY * 2.1);
+player::player(int x, int y, level* l, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): shooter(x,y,l,b,MAX_HEALTH,gunFireRate,gunDamage){
+	this->jumpSpeed = -sqrt(jumpHeight * ENTITY_G * 2.1);
 	this->armor = armor; // 0-1 moltiplica i danni subiti
 }
 
@@ -61,8 +59,8 @@ void player::print(timeSpan deltaTime){
 	// health bar
 	attrset(COLOR_PAIR(1));
 	mvprintw(1, 1, "health: %3d |", this->health);
-	for(int i=0 ; i<HEALTH_LENGTH ; i++){
-		if(this->health - i*MAX_HEALTH/HEALTH_LENGTH > 0)
+	for(int i=0 ; i<HEALTH_BAR_LENGTH ; i++){
+		if(this->health - i*MAX_HEALTH/HEALTH_BAR_LENGTH > 0)
 			printw("#");
 		else
 			printw(".");

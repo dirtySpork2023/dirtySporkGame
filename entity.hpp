@@ -3,8 +3,9 @@
 
 #include "lib.hpp"
 #include "bulletManager.hpp"
+#include "level.hpp"
 
-#define GRAVITY 175
+#define ENTITY_G 175
 #define DAMAGE_TIMESPAN 0.10
 
 class entity {
@@ -13,6 +14,7 @@ protected:
 	int health;
 	timeSpan lastDamage; // time in seconds elapsed since entity was hurt
 	bulletManager* bM;
+	level* lM;
 	double ySpeed; // velocità verticale
 	double yMod; // parte decimale della posizione in verticale
 	bool isGrounded; // true se il player è sopra qualcosa di solido ( => non sta cadendo <=> può saltare)
@@ -22,7 +24,7 @@ protected:
 	void setPrintColor(int paint = PAINT_DEFAULT);
 
 public:
-	entity(int x, int y, bulletManager* b, int hp);
+	entity(int x, int y, level* l, bulletManager* b, int hp);
 	void update(timeSpan deltaTime);
 	point getPos();
 	hitBox getHitBox();

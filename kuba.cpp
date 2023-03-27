@@ -4,7 +4,7 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-kuba::kuba(int x, int y, bulletManager* b, int h, double moveSpeed, int damage): entity(x,y,b,h){
+kuba::kuba(int x, int y, level* l, bulletManager* b, int h, double moveSpeed, int damage): entity(x,y,l,b,h){
 	this->xSpeed = moveSpeed;
 	this->lastMove = 0;
 
@@ -14,7 +14,7 @@ kuba::kuba(int x, int y, bulletManager* b, int h, double moveSpeed, int damage):
 	this->box.a.y = y-1;
 }
 
-kuba::kuba(int x, int y, bulletManager* b, int level): entity(x,y,b,0){
+kuba::kuba(int x, int y, level* l, bulletManager* b, int level): entity(x,y,l,b,0){
 	this->health = 40 + 20*level;
 
 	this->damage = 20 + 10*level;

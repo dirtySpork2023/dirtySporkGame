@@ -50,7 +50,7 @@ void bulletManager::update(double deltaTime){
 	node* tmp = this->head;
 	while( tmp!=NULL ) {
 		if( tmp->gravity ){
-			tmp->speed.y += GRAVITY * deltaTime;
+			tmp->speed.y += BULLET_G * deltaTime;
 		}
 		tmp->pos.x += tmp->speed.x * deltaTime;
 		tmp->pos.y += tmp->speed.y * deltaTime;

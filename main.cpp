@@ -57,9 +57,11 @@ int main(){
 	while( !quit ){
 		//level setup here
 
-		player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
-		kuba* K = new kuba(COLS-30, 5, &B, 2);
-		shooter* S = new shooter(COLS-10, 5, &B, 50, 1.5, 20);
+		int level = 1; //provvisorio per testing
+
+		player P = player(10, 10, &B, 0.1, 10, 12, 0.5);
+		kuba* K = new kuba(80, 10, &B, level);
+		shooter* S = new shooter(120, 10, &B, level);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 
@@ -96,10 +98,16 @@ int main(){
 				delete S;
 				S = NULL;
 			}
+			if(S==NULL && K==NULL){
+				level++;
+				K = new kuba(80, 10, &B, level);
+				S = new shooter(120, 10, &B, level);
+			}
 
 			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
+			mvprintw(0, 30, "|level: %d", level);
 			move(36, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 

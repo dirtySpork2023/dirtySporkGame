@@ -3,9 +3,6 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-#define MAX_BULLETS 100
-#define GRAVITY 150
-
 bulletManager::bulletManager(){
 	this->head = NULL;
 	this->tail = NULL;

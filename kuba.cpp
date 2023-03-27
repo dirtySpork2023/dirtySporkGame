@@ -15,13 +15,12 @@ kuba::kuba(int x, int y, bulletManager* b, int h, double moveSpeed, int damage):
 }
 
 kuba::kuba(int x, int y, bulletManager* b, int level): entity(x,y,b,0){
+	this->health = 40 + 20*level;
+
+	this->damage = 20 + 10*level;
 	this->xSpeed = 0.1;
+
 	this->lastMove = 0;
-
-	this->damage = 10 * level;
-	this->health = 20 * level;
-
-	//hitbox 3x2
 	this->box.a.y = y-1;
 }
 

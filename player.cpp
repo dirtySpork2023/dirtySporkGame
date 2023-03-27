@@ -87,5 +87,5 @@ void player::shoot(){
 	if( facingRight ) muzzle.x += 2;
 	else muzzle.x -= 2;
 
-	this->bM->add(muzzle, speed, false, this->dmg, 'o');
+	this->bM->add(muzzle, speed, false, this->damage, 'o');
 }

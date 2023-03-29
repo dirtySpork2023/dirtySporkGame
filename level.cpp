@@ -44,25 +44,25 @@ infoCrash level::check (hitBox ch, char d) {
         r = tmp1->pl.getHitbox();
         if (d == 'a') {
             if (whereIsY (r, ch) == 3 && r.b.x == ch.a.x-1) {
-                info.tipe = 'p';
+                info.type = 'p';
                 info.i = j;
                 here = true;
             }
         } else if (d == 'd') {
             if (whereIsY (r, ch) == 3 && r.a.x == ch.b.x+1) {
-                info.tipe = 'p';
-                info.i = j;
+                info.type = 'p';
+                info.i= j;
                 here = true;
             }
         } else if (d == 'w') {
             if (whereIsX (r, ch) == 3 && r.b.y == ch.a.y+1) {
-                info.tipe = 'p';
+                info.type = 'p';
                 info.i = j;
                 here = true;                
             } 
         } else if (d == 's') {
             if (whereIsX (r, ch) == 3 && r.a.y == ch.b.y-1) {
-                info.tipe = 'p';
+                info.type = 'p';
                 info.i = j;
                 here = true;
             }
@@ -72,30 +72,30 @@ infoCrash level::check (hitBox ch, char d) {
     delete tmp1;
 
     // Controllo nemici
-    lEnemies tmp2 = this->kubas;
+    lEnemies tmp2 = this->enemies;
     for (j=0; tmp2 != NULL && here == false; j++) {
-        r = tmp2->ku.getHitBox;
+        r = tmp2->ent.getHitBox;
         if (d == 'a') {
             if (whereIsY (r, ch) == 3 && r.b.x == ch.a.x-1) {
-                info.tipe = 'k';
+                info.type = 'k';
                 info.i = j;
                 here = true;
             }
         } else if (d == 'd') {
             if (whereIsY (r, ch) == 3 && r.a.x == ch.b.x+1) {
-                info.tipe = 'k';
+                info.type = 'k';
                 info.i = j;
                 here = true;
             }
         } else if (d == 'w') {
             if (whereIsX (r, ch) == 3 && r.b.y == ch.a.y+1) {
-                info.tipe = 'k';
+                info.type = 'k';
                 info.i = j;
                 here = true;                
             } 
         } else if (d == 's') {
             if (whereIsX (r, ch) == 3 && r.a.y == ch.b.y-1) {
-                info.tipe = 'k';
+                info.type = 'k';
                 info.i = j;
                 here = true;
             }
@@ -117,15 +117,5 @@ infoCrash level::check (hitBox ch, char d) {
 
    return info;
 }
-
-
-
-
-
-
-
-
-
-
 
 

@@ -4,9 +4,11 @@
 #include "player.hpp"
 #include "kuba.hpp"
 #include "bulletManager.hpp"
+#include "level.hpp"
+#include "platform.hpp"
 using namespace std;
 
-//inizializza ncurses
+//Inizializzazione di ncurses
 void init(){
 	initscr();
 	noecho();
@@ -22,6 +24,13 @@ void init(){
 	//if(!has_colors()) printw("TERMINAL DOES NOT HAVE COLORS");
 }
 
+struct structLevel {
+	level liv;
+	structLevel* next;
+};
+
+typedef structLevel* lLevels;
+
 int main(){
 
 	init();
@@ -31,13 +40,17 @@ int main(){
 	bulletManager B = bulletManager();
 
 	char input;
+	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
+	lLevels levels = new structLevel;           // Lista dei livelli
+
 
 	while( !quit ){
 		//level setup here
 
 		player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
 		kuba* K = new kuba(100, 5, 50, &B, 0.1, 20);
+		levels->liv = level (numL);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 

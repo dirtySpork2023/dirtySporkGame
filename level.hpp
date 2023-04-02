@@ -2,7 +2,7 @@
 #define LEVEL_HPP
 
 #include "lib.hpp"
-#include "kuba.hpp"
+#include "entity.hpp"
 #include "platform.hpp"
 
 // Lista delle piattaforme presenti in un livello
@@ -14,17 +14,17 @@ struct platforms{
 typedef platforms* lPlatforms; 
 
 // Lista dei nemici presenti in un livello
-struct enemies{
-    kuba ku;
-    enemies* next;
+struct enemy{
+    entity ent;
+    enemy* next;
 };
 
-typedef enemies* lEnemies;
+typedef enemy* lEnemies;
 
 
 // Struct da restituire nella funzione check
 struct infoCrash {
-    char tipe;                // Tipo di oggetto con cui ci si scontra (p: platform || k: kuba || u: upgrades || n: nothing)
+    char type;                // Tipo di oggetto con cui ci si scontra (p: platform || k: kuba || u: upgrades || n: nothing)
     int i;                    // Indice in cui è posizionato l'oggetto all'interno della sua lista
 }; 
 
@@ -32,7 +32,7 @@ class level {
     private:
     int nlevel;                // Numero del livello
     lPlatforms plat;           // Lista delle piattaforme del livello
-    lEnemies kubas;            // Lista dei nemici del livello
+    lEnemies enemies;            // Lista dei nemici del livello
 
     public:
     level (int nl);

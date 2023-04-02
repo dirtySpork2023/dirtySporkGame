@@ -7,7 +7,31 @@
 #include "kuba.hpp"
 #include "shooter.hpp"
 #include "player.hpp"
+#include "platform.hpp"
 using namespace std;
+
+//Inizializzazione di ncurses
+void init(){
+	initscr();
+	noecho();
+	cbreak();
+	nodelay(stdscr, TRUE);
+	curs_set(0);
+
+	start_color(); // permette di usare i colori attraverso gli attributi di ncurses
+	init_color(COLOR_BLACK, 100, 100, 100);
+	init_pair(1, COLOR_WHITE, COLOR_BLACK); //default
+	init_pair(2, COLOR_RED, COLOR_BLACK); //damaged entity
+	attrset(COLOR_PAIR(1));
+	//if(!has_colors()) printw("TERMINAL DOES NOT HAVE COLORS");
+}
+
+struct structLevel {
+	level liv;
+	structLevel* next;
+};
+
+typedef structLevel* lLevels;
 
 int main(){
 
@@ -19,7 +43,10 @@ int main(){
 	level levelClass = level(5);
 
 	char input;
+	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
+	lLevels levels = new structLevel;           // Lista dei livelli
+
 
 	while( !quit ){
 		//level setup here
@@ -27,6 +54,7 @@ int main(){
 		player P = player(10, 10, &B, 0.1, 10, 12, 0);
 		kuba* K = new kuba(80, 10, &levelClass, &B);
 		shooter* S = new shooter(120, 10, &levelClass, &B);
+		levels->liv = level (numL);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 

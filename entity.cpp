@@ -1,9 +1,11 @@
 #include <ncurses.h>
+
 #include "lib.hpp"
+#include "level.hpp"
 #include "entity.hpp"
 using namespace std;
 
-entity::entity(int x, int y, level* l, bulletManager* b, int hp){
+entity::entity(int x, int y, level* lM, bulletManager* bM, int hp){
 	this->yMod = 0;
 	this->ySpeed = 0;
 	this->isGrounded = false;
@@ -11,8 +13,8 @@ entity::entity(int x, int y, level* l, bulletManager* b, int hp){
 	this->health = hp;
 	this->lastDamage = 0;
 
-	this->bM = b;
-	this->lM = l;
+	this->bM = bM;
+	this->lM = lM;
 
 	//default hitbox. da sovrascrivere se necessario
 	this->box.a.x = x-2;
@@ -22,70 +24,67 @@ entity::entity(int x, int y, level* l, bulletManager* b, int hp){
 }
 
 void entity::update(timeSpan deltaTime){
-	this->hurt(bM->check(this->box));
-
-	this->lastDamage += deltaTime;
-
-	this->applyGravity(deltaTime);
+	hurt(bM->check(box));
+	lastDamage += deltaTime;
+	applyGravity(deltaTime);
+	setGrounded( lM->check(box, 's').type!='n' );
 }
 
 void entity::applyGravity(timeSpan deltaTime){
-	if( this->isGrounded ){
-		this->ySpeed = 0;
-		this->yMod = 0;
+	if( isGrounded ){
+		ySpeed = 0;
+		yMod = 0;
 	}else{
-		this->ySpeed += ENTITY_G * deltaTime;
-		this->yMod += this->ySpeed * deltaTime;
-		if(this->yMod > 1){
-			this->yMod -= 1;
-			this->move('s');
-		}else if(this->yMod < -1){
-			this->yMod += 1;
-			this->move('w');
+		ySpeed += ENTITY_G * deltaTime;
+		yMod += ySpeed * deltaTime;
+		if(yMod > 1){
+			yMod -= 1;
+			move('s');
+		}else if(yMod < -1){
+			yMod += 1;
+			move('w');
 		}
 	}
 }
 
 void entity::move(char input){
-	if( this->lM->check(this->box, input).tipe == 'n'){
+	if( lM->check(box, input).type == 'n'){
 		if( input=='a' ){
-			this->box.a.x -= 1;
-			this->box.b.x -= 1;
+			box.a.x -= 1;
+			box.b.x -= 1;
 			// cleanup
-			for(int y=this->box.a.y ; y<=this->box.b.y ; y++){
-				mvprintw(y, this->box.b.x+1, " ");
+			for(int y=box.a.y ; y<=box.b.y ; y++){
+				mvprintw(y, box.b.x+1, " ");
 			}
 		}else if( input=='d' ){
-			this->box.a.x += 1;
-			this->box.b.x += 1;
+			box.a.x += 1;
+			box.b.x += 1;
 			// cleanup
-			for(int y=this->box.a.y ; y<=this->box.b.y ; y++){
-				mvprintw(y, this->box.a.x-1, " ");
+			for(int y=box.a.y ; y<=box.b.y ; y++){
+				mvprintw(y, box.a.x-1, " ");
 			}
 		}else if( input=='w' ){
-			this->box.a.y -= 1;
-			this->box.b.y -= 1;
-			this->setGrounded(false);
+			box.a.y -= 1;
+			box.b.y -= 1;
+			setGrounded(false);
 			// cleanup
-			for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
-				mvprintw(this->box.b.y+1, x, " ");
+			for(int x=box.a.x ; x<=box.b.x ; x++){
+				mvprintw(box.b.y+1, x, " ");
 			}
 		}else if( input=='s' ){
-			this->box.a.y += 1;
-			this->box.b.y += 1;
-			if( this->lM->check(this->box, input).tipe != 'n'){
-				this->setGrounded(true);
-			}
+			box.a.y += 1;
+			box.b.y += 1;
+			//if( lM->check(box, input).type != 'n') setGrounded(true); //needs testing. setgrounded is in update()
 			// cleanup
-			for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
-				mvprintw(this->box.a.y-1, x, " ");
+			for(int x=box.a.x ; x<=box.b.x ; x++){
+				mvprintw(box.a.y-1, x, " ");
 			}
 		}
 	}
 }
 
 void entity::setPrintColor(int paint){
-	if(this->lastDamage <= DAMAGE_TIMESPAN){
+	if(lastDamage <= DAMAGE_TIMESPAN){
 		attrset(COLOR_PAIR( PAINT_DAMAGE ));
 	}else{
 		attrset(COLOR_PAIR( paint ));
@@ -109,12 +108,12 @@ int entity::getHealth(){
 // danneggia entity e ritorna se è morto
 bool entity::hurt(int value){
 	if( value!=0 ){
-		this->lastDamage = 0;
-		this->health -= value;
+		lastDamage = 0;
+		health -= value;
 	}
 
-	if(this->health <= 0){
-		this->health = 0;
+	if(health <= 0){
+		health = 0;
 		return true;
 	}else{
 		return false;
@@ -124,9 +123,9 @@ bool entity::hurt(int value){
 // quando entity è a terra (o sopra un nemico), bisogna invocare questo metodo
 void entity::setGrounded(bool grounded){
 	if(grounded && ySpeed>=0 ){
-		this->isGrounded = true;
+		isGrounded = true;
 	}else{
-		this->isGrounded = false;
+		isGrounded = false;
 	}
 }
 

@@ -8,6 +8,8 @@
 #define ENTITY_G 175
 #define DAMAGE_TIMESPAN 0.10
 
+class level; // necessario per compilare
+
 class entity {
 protected:
 	hitBox box;
@@ -24,7 +26,7 @@ protected:
 	void setPrintColor(int paint = PAINT_DEFAULT);
 
 public:
-	entity(int x, int y, level* l, bulletManager* b, int hp);
+	entity(int x, int y, level* lM, bulletManager* bM, int hp);
 	void update(timeSpan deltaTime);
 	point getPos();
 	hitBox getHitBox();

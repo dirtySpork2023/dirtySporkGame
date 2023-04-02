@@ -10,28 +10,47 @@
 #include "platform.hpp"
 using namespace std;
 
-//Inizializzazione di ncurses
 void init(){
 	initscr();
+	start_color();
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
 	curs_set(0);
 
-	start_color(); // permette di usare i colori attraverso gli attributi di ncurses
+	/*	COLOR_BLACK
+		COLOR_RED
+		COLOR_GREEN
+		COLOR_YELLOW
+		COLOR_BLUE
+		COLOR_MAGENTA
+		COLOR_CYAN
+		COLOR_WHITE
+
+	 	COLORS numero tot di colori
+	 	COLOR_PAIRS numero tot di coppie di colori
+	 */
+
 	init_color(COLOR_BLACK, 100, 100, 100);
-	init_pair(1, COLOR_WHITE, COLOR_BLACK); //default
-	init_pair(2, COLOR_RED, COLOR_BLACK); //damaged entity
-	attrset(COLOR_PAIR(1));
-	//if(!has_colors()) printw("TERMINAL DOES NOT HAVE COLORS");
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
+	init_color(COLOR_RED, 1000, 0, 0);
+	init_color(COLOR_PLAYER, 500, 800, 700);
+	init_color(COLOR_ENEMY, 500, 700, 800);
+
+	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
+	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
+	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
+	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
+/*
 struct structLevel {
 	level liv;
 	structLevel* next;
 };
 
-typedef structLevel* lLevels;
+typedef structLevel* lLevels;*/
 
 int main(){
 
@@ -40,30 +59,28 @@ int main(){
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 
 	bulletManager B = bulletManager();
-	level levelClass = level(5);
 
 	char input;
 	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
-	lLevels levels = new structLevel;           // Lista dei livelli
+	//structLevel* levels = new structLevel;           // Lista dei livelli
+
 
 
 	while( !quit ){
 		//level setup here
 
-		player P = player(10, 10, &B, 0.1, 10, 12, 0);
-		kuba* K = new kuba(80, 10, &levelClass, &B);
-		shooter* S = new shooter(120, 10, &levelClass, &B);
-		levels->liv = level (numL);
+		level liv = level(numL);
+		player P = player(10, 10, &liv, &B, 0.1, 10, 12, 0);
+		kuba* K = new kuba(80, 10, &liv, &B);
+		shooter* S = new shooter(120, 10, &liv, &B);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
-
 		while( !quit ){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
 			deltaTime = std::chrono::duration<double>(elapsed).count();
-
 
 			input = getch();
 

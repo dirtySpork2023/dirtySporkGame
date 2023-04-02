@@ -1,4 +1,5 @@
 #include <ncurses.h>
+
 #include <cmath>
 #include "lib.hpp"
 #include "player.hpp"
@@ -10,34 +11,35 @@ player::player(int x, int y, level* l, bulletManager* b, double gunFireRate, int
 	this->armor = armor; // 0-1 moltiplica i danni subiti
 }
 
+bool upperCase(char c){
+	return ('A'<=c && c<= 'Z');
+}
+
 //aggiorna la posizione del player e/o spara
 void player::update(char input, timeSpan deltaTime){
 
-	// horizontal movement
+	entity::update(deltaTime); // non utilizza la funzione hurt modificata => armatura non funziona
+/*	hurt(bM->check(box));  // => armatura funziona
+	lastDamage += deltaTime;
+	entity::applyGravity(deltaTime);*/
+
 	if( input=='a' || input=='A' ){
 		facingRight = false;
 		entity::move('a');
-	}else if( input=='d' || input=='D' ){
+	}
+	if( input=='d' || input=='D' ){
 		facingRight = true;
 		entity::move('d');
 	}
-
-	// vertical movement
-	entity::applyGravity(deltaTime);
-
-	if( isGrounded && ((int)'A'<=input && input<=(int)'Z' || input=='w')){
-		this->ySpeed = this->jumpSpeed; //jump vertical speed
-		this->isGrounded = false;
+	if( isGrounded && (upperCase(input) || input=='w')){
+		ySpeed = jumpSpeed;
+		isGrounded = false;
 	}
-
-	this->hurt(bM->check(this->box));
-	this->lastDamage += deltaTime;
-
-	if( (input=='f'||input=='F') && this->lastShot > this->fireRate ){
-		this->shoot();
-		this->lastShot = 0;
+	if( (input=='f'||input=='F') && lastShot > fireRate ){
+		shoot();
+		lastShot = 0;
 	}else{
-		this->lastShot += deltaTime;
+		lastShot += deltaTime;
 	}
 }
 
@@ -47,30 +49,30 @@ void player::print(timeSpan deltaTime){
 
 	// body
 	if( facingRight ){
-		mvprintw(this->box.a.y,   this->box.a.x, " p ");
-		mvprintw(this->box.a.y+1, this->box.a.x, ">W=");
-		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
+		mvprintw(box.a.y,   box.a.x, " p ");
+		mvprintw(box.a.y+1, box.a.x, ">W=");
+		mvprintw(box.b.y,   box.a.x, "/\"\\");
 	}else{
-		mvprintw(this->box.a.y,   this->box.a.x, " q ");
-		mvprintw(this->box.a.y+1, this->box.a.x, "=W<");
-		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
+		mvprintw(box.a.y,   box.a.x, " q ");
+		mvprintw(box.a.y+1, box.a.x, "=W<");
+		mvprintw(box.b.y,   box.a.x, "/\"\\");
 	}
 
 	// health bar
 	attrset(COLOR_PAIR(1));
-	mvprintw(1, 1, "health: %3d |", this->health);
+	mvprintw(1, 1, "health: %3d |", health);
 	for(int i=0 ; i<HEALTH_BAR_LENGTH ; i++){
-		if(this->health - i*MAX_HEALTH/HEALTH_BAR_LENGTH > 0)
+		if(health - i*MAX_HEALTH/HEALTH_BAR_LENGTH > 0)
 			printw("#");
 		else
 			printw(".");
 	}
 	printw("|");
-	mvprintw(2, 1, "armor: %3.0f%%", this->armor*100);
+	mvprintw(2, 1, "armor: %2.0f%%", armor*100);
 }
 
 bool player::hurt(int value){
-	return entity::hurt(value * (1-this->armor));
+	return entity::hurt(value * (1-armor));
 }
 
 void player::shoot(){
@@ -80,10 +82,10 @@ void player::shoot(){
 	if( !facingRight ) speed.x *= -1;
 
 	point muzzle;
-	muzzle.x = this->box.a.x+1;
-	muzzle.y = this->box.a.y+1;
+	muzzle.x = box.a.x+1;
+	muzzle.y = box.a.y+1;
 	if( facingRight ) muzzle.x += 2;
 	else muzzle.x -= 2;
 
-	this->bM->add(muzzle, speed, false, this->damage, 'o');
+	bM->add(muzzle, speed, false, damage, 'o');
 }

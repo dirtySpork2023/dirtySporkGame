@@ -1,48 +1,13 @@
 #include <ncurses.h>
 #include <chrono>
 #include "lib.hpp"
+#include "level.hpp"
+#include "bulletManager.hpp"
 #include "entity.hpp"
-#include "player.hpp"
 #include "kuba.hpp"
 #include "shooter.hpp"
-#include "bulletManager.hpp"
-#include "level.hpp"
+#include "player.hpp"
 using namespace std;
-
-//inizializza ncurses
-void init(){
-	initscr();
-	start_color();
-	noecho();
-	cbreak();
-	nodelay(stdscr, TRUE);
-	curs_set(0);
-
-	/*	COLOR_BLACK
-		COLOR_RED
-		COLOR_GREEN
-		COLOR_YELLOW
-		COLOR_BLUE
-		COLOR_MAGENTA
-		COLOR_CYAN
-		COLOR_WHITE
-
-	 	COLORS numero tot di colori
-	 	COLOR_PAIRS numero tot di coppie di colori
-	 */
-
-	init_color(COLOR_BLACK, 100, 100, 100);
-	init_color(COLOR_WHITE, 1000, 1000, 1000);
-	init_color(COLOR_RED, 1000, 0, 0);
-	init_color(COLOR_PLAYER, 500, 800, 700);
-	init_color(COLOR_ENEMY, 500, 700, 800);
-
-	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
-	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
-	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
-	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
-	attrset(COLOR_PAIR(PAINT_DEFAULT));
-}
 
 int main(){
 
@@ -51,6 +16,7 @@ int main(){
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 
 	bulletManager B = bulletManager();
+	level levelClass = level(5);
 
 	char input;
 	bool quit = false;
@@ -58,9 +24,9 @@ int main(){
 	while( !quit ){
 		//level setup here
 
-		player P = player(10, 10, &B, 0.1, 10, 12, 0.5);
-		kuba* K = new kuba(80, 10, &B, 1);
-		shooter* S = new shooter(120, 10, &B, 1);
+		player P = player(10, 10, &B, 0.1, 10, 12, 0);
+		kuba* K = new kuba(80, 10, &levelClass, &B);
+		shooter* S = new shooter(120, 10, &levelClass, &B);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 

@@ -9,14 +9,8 @@ shooter::shooter(int x, int y, level* l, bulletManager* b, int h, double fireRat
 	this->facingRight = true;
 }
 
-shooter::shooter(int x, int y, level* l, bulletManager* b, int level): entity(x,y,l,b,0){
-	this->health = 20 + 5*level;
-
-	this->damage = 20 + 10*level;
-	this->fireRate = 1/(0.2 + 0.5*level);
-
-	this->lastShot = 0;
-	this->facingRight = true;
+shooter::shooter(int x, int y, level* l, bulletManager* b):
+	shooter(x, y, l, b, /*HEALTH*/20+5*l.number(), /*FIRE_RATE*/1/(0.2 + 0.5*l.number()), /*DAMAGE*/20 + 10*l.number()){
 }
 
 void shooter::update(point target, timeSpan deltaTime){

@@ -1,10 +1,11 @@
 #ifndef	KUBA_HPP
 #define KUBA_HPP
 
+#include "level.hpp"
+#include "bulletManager.hpp"
 #include "lib.hpp"
 #include "entity.hpp"
 #include "player.hpp"
-#include "bulletManager.hpp"
 
 class kuba: public entity {
 protected:
@@ -13,7 +14,7 @@ protected:
 	timeSpan lastMove;
 public:
 	kuba(int x, int y, level* l, bulletManager* b, int h, double moveSpeed, int damage);
-	kuba(int x, int y, level* l, bulletManager* b, int level);
+	kuba(int x, int y, level* l, bulletManager* b);
 	void update(player* target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 };

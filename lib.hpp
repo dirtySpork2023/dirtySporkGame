@@ -11,7 +11,7 @@
 #define PAINT_PLAYER 3
 #define PAINT_ENEMY 4
 
-
+void init();
 
 typedef double timeSpan;
 

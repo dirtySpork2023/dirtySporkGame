@@ -2,8 +2,8 @@
 #define ENTITY_HPP
 
 #include "lib.hpp"
-#include "bulletManager.hpp"
 #include "level.hpp"
+#include "bulletManager.hpp"
 
 #define ENTITY_G 175
 #define DAMAGE_TIMESPAN 0.10

@@ -14,14 +14,9 @@ kuba::kuba(int x, int y, level* l, bulletManager* b, int h, double moveSpeed, in
 	this->box.a.y = y-1;
 }
 
-kuba::kuba(int x, int y, level* l, bulletManager* b, int level): entity(x,y,l,b,0){
-	this->health = 40 + 20*level;
+kuba::kuba(int x, int y, level* l, bulletManager* b):
+	kuba(x, y, l, b, /*HEALTH*/40+20*l.number(), /*SPEED*/0.1, /*DAMAGE*/20+10*l.number() ){
 
-	this->damage = 20 + 10*level;
-	this->xSpeed = 0.1;
-
-	this->lastMove = 0;
-	this->box.a.y = y-1;
 }
 
 void kuba::update(player* target, timeSpan deltaTime){

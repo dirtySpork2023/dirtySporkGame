@@ -65,6 +65,7 @@ void entity::move(char input){
 		}else if( input=='w' ){
 			this->box.a.y -= 1;
 			this->box.b.y -= 1;
+			this->setGrounded(false);
 			// cleanup
 			for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
 				mvprintw(this->box.b.y+1, x, " ");
@@ -72,6 +73,9 @@ void entity::move(char input){
 		}else if( input=='s' ){
 			this->box.a.y += 1;
 			this->box.b.y += 1;
+			if( this->lM->check(this->box, input).tipe != 'n'){
+				this->setGrounded(true);
+			}
 			// cleanup
 			for(int x=this->box.a.x ; x<=this->box.b.x ; x++){
 				mvprintw(this->box.a.y-1, x, " ");

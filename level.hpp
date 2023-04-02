@@ -2,6 +2,7 @@
 #define LEVEL_HPP
 
 #include "lib.hpp"
+#include "kuba.hpp"
 #include "platform.hpp"
 
 // Lista delle piattaforme presenti in un livello

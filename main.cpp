@@ -58,11 +58,9 @@ int main(){
 	while( !quit ){
 		//level setup here
 
-		int lvl = 1; //provvisorio per testing
-
 		player P = player(10, 10, &B, 0.1, 10, 12, 0.5);
-		kuba* K = new kuba(80, 10, &B, lvl);
-		shooter* S = new shooter(120, 10, &B, lvl);
+		kuba* K = new kuba(80, 10, &B, 1);
+		shooter* S = new shooter(120, 10, &B, 1);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 
@@ -76,12 +74,12 @@ int main(){
 			input = getch();
 
 			// setGrounded
-			if( P.getPos().y==35 ) P.setGrounded(true);
+/*			if( P.getPos().y==35 ) P.setGrounded(true);
 			else P.setGrounded(false);
 			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true);
 			else if(K!=NULL) K->setGrounded(false);
 			if( S!=NULL && S->getPos().y==35 ) S->setGrounded(true);
-			else if(S!=NULL) S->setGrounded(false);
+			else if(S!=NULL) S->setGrounded(false);*/
 
 			// update
 			P.update(input, deltaTime);
@@ -99,16 +97,10 @@ int main(){
 				delete S;
 				S = NULL;
 			}
-			if(S==NULL && K==NULL){
-				lvl++;
-				K = new kuba(80, 10, &B, lvl);
-				S = new shooter(120, 10, &B, lvl);
-			}
 
 			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
-			mvprintw(0, 30, "|level: %d", lvl);
 			move(36, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 

@@ -1,8 +1,10 @@
 #include <ncurses.h>
 #include <chrono>
+#include "lib.hpp"
 #include "entity.hpp"
 #include "player.hpp"
 #include "kuba.hpp"
+#include "shooter.hpp"
 #include "bulletManager.hpp"
 #include "level.hpp"
 #include "platform.hpp"
@@ -11,17 +13,36 @@ using namespace std;
 //Inizializzazione di ncurses
 void init(){
 	initscr();
+	start_color();
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
 	curs_set(0);
 
-	start_color(); // permette di usare i colori attraverso gli attributi di ncurses
+	/*	COLOR_BLACK
+		COLOR_RED
+		COLOR_GREEN
+		COLOR_YELLOW
+		COLOR_BLUE
+		COLOR_MAGENTA
+		COLOR_CYAN
+		COLOR_WHITE
+
+	 	COLORS numero tot di colori
+	 	COLOR_PAIRS numero tot di coppie di colori
+	 */
+
 	init_color(COLOR_BLACK, 100, 100, 100);
-	init_pair(1, COLOR_WHITE, COLOR_BLACK); //default
-	init_pair(2, COLOR_RED, COLOR_BLACK); //damaged entity
-	attrset(COLOR_PAIR(1));
-	//if(!has_colors()) printw("TERMINAL DOES NOT HAVE COLORS");
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
+	init_color(COLOR_RED, 1000, 0, 0);
+	init_color(COLOR_PLAYER, 500, 800, 700);
+	init_color(COLOR_ENEMY, 500, 700, 800);
+
+	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
+	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
+	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
+	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
 struct structLevel {
@@ -49,8 +70,13 @@ int main(){
 		//level setup here
 
 		player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
+<<<<<<< HEAD
 		kuba* K = new kuba(100, 5, 50, &B, 0.1, 20);
 		levels->liv = level (numL);
+=======
+		kuba* K = new kuba(COLS-30, 5, &B, 2);
+		shooter* S = new shooter(COLS-10, 5, &B, 50, 1.5, 20);
+>>>>>>> testMarco
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 
@@ -61,50 +87,43 @@ int main(){
 			deltaTime = std::chrono::duration<double>(elapsed).count();
 
 
-			//  INPUT E CALCOLI
 			input = getch();
-			if( P.getPos().y==35 ) P.setGrounded(true); // da spostare dentro entity
+
+			// setGrounded
+			if( P.getPos().y==35 ) P.setGrounded(true);
 			else P.setGrounded(false);
-			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true); // da spostare dentro entity
+			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true);
 			else if(K!=NULL) K->setGrounded(false);
+			if( S!=NULL && S->getPos().y==35 ) S->setGrounded(true);
+			else if(S!=NULL) S->setGrounded(false);
+
+			// update
 			P.update(input, deltaTime);
 			if(K!=NULL) K->update(&P, deltaTime);
+			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			B.update(deltaTime);
-			if( input=='k' ){ // crea un proiettile a partire dal punto 'muzzle'
-				point p;
-				p.x = COLS-5;
-				p.y = 35;
-				vector speed;
-				speed.x = -150;
-				//speed.y = -100;
-				int Dx = P.getPos().x -p.x -1;
-				int Dy = P.getPos().y -p.y -1;
 
-				speed.y = -112 * Dx / speed.x  +  Dy * speed.x / Dx;
-				// velocità verticale esatta necessaria per colpire il player. (imprecisa su distanze più lunghe del terminale)
-				// yeah mista white
-				// yeah SCIENCE
-				B.add(p,speed,true,4,'G');
-			}
+			// death
 			if( input=='q' ) quit = true;
 			if(K!=NULL && K->getHealth()==0){
-				K->kill();
 				delete K;
 				K = NULL;
-				mvprintw(2, 1, "kuba: dead");
+			}
+			if(S!=NULL && S->getHealth()==0){
+				delete S;
+				S = NULL;
 			}
 
-			//  OUTPUT
+			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
-			mvprintw(1, 1, "health: %3d", P.getHealth());
-			if(K!=NULL) mvprintw(2, 1, "kuba: %3d", K->getHealth());
 			move(36, 0);
 			for(int i=0 ; i<COLS ; i++){ printw("#"); }
 
 			B.print();
 			P.print(deltaTime);
 			if(K!=NULL) K->print(deltaTime);
+			if(S!=NULL) S->print(deltaTime);
 
 			refresh();
 		}

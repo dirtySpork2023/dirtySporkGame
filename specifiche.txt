@@ -23,7 +23,6 @@ MIKE - mercato, powerup
 
 	PLAYER
 # Il giocatore umano controlla il protagonista
--grande 3*3 caselle
 -salta
 -va avanti e indietro
 -spara proiettili nella direzione in cui guarda

@@ -5,50 +5,15 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): entity(x,y,HEALTH,b){
+#define HEALTH_LENGTH 20
+
+player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): shooter(x,y,b,MAX_HEALTH,gunFireRate,gunDamage){
 	this->jumpSpeed = -sqrt(jumpHeight * GRAVITY * 2.1);
-
-	this->facingRight = true;
-
-	this->bM = b;
-	this->fireRate = gunFireRate; // 0.25 = 1/4 --> 4 colpi al secondo
-	this->dmg = gunDamage;
-
 	this->armor = armor; // 0-1 moltiplica i danni subiti
-}
-
-//stampa il player
-void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
-	static double elapsedSinceLastDamage = 0; //in secondi
-	static int lastHP = this->health;
-
-	if( lastHP != this->health ){
-		attrset(COLOR_PAIR(2));
-		elapsedSinceLastDamage += deltaTime;
-		if(elapsedSinceLastDamage >= 0.10){
-			lastHP=this->health;
-			elapsedSinceLastDamage = 0;
-		}
-	}
-
-	//TODO stampa barra della vita
-
-	if( facingRight ){
-		mvprintw(this->box.a.y,   this->box.a.x, " p ");
-		mvprintw(this->box.a.y+1, this->box.a.x, ">W=");
-		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
-	}else{
-		mvprintw(this->box.a.y,   this->box.a.x, " q ");
-		mvprintw(this->box.a.y+1, this->box.a.x, "=W<");
-		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
-	}
-
-	attrset(COLOR_PAIR(1));
 }
 
 //aggiorna la posizione del player e/o spara
 void player::update(char input, timeSpan deltaTime){
-	static double elapsedSinceLastShot = 0; //in secondi
 
 	// horizontal movement
 	if( input=='a' || input=='A' ){
@@ -67,15 +32,43 @@ void player::update(char input, timeSpan deltaTime){
 		this->isGrounded = false;
 	}
 
-	// applica danno se collide con proiettili
 	this->hurt(bM->check(this->box));
+	this->lastDamage += deltaTime;
 
-	if( (input=='f'||input=='F') && elapsedSinceLastShot > this->fireRate ){
+	if( (input=='f'||input=='F') && this->lastShot > this->fireRate ){
 		this->shoot();
-		elapsedSinceLastShot = 0;
+		this->lastShot = 0;
 	}else{
-		elapsedSinceLastShot += deltaTime;
+		this->lastShot += deltaTime;
 	}
+}
+
+//stampa il player
+void player::print(timeSpan deltaTime){
+	entity::setPrintColor(PAINT_PLAYER);
+
+	// body
+	if( facingRight ){
+		mvprintw(this->box.a.y,   this->box.a.x, " p ");
+		mvprintw(this->box.a.y+1, this->box.a.x, ">W=");
+		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
+	}else{
+		mvprintw(this->box.a.y,   this->box.a.x, " q ");
+		mvprintw(this->box.a.y+1, this->box.a.x, "=W<");
+		mvprintw(this->box.b.y,   this->box.a.x, "/\"\\");
+	}
+
+	// health bar
+	attrset(COLOR_PAIR(1));
+	mvprintw(1, 1, "health: %3d |", this->health);
+	for(int i=0 ; i<HEALTH_LENGTH ; i++){
+		if(this->health - i*MAX_HEALTH/HEALTH_LENGTH > 0)
+			printw("#");
+		else
+			printw(".");
+	}
+	printw("|");
+	mvprintw(2, 1, "armor: %3.0f%%", this->armor*100);
 }
 
 bool player::hurt(int value){

@@ -3,34 +3,33 @@
 #include "entity.hpp"
 using namespace std;
 
-entity::entity(int x, int y, int hp, bulletManager* b){
-	//this->pos.x = x;
-	//this->pos.y = y;
+entity::entity(int x, int y, bulletManager* b, int hp){
 	this->yMod = 0;
 	this->ySpeed = 0;
 	this->isGrounded = false;
 
 	this->health = hp;
+	this->lastDamage = 0;
 
 	this->bM = b;
 
 	//default hitbox. da sovrascrivere se necessario
-	this->box.a.x = x-1;
-	this->box.a.y = y-1;
-	this->box.b.x = x+1;
-	this->box.b.y = y+1;
+	this->box.a.x = x-2;
+	this->box.a.y = y-2;
+	this->box.b.x = x;
+	this->box.b.y = y;
 }
 
 void entity::update(timeSpan deltaTime){
-	// applica danno se collide con proiettili
 	this->hurt(bM->check(this->box));
+
+	this->lastDamage += deltaTime;
 
 	this->applyGravity(deltaTime);
 }
 
 void entity::applyGravity(timeSpan deltaTime){
 	if( this->isGrounded ){
-		//this->pos.y = 30;
 		this->ySpeed = 0;
 		this->yMod = 0;
 	}else{
@@ -48,7 +47,6 @@ void entity::applyGravity(timeSpan deltaTime){
 
 void entity::move(char input){
 	if( input=='a' ){
-		//this->pos.x -= 1;
 		this->box.a.x -= 1;
 		this->box.b.x -= 1;
 		// cleanup
@@ -56,7 +54,6 @@ void entity::move(char input){
 			mvprintw(y, this->box.b.x+1, " ");
 		}
 	}else if( input=='d' ){
-		//this->pos.x += 1;
 		this->box.a.x += 1;
 		this->box.b.x += 1;
 		// cleanup
@@ -64,7 +61,6 @@ void entity::move(char input){
 			mvprintw(y, this->box.a.x-1, " ");
 		}
 	}else if( input=='w' ){
-		//this->pos.y -= 1;
 		this->box.a.y -= 1;
 		this->box.b.y -= 1;
 		// cleanup
@@ -72,7 +68,6 @@ void entity::move(char input){
 			mvprintw(this->box.b.y+1, x, " ");
 		}
 	}else if( input=='s' ){
-		//this->pos.y += 1;
 		this->box.a.y += 1;
 		this->box.b.y += 1;
 		// cleanup
@@ -82,7 +77,14 @@ void entity::move(char input){
 	}
 }
 
-// deprecated
+void entity::setPrintColor(int paint){
+	if(this->lastDamage <= DAMAGE_TIMESPAN){
+		attrset(COLOR_PAIR( PAINT_DAMAGE ));
+	}else{
+		attrset(COLOR_PAIR( paint ));
+	}
+}
+
 point entity::getPos(){
 	return this->box.b;
 }
@@ -92,15 +94,18 @@ hitBox entity::getHitBox(){
 	return this->box;
 }
 
-
 // ritorna i punti vita
 int entity::getHealth(){
 	return this->health;
 }
 
-// danneggia entity e ritorna true se è morto
+// danneggia entity e ritorna se è morto
 bool entity::hurt(int value){
-	this->health -= value;
+	if( value!=0 ){
+		this->lastDamage = 0;
+		this->health -= value;
+	}
+
 	if(this->health <= 0){
 		this->health = 0;
 		return true;
@@ -118,8 +123,8 @@ void entity::setGrounded(bool grounded){
 	}
 }
 
-// cancella l'entity solo graficamente. ipotizzando che hitbox e grafica coincidano
-void entity::kill(){
+// distruttore: cancella l'entity solo graficamente. ipotizzando che hitbox e grafica coincidano
+entity::~entity(){
 	for(int x=box.a.x ; x<=box.b.x ; x++){
 		for(int y=box.a.y ; y<=box.b.y ; y++){
 			mvprintw(y,x," ");

@@ -1,7 +1,7 @@
 all: game
 
-game: main.o lib.o entity.o player.o kuba.o bulletManager.o
-	g++ -o game main.o lib.o entity.o player.o kuba.o bulletManager.o -lncurses
+game: main.o lib.o entity.o player.o kuba.o shooter.o bulletManager.o
+	g++ -o game main.o lib.o entity.o player.o kuba.o shooter.o bulletManager.o -lncurses
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -17,6 +17,9 @@ player.o: player.cpp player.hpp
 
 kuba.o: kuba.cpp kuba.hpp
 	g++ -c kuba.cpp
+
+shooter.o: shooter.cpp shooter.hpp
+	g++ -c shooter.cpp
 
 bulletManager.o: bulletManager.cpp bulletManager.hpp
 	g++ -c bulletManager.cpp

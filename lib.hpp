@@ -11,8 +11,6 @@
 #define PAINT_PLAYER 3
 #define PAINT_ENEMY 4
 
-
-
 typedef double timeSpan;
 
 struct point {

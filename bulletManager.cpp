@@ -1,26 +1,24 @@
 #include <ncurses.h>
+
 #include "lib.hpp"
 #include "bulletManager.hpp"
 using namespace std;
 
-#define MAX_BULLETS 100
-#define GRAVITY 150
-
 bulletManager::bulletManager(){
-	this->head = NULL;
-	this->tail = NULL;
-	this->num = 0;
+	head = NULL;
+	tail = NULL;
+	num = 0;
 }
 
 // aggiunge un elemento in coda
 void bulletManager::add(point p, vector speed, bool gravity, int damage, char texture){
 	node* tmp = new node;
 	tmp->next = NULL;
-	if( this->tail!=NULL )
-		this->tail->next = tmp;
-	this->tail = tmp;
-	if( this->head==NULL )
-		this->head = tmp;
+	if( tail!=NULL )
+		tail->next = tmp;
+	tail = tmp;
+	if( head==NULL )
+		head = tmp;
 
 	vector v;
  	v.x = (double)p.x;
@@ -32,28 +30,28 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
 	tmp->gravity = gravity;
 	tmp->damage = damage;
 	tmp->texture = texture;
-	this->num++;
+	num++;
 
-	if( this->num > MAX_BULLETS ){ //TODO verificare se i proiettili sono fuori dallo schermo
-		this->removeOldest();
+	if( num > MAX_BULLETS ){ //TODO verificare se i proiettili sono fuori dallo schermo
+		removeOldest();
 	}
 }
 
 // rimuove l'elemento in testa
 void bulletManager::removeOldest(){
 	if(head!=NULL && head->next!=NULL){
-		node* tmp = this->head->next;
-		delete this->head;
-		this->head = tmp;
-		this->num--;
+		node* tmp = head->next;
+		delete head;
+		head = tmp;
+		num--;
 	}
 }
 
 void bulletManager::update(double deltaTime){
-	node* tmp = this->head;
+	node* tmp = head;
 	while( tmp!=NULL ) {
 		if( tmp->gravity ){
-			tmp->speed.y += GRAVITY * deltaTime;
+			tmp->speed.y += BULLET_G * deltaTime;
 		}
 		tmp->pos.x += tmp->speed.x * deltaTime;
 		tmp->pos.y += tmp->speed.y * deltaTime;
@@ -70,19 +68,20 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 		// cleanup
 		mvprintw((int)p->pos.y, (int)p->pos.x, " ");
 
-		this->num--;
-		if( p==this->head ){
-			this->head = this->head->next;
-			if( this->head==NULL )
-				this->tail = NULL;
+		num--;
+		if( p==head ){
+			head = head->next;
+			if( head==NULL )
+				tail = NULL;
 		}
 
 		node* tmp = p->next;
 		delete p;
-		return this->removeNode(target, tmp, damage);
+		return removeNode(target, tmp, damage);
 	}else{
-		p->next = this->removeNode(target, p->next, damage);
-		if( p->next==NULL && p->next!=this->tail ) this->tail = p;
+		p->next = removeNode(target, p->next, damage);
+		if( p->next==NULL && p->next!=tail )
+			tail = p;
 		return p;
 	}
 }
@@ -90,12 +89,12 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 // ritorna 0 se non ci sono collisioni, altrimenti ritorna il danno del proiettile (ed elimina il proiettile dalla lista)
 int bulletManager::check(hitBox target){
 	int result = 0;
-	this->head = this->removeNode(target, this->head, result);
+	head = removeNode(target, head, result);
 	return result;
 }
 
 void bulletManager::print(){
-	node* tmp = this->head;
+	node* tmp = head;
 	while( tmp!=NULL ){
 		mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c", tmp->texture );
 		// cleanup
@@ -106,10 +105,4 @@ void bulletManager::print(){
 		}
 		tmp = tmp->next;
 	}
-
-
-
-	//mvprintw(1,0,"num: %d\t", num);
-	//mvprintw(2,0,"head: %d\t\t\t", this->head);
-	//mvprintw(3,0,"tail: %d\t\t\t", this->tail);
 }

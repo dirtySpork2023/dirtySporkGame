@@ -4,7 +4,7 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-kuba::kuba(int x, int y, bulletManager* b, int h, double moveSpeed, int damage): entity(x,y,b,h){
+kuba::kuba(int x, int y, level* lM, bulletManager* bM, int h, double moveSpeed, int damage): entity(x,y,lM,bM,h){
 	this->xSpeed = moveSpeed;
 	this->lastMove = 0;
 
@@ -14,15 +14,9 @@ kuba::kuba(int x, int y, bulletManager* b, int h, double moveSpeed, int damage):
 	this->box.a.y = y-1;
 }
 
-kuba::kuba(int x, int y, bulletManager* b, int level): entity(x,y,b,0){
-	this->xSpeed = 0.1;
-	this->lastMove = 0;
+kuba::kuba(int x, int y, level* lM, bulletManager* bM):
+	kuba(x, y, lM, bM, /*HEALTH*/40+20*lM->number(), /*SPEED*/0.1, /*DAMAGE*/20+10*lM->number() ){
 
-	this->damage = 10 * level;
-	this->health = 20 * level;
-
-	//hitbox 3x2
-	this->box.a.y = y-1;
 }
 
 void kuba::update(player* target, timeSpan deltaTime){
@@ -30,31 +24,31 @@ void kuba::update(player* target, timeSpan deltaTime){
 
 	// WIP
 	if( lastMove>=xSpeed ){
-		if(this->box.b.x > target->getPos().x+3){
+		if(box.b.x > target->getPos().x+3){
 			entity::move('a');
-			this->lastMove = 0;
-		}else if(this->box.b.x < target->getPos().x-3){
+			lastMove = 0;
+		}else if(box.b.x < target->getPos().x-3){
 			entity::move('d');
-			this->lastMove = 0;
-		}else if(this->box.b.x == target->getPos().x+3 && this->box.b.y == target->getPos().y){
-			target->hurt(this->damage);
+			lastMove = 0;
+		}else if(box.b.x == target->getPos().x+3 && box.b.y == target->getPos().y){
+			target->hurt(damage);
 			entity::move('d');
-			this->lastMove = -xSpeed*2;
-		}else if(this->box.b.x == target->getPos().x-3 && this->box.b.y == target->getPos().y){
-			target->hurt(this->damage);
+			lastMove = -xSpeed*2;
+		}else if(box.b.x == target->getPos().x-3 && box.b.y == target->getPos().y){
+			target->hurt(damage);
 			entity::move('a');
-			this->lastMove = -xSpeed*2;
+			lastMove = -xSpeed*2;
 		}
 	}
 
-	this->lastMove += deltaTime;
+	lastMove += deltaTime;
 }
 
 void kuba::print(timeSpan deltaTime){
 	entity::setPrintColor(PAINT_ENEMY);
 
-	mvprintw(this->box.a.y, this->box.a.x, "<O>");
-	mvprintw(this->box.b.y, this->box.a.x, "/-\\");
+	mvprintw(box.a.y, box.a.x, "<O>");
+	mvprintw(box.b.y, box.a.x, "/-\\");
 
 	attrset(COLOR_PAIR(1));
 }

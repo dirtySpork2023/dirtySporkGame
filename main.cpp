@@ -1,16 +1,15 @@
 #include <ncurses.h>
 #include <chrono>
 #include "lib.hpp"
+#include "level.hpp"
+#include "bulletManager.hpp"
 #include "entity.hpp"
-#include "player.hpp"
 #include "kuba.hpp"
 #include "shooter.hpp"
-#include "bulletManager.hpp"
-#include "level.hpp"
+#include "player.hpp"
 #include "platform.hpp"
 using namespace std;
 
-//Inizializzazione di ncurses
 void init(){
 	initscr();
 	start_color();
@@ -45,12 +44,13 @@ void init(){
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
+/*
 struct structLevel {
 	level liv;
 	structLevel* next;
 };
 
-typedef structLevel* lLevels;
+typedef structLevel* lLevels;*/
 
 int main(){
 
@@ -63,39 +63,34 @@ int main(){
 	char input;
 	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
-	lLevels levels = new structLevel;           // Lista dei livelli
+	//structLevel* levels = new structLevel;           // Lista dei livelli
+
 
 
 	while( !quit ){
 		//level setup here
 
-		player P = player(10, 5, &B, 0.1, 10, 12, 0.5);
-<<<<<<< HEAD
-		kuba* K = new kuba(100, 5, 50, &B, 0.1, 20);
 		levels->liv = level (numL);
-=======
-		kuba* K = new kuba(COLS-30, 5, &B, 2);
-		shooter* S = new shooter(COLS-10, 5, &B, 50, 1.5, 20);
->>>>>>> testMarco
+		player P = player(10, 10, &liv, &B, 0.1, 10, 12, 0);
+		kuba* K = new kuba(80, 10, &liv, &B);
+		shooter* S = new shooter(120, 10, &liv, &B);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
-
 		while( !quit ){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
 			deltaTime = std::chrono::duration<double>(elapsed).count();
 
-
 			input = getch();
 
 			// setGrounded
-			if( P.getPos().y==35 ) P.setGrounded(true);
+/*			if( P.getPos().y==35 ) P.setGrounded(true);
 			else P.setGrounded(false);
 			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true);
 			else if(K!=NULL) K->setGrounded(false);
 			if( S!=NULL && S->getPos().y==35 ) S->setGrounded(true);
-			else if(S!=NULL) S->setGrounded(false);
+			else if(S!=NULL) S->setGrounded(false);*/
 
 			// update
 			P.update(input, deltaTime);

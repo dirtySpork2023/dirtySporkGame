@@ -2,24 +2,28 @@
 #include "entity.hpp"
 #include "shooter.hpp"
 
-shooter::shooter(int x, int y, bulletManager* b, int h, double fireRate, int damage): entity(x,y,b,h){
+shooter::shooter(int x, int y, level* lM, bulletManager* bM, int h, double fireRate, int damage): entity(x,y,lM,bM,h){
 	this->fireRate = fireRate;
 	this->lastShot = 0;
-	this->dmg = damage;
+	this->damage = damage;
 	this->facingRight = true;
+}
+
+shooter::shooter(int x, int y, level* lM, bulletManager* bM):
+	shooter(x, y, lM, bM, /*HEALTH*/20+5*lM->number(), /*FIRE_RATE*/1/(0.2 + 0.5*lM->number()), /*DAMAGE*/20 + 10*lM->number()){
 }
 
 void shooter::update(point target, timeSpan deltaTime){
 	entity::update(deltaTime);
 
-	if(target.x <= this->box.a.x) facingRight = false;
+	if(target.x <= box.a.x) facingRight = false;
 	else facingRight = true;
 
-	if( this->lastShot > this->fireRate ){
-		this->shoot(target);
-		this->lastShot = 0;
+	if( lastShot > fireRate ){
+		shoot(target);
+		lastShot = 0;
 	}else{
-		this->lastShot += deltaTime;
+		lastShot += deltaTime;
 	}
 }
 
@@ -27,13 +31,13 @@ void shooter::print(timeSpan deltaTime){
 	entity::setPrintColor(PAINT_ENEMY);
 
 	if( facingRight ){
-		mvprintw(this->box.a.y,   this->box.a.x, "_//");
-		mvprintw(this->box.a.y+1, this->box.a.x, "W/p");
-		mvprintw(this->box.b.y,   this->box.a.x, "O=O");
+		mvprintw(box.a.y,   box.a.x, "_//");
+		mvprintw(box.a.y+1, box.a.x, "W/p");
+		mvprintw(box.b.y,   box.a.x, "O=O");
 	}else{
-		mvprintw(this->box.a.y,   this->box.a.x, "\\\\_");
-		mvprintw(this->box.a.y+1, this->box.a.x, "q\\W");
-		mvprintw(this->box.b.y,   this->box.a.x, "O=O");
+		mvprintw(box.a.y,   box.a.x, "\\\\_");
+		mvprintw(box.a.y+1, box.a.x, "q\\W");
+		mvprintw(box.b.y,   box.a.x, "O=O");
 	}
 
 	attrset(COLOR_PAIR(1));
@@ -41,18 +45,18 @@ void shooter::print(timeSpan deltaTime){
 
 void shooter::shoot(point p){
 	point muzzle;
-	muzzle.x = this->box.a.x+1;
-	muzzle.y = this->box.a.y-1;
+	muzzle.x = box.a.x+1;
+	muzzle.y = box.a.y-1;
 
 	vector speed;
-	if( facingRight ) speed.x = 150;
-	else speed.x = -150;
+	if( facingRight ) speed.x = 100;
+	else speed.x = -100;
 
 	//int Dx = (p.x-muzzle.x-1);
 	//int Dy = (p.y-muzzle.y-1);
-	speed.y = -112*(p.x-muzzle.x-1) / speed.x  +  (p.y-muzzle.y-1)*speed.x / (p.x-muzzle.x-1);
-	// velocità verticale esatta necessaria per colpire il player. (imprecisa su distanze più lunghe del terminale)
+	speed.y = -0.75*BULLET_G*(p.x-muzzle.x-1) / speed.x  +  (p.y-muzzle.y-1)*speed.x / (p.x-muzzle.x-1);
+	// velocità verticale esatta necessaria per colpire il player.
 	// yeah mista white
 	// yeah SCIENCE
-	this->bM->add(muzzle,speed,true,this->dmg,'G');
+	bM->add(muzzle,speed,true,damage,'G');
 }

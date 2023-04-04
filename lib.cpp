@@ -2,7 +2,6 @@
 using namespace std;
 
 bool collisionHH(hitBox B, hitBox T){
-	// brutto, ma funziona
 	// per ogni punto della hitbox T(iny), controllo se collide con la hitbox B(ig)
 	bool found = false;
 	int x = T.a.x;

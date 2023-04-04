@@ -37,5 +37,7 @@ class level {
     public:
     level (int nl);
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
-};                                        // a: sinistra || w: sopra || d: destra || s: sotto  
+    int lnumber ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
+};                                        
+
 #endif //LEVEL_HPP

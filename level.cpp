@@ -19,9 +19,10 @@ level::level (int nl) {
     p2.b.x = len;
     p2.b.y = 3;                       // altezza del player
 
-    // Genero la lista di piattaforme per questo livello.
+    // Generazione lista di piattaforme per questo livello.
     this->plat = new lPlatforms;
-    lPlatforms tmp = this->plat;
+    this->plat->pl = platform (0, 1, COLS, 0);        // Base del livello
+    lPlatforms tmp = this->plat->next;
     for (int i=0; i<numPlat; i++) {
         tmp->pl = randomPlat(p1);
         tmp = tmp->next;
@@ -30,6 +31,9 @@ level::level (int nl) {
     }
     tmp = NULL;
     delete tmp;
+
+    // Generazione lista nemici per il livello
+    
 }
 
 infoCrash level::check (hitBox ch, char d) {
@@ -118,4 +122,6 @@ infoCrash level::check (hitBox ch, char d) {
    return info;
 }
 
-
+int level::lnumber () {
+    return this->nlevel;
+}

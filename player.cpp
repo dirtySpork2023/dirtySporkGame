@@ -18,10 +18,10 @@ bool upperCase(char c){
 //aggiorna la posizione del player e/o spara
 void player::update(char input, timeSpan deltaTime){
 
-	entity::update(deltaTime); // non utilizza la funzione hurt modificata => armatura non funziona
-/*	hurt(bM->check(box));  // => armatura funziona
-	lastDamage += deltaTime;
-	entity::applyGravity(deltaTime);*/
+	// faccio un bM->check prima per usare l'override della funzione hurt
+	// quindi ci sarà un bM->check ridondante all'interno di entity
+	hurt(bM->check(box));
+	entity::update(deltaTime);
 
 	if( input=='a' || input=='A' ){
 		facingRight = false;

@@ -1,4 +1,6 @@
 #include <ncurses.h>
+#include <iostream>
+#include <fstream>
 #include <chrono>
 #include "lib.hpp"
 #include "level.hpp"
@@ -42,15 +44,17 @@ void init(){
 	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
 	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
+
+	ofstream Documento ("salvataggio.txt");
 }
 
-/*
+
 struct structLevel {
 	level liv;
 	structLevel* next;
 };
 
-typedef structLevel* lLevels;*/
+typedef structLevel* lLevels;
 
 int main(){
 
@@ -63,17 +67,19 @@ int main(){
 	char input;
 	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
-	//structLevel* levels = new structLevel;           // Lista dei livelli
-
+	lLevels levels = new structLevel;           // Lista dei livelli
+	lLevels pointL = levels;
 
 
 	while( !quit ){
 		//level setup here
 
-		levels->liv = level (numL);
+		pointL->liv = level (numL, B);
+
 		player P = player(10, 10, &liv, &B, 0.1, 10, 12, 0);
 		kuba* K = new kuba(80, 10, &liv, &B);
 		shooter* S = new shooter(120, 10, &liv, &B);
+		
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
@@ -85,18 +91,41 @@ int main(){
 			input = getch();
 
 			// setGrounded
-/*			if( P.getPos().y==35 ) P.setGrounded(true);
+            /*
+			if( P.getPos().y==35 ) P.setGrounded(true);
 			else P.setGrounded(false);
 			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true);
 			else if(K!=NULL) K->setGrounded(false);
 			if( S!=NULL && S->getPos().y==35 ) S->setGrounded(true);
-			else if(S!=NULL) S->setGrounded(false);*/
+			else if(S!=NULL) S->setGrounded(false);
+			*/
 
-			// update
+            // Update
+			level tmp = pointL->liv;
+
 			P.update(input, deltaTime);
-			if(K!=NULL) K->update(&P, deltaTime);
+			
+			// Update enemies:
+			/*  Update con liste:
+			while (tmp.enemies != NULL && tmp.enemies->type == 'k' ) {
+				tmp.enemies->ent->update(&P, deltaTime);
+				tmp.enemies = tmp.enemies->next;  
+			} 
+			while (tmp.enemies != NULL && tmp.enemies->type == 's' ) {
+				tmp.enemies->ent->update(P.getPos(), deltaTime);
+				tmp.enemies = tmp.enemies->next;
+			}
+			*/
+		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
-			B.update(deltaTime);
+			
+			// Update platforms:
+			while (tmp.plat != NULL) {
+				tmp.plat->pl.print();
+				tmp.plat = tmp.plat->next;   
+			}
+			
+		    B.update(deltaTime);
 
 			// death
 			if( input=='q' ) quit = true;

@@ -16,6 +16,7 @@ typedef platforms* lPlatforms;
 // Lista dei nemici presenti in un livello
 struct enemy{
     entity ent;
+    char type;      // tipologia del nemico [k = kuba || s = shooter]
     enemy* next;
 };
 

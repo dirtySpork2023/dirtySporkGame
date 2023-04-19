@@ -8,7 +8,7 @@
 #include "platform.hpp"
 
 
-level::level (int nl) {
+level::level (int nl, bulletManager B) {
     this->nlevel = nl;                // Assegno il numero del livello 
     int numPlat = 3 + rand()%6;       // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme in quel livello
     int len = COLS-3 / numPlat;       // Larghezza massima delle piattaforme in base al loro numero
@@ -22,18 +22,31 @@ level::level (int nl) {
     // Generazione lista di piattaforme per questo livello.
     this->plat = new lPlatforms;
     this->plat->pl = platform (0, 1, COLS, 0);        // Base del livello
-    lPlatforms tmp = this->plat->next;
+    lPlatforms tmp1 = this->plat->next;
     for (int i=0; i<numPlat; i++) {
-        tmp->pl = randomPlat(p1);
-        tmp = tmp->next;
+        tmp1->pl = randomPlat(p1);
+        tmp1 = tmp1->next;
         p1.a.x += len;
         p1.b.x += len;
     }
-    tmp = NULL;
-    delete tmp;
+    tmp1 = NULL;
+    delete tmp1;
 
     // Generazione lista nemici per il livello
-    
+    this->enemies = new lEnemies;
+    lEnemies tmp2 = enemies;
+    for (int i=0; i<2; i++) {
+        if (i<1) {
+            tmp2->ent = new kuba(80, 10, &this, &B);
+            tmp2->type = 'k';
+        } else {
+            tmp2->ent = new shooter(120, 10, &this, &B);
+            tmp2->type = 's';
+        }
+        tmp2=tmp2->next;
+    }
+    tmp2 = NULL;
+    delete tmp2;
 }
 
 infoCrash level::check (hitBox ch, char d) {

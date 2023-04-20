@@ -5,7 +5,7 @@
 
 class yuck: public shooter{
 protected:
-	bool awake;
+	bool awake
 public:
 	yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm);
 	yuck(int x, int y, level* lM, bulletManager* bM);

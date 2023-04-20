@@ -48,14 +48,14 @@ void init(){
 	ofstream Documento ("salvataggio.txt");
 }
 
+    struct strLevel {
+		level liv;
+		strLevel* next;
+	};
+	
+	typedef strLevel* lLevels;
 
-struct structLevel {
-	level liv;
-	structLevel* next;
-};
-
-typedef structLevel* lLevels;
-
+	
 int main(){
 
 	init();
@@ -67,7 +67,7 @@ int main(){
 	char input;
 	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
-	lLevels levels = new structLevel;           // Lista dei livelli
+	lLevels levels = new strLevel;           // Lista dei livelli
 	lLevels pointL = levels;
 
 
@@ -120,10 +120,7 @@ int main(){
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			
 			// Update platforms:
-			while (tmp.plat != NULL) {
-				tmp.plat->pl.print();
-				tmp.plat = tmp.plat->next;   
-			}
+			tmp.print_platforms ();
 			
 		    B.update(deltaTime);
 

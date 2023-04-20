@@ -49,6 +49,15 @@ level::level (int nl, bulletManager B) {
     delete tmp2;
 }
 
+ void level::print_platforms () {
+    lPlatforms tmp = this->plat;
+    while (tmp != NULL) {
+		tmp->pl.print();
+		tmp = tmp->next;   
+	}
+    delete tmp;
+ }
+
 infoCrash level::check (hitBox ch, char d) {
     infoCrash info;      // Variabile da restituire                             
     bool here = false;   // True se trovo qualcosa                                   

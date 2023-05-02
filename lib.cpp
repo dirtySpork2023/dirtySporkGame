@@ -1,4 +1,6 @@
 #include "lib.hpp"
+
+#include <ncurses.h>
 using namespace std;
 
 bool collisionHH(hitBox B, hitBox T){
@@ -39,4 +41,15 @@ bool collisionHV(hitBox box, vector p){
 bool collisionPP(point A, point B){
 	if( A.x==B.x && A.y==B.y ) return true;
 	else return false;
+}
+
+point snap(vector v){
+	point result;
+	result.x = (int)v.x;
+	result.y = (int)v.y;
+	return result;
+}
+
+void posPrintW(point pos, char* str){
+	mvprintw(pos.y, pos.x, str);
 }

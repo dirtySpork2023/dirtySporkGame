@@ -38,4 +38,8 @@ bool collisionHP(hitBox, point);
 bool collisionHV(hitBox, vector);
 bool collisionPP(point, point);
 
+point snap(vector);
+
+void posPrintW(point, char*);
+
 #endif //LIB_HPP

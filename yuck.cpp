@@ -6,8 +6,7 @@ yuck::yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm)
 	fireRate = 0.1;
 	chargeTime = 5; // 5 secondi
 	laserTime = 3; // 3 secondi
-	t = 0;
-	shooting = false;
+	lastCharge = 0;
 
 	box.a.x -= 1;
 	box.b.x += 1;
@@ -17,11 +16,10 @@ yuck::yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm)
 yuck::yuck(int x, int y, level* lM, bulletManager* bM): shooter(x,y,lM,bM){
 	damage *= 4;
 	health *= 4;
-	fireRate = 0.1;
+	fireRate = 0.05;
 	chargeTime = 5; // 5 secondi
 	laserTime = 3; // 3 secondi
-	t = 0;
-	shooting = false;
+	lastCharge = 0;
 
 	box.a.x -= 1;
 	box.b.x += 1;
@@ -31,21 +29,19 @@ yuck::yuck(int x, int y, level* lM, bulletManager* bM): shooter(x,y,lM,bM){
 void yuck::update(point target, timeSpan deltaTime){
 	if(awake){
 		shooter::update(target, deltaTime);
-		t += deltaTime;
+		lastCharge += deltaTime;
 
-		if(shooting && t>laserTime){
-			shooting = false;
-			t = 0;
-		}else if (!shooting && t>chargeTime){
-			shooting = true;
-			t = 0;
-		}else if (shooting && t<laserTime)
+		if(lastCharge < chargeTime){
+			//charging animation ?
+		}else if(lastCharge < chargeTime+laserTime){
 			if( lastShot > fireRate ){
 				shoot();
 				lastShot = 0;
 			}else{
 				lastShot += deltaTime;
 			}
+		}else{
+			lastCharge = 0;
 		}
 
 	}else{

@@ -8,8 +8,7 @@ protected:
 	bool awake;
 	timeSpan chargeTime; // si può fare const?
 	timeSpan laserTime; // si può fare const?
-	timeSpan t; // conta il tempo
-	bool shooting;
+	timeSpan lastCharge;
 public:
 	yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm);
 	yuck(int x, int y, level* lM, bulletManager* bM);

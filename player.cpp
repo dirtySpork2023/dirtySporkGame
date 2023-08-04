@@ -15,6 +15,11 @@ player::player(int x, int y, bulletManager* b, double gunFireRate, int gunDamage
 	this->dmg = gunDamage;
 
 	this->armor = armor; // 0-1 moltiplica i danni subiti
+
+	//shieldpowerup
+	this->shieldActive = false;
+	this->shieldDuration = 0.0;
+    this->elapsedShieldTime = 0.0;
 }
 
 //stampa il player
@@ -30,6 +35,11 @@ void player::print(timeSpan deltaTime){//TODO da generalizzare in entity
 			elapsedSinceLastDamage = 0;
 		}
 	}
+
+	// Update shield if it's active
+    if (shieldActive) {
+        updateShield(deltaTime);
+    }
 
 	//TODO stampa barra della vita
 
@@ -95,4 +105,30 @@ void player::shoot(){
 	else muzzle.x -= 2;
 
 	this->bM->add(muzzle, speed, false, this->dmg, 'o');
+}
+
+//method for healthpowerup
+void player::heal(int amount){
+	health = health + amount;
+	if (health > HEALTH){
+		health = HEALTH; //health cant be bigger than the starting health
+	}
+}
+
+//methods for shieldpowerup
+ void player::activateShield(double duration) {
+    shieldActive = true;
+    shieldDuration = duration;
+    elapsedShieldTime = 0.0;
+}
+
+void player::updateShield(double deltaTime) {
+    elapsedShieldTime += deltaTime;
+    if (elapsedShieldTime >= shieldDuration) {
+        shieldActive = false;
+    }
+}
+
+bool player::isShieldActive() {
+    return shieldActive;
 }

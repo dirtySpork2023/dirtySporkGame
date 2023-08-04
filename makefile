@@ -1,7 +1,7 @@
 all: game
 
-game: main.o lib.o entity.o player.o kuba.o bulletManager.o
-	g++ -o game main.o lib.o entity.o player.o kuba.o bulletManager.o -lncurses
+game: main.o lib.o entity.o player.o kuba.o bulletManager.o powerup.o healthpowerup.o shieldpowerup.o
+	g++ -o game main.o lib.o entity.o player.o kuba.o bulletManager.o powerup.o healthpowerup.o shieldpowerup.o -lncurses
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -20,6 +20,15 @@ kuba.o: kuba.cpp kuba.hpp
 
 bulletManager.o: bulletManager.cpp bulletManager.hpp
 	g++ -c bulletManager.cpp
+
+powerup.o: powerup.cpp powerup.hpp
+	g++ -c powerup.cpp
+
+healthpowerup.o: healthpowerup.cpp healthpowerup.hpp
+	g++ -c healthpowerup.cpp
+
+shieldpowerup.o: shieldpowerup.cpp shieldpowerup.hpp
+	g++ -c shieldpowerup.cpp
 
 clean:
 	rm -f *.o game

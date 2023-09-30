@@ -60,7 +60,7 @@ int main(){
 
 	bulletManager B = bulletManager();
 
-	char input;
+	char input; // tasto preso in input
 	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
 	//structLevel* levels = new structLevel;           // Lista dei livelli

@@ -28,10 +28,10 @@ protected:
 public:
 	entity(int x, int y, level* lM, bulletManager* bM, int hp);
 	void update(timeSpan deltaTime);
-	point getPos(); // ritorna la posizione del
+	point getPos(); // ritorna la posizione
 	hitBox getHitBox(); // ritorna la hitBox
 	int getHealth(); // ritorna i punti vita
-	bool hurt(int value); // danneggia entity e ritorna se è morto
+	bool hurt(int value); // danneggia entity e ritorna 'se è morto'
 	void setGrounded(bool grounded); // quando entity è a terra (o sopra un nemico), bisogna invocare questo metodo // TODO rifare
 	~entity(); // distruttore: cancella l'entity solo graficamente
 };

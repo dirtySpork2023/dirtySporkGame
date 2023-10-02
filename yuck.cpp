@@ -32,7 +32,10 @@ void yuck::update(point target, timeSpan deltaTime){
 		lastCharge += deltaTime;
 
 		if(lastCharge < chargeTime){
-			//charging animation ?
+			attron("A_STANDOUT");
+			if(facingRight)	mvprintw(box.a.y+2, box.b.x+1, "%1d", (int)lastCharge);
+			else			mvprintw(box.a.y+2, box.a.x-1, "%1d", (int)lastCharge);
+			attroff("A_STANDOUT");
 		}else if(lastCharge < chargeTime+laserTime){
 			if( lastShot > fireRate ){
 				shoot();
@@ -62,12 +65,12 @@ void yuck::print(timeSpan deltaTime){
 		mvprintw(box.a.y,   box.a.x, "+---+");
 		mvprintw(box.a.y+1, box.a.x, "|o o|");
 		mvprintw(box.a.y+2, box.a.x, "| <>|");
-		mvprintw(box.b.y,   box.a.x, "|___|");
+		mvprintw(box.b.y,   box.a.x, "!___|");
 	}else{
 		mvprintw(box.a.y,   box.a.x, "+---+");
 		mvprintw(box.a.y+1, box.a.x, "|o o|");
 		mvprintw(box.a.y+2, box.a.x, "|<> |");
-		mvprintw(box.b.y,   box.a.x, "|___|");
+		mvprintw(box.b.y,   box.a.x, "|___!");
 	}
 
 	attrset(COLOR_PAIR(1));
@@ -80,10 +83,9 @@ void yuck::shoot(){
 	if( !facingRight ) speed.x *= -1;
 
 	point muzzle;
-	muzzle.x = box.a.x+2;
+	muzzle.x = box.a.x-1;
 	muzzle.y = box.a.y+2;
-	if( facingRight ) muzzle.x += 3;
-	else muzzle.x -= 3;
+	if( facingRight ) muzzle.x += 6;
 
 	bM->add(muzzle, speed, false, damage, '=');
 }

@@ -3,6 +3,8 @@ GUERRINI - mondo, salvataggio
 MIKE - mercato, powerup
 
 
+- il primo livello contiene il titolo
+
 	REGOLE
 # Man mano che si procede la difficoltà aumenta (più nemici, meno potenziamenti)
 # Devono essere presenti diversi tipi di nemici e una valuta
@@ -52,5 +54,4 @@ MIKE - mercato, powerup
 - livello 2 oppure a metà tra ogni livello
 - si può comprare tutto (armi, powerup)
 - powerup: armatura, guarigione, danno aggiuntivo, 
-
-
+- è un carro sottoclasse di entity quando muore spawna un pò di soldi

@@ -1,4 +1,6 @@
 #include "lib.hpp"
+
+#include <ncurses.h>
 using namespace std;
 
 bool collisionHH(hitBox B, hitBox T){
@@ -54,7 +56,6 @@ int whereIsY (hitBox v1, hitBox v2) {
     return k;
 }
 
-
 // Funzione che ritorna dove si trova in LARGHEZZA v2 rispetto a v1
 // 1: sinistra || 2: destra || 3: conincidono in quelche punto
 int whereIsX (hitBox v1, hitBox v2) {
@@ -66,4 +67,15 @@ int whereIsX (hitBox v1, hitBox v2) {
     } else k = 3;
 
     return k;
+}
+
+point snap(vector v){
+	point result;
+	result.x = (int)v.x;
+	result.y = (int)v.y;
+	return result;
+}
+
+void posPrintW(point pos, char* str){
+	mvprintw(pos.y, pos.x, str);
 }

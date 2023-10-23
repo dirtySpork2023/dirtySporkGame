@@ -5,7 +5,7 @@
 #include "entity.hpp"
 using namespace std;
 
-entity::entity(int x, int y, level* lM, bulletManager* bM, int hp){
+entity::entity(int x, int y, level* lvl, bulletManager* bM, int hp){
 	this->yMod = 0;
 	this->ySpeed = 0;
 	this->isGrounded = false;
@@ -14,7 +14,7 @@ entity::entity(int x, int y, level* lM, bulletManager* bM, int hp){
 	this->lastDamage = 0;
 
 	this->bM = bM;
-	this->lM = lM;
+	this->lvl = lvl;
 
 	//default hitbox. da sovrascrivere se necessario
 	this->box.a.x = x-2;
@@ -27,7 +27,7 @@ void entity::update(timeSpan deltaTime){
 	hurt(bM->check(box));
 	lastDamage += deltaTime;
 	applyGravity(deltaTime);
-	setGrounded( lM->check(box, 's').type!='n' );
+	setGrounded( lvl->check(box, 's').type!='n' );
 }
 
 void entity::applyGravity(timeSpan deltaTime){
@@ -48,7 +48,7 @@ void entity::applyGravity(timeSpan deltaTime){
 }
 
 void entity::move(char input){
-	if( lM->check(box, input).type == 'n'){
+	if( lvl->check(box, input).type == 'n'){
 		if( input=='a' ){
 			box.a.x -= 1;
 			box.b.x -= 1;
@@ -74,7 +74,7 @@ void entity::move(char input){
 		}else if( input=='s' ){
 			box.a.y += 1;
 			box.b.y += 1;
-			//if( lM->check(box, input).type != 'n') setGrounded(true); //needs testing. setgrounded is in update()
+			//TODO if( lvl->check(box, input).type != 'n') setGrounded(true); // setgrounded is in update()
 			// cleanup
 			for(int x=box.a.x ; x<=box.b.x ; x++){
 				mvprintw(box.a.y-1, x, " ");
@@ -95,17 +95,14 @@ point entity::getPos(){
 	return this->box.b;
 }
 
-// ritorna la hitBox
 hitBox entity::getHitBox(){
 	return this->box;
 }
 
-// ritorna i punti vita
 int entity::getHealth(){
 	return this->health;
 }
 
-// danneggia entity e ritorna se è morto
 bool entity::hurt(int value){
 	if( value!=0 ){
 		lastDamage = 0;
@@ -120,7 +117,6 @@ bool entity::hurt(int value){
 	}
 }
 
-// quando entity è a terra (o sopra un nemico), bisogna invocare questo metodo
 void entity::setGrounded(bool grounded){
 	if(grounded && ySpeed>=0 ){
 		isGrounded = true;
@@ -129,7 +125,6 @@ void entity::setGrounded(bool grounded){
 	}
 }
 
-// distruttore: cancella l'entity solo graficamente. ipotizzando che hitbox e grafica coincidano
 entity::~entity(){
 	for(int x=box.a.x ; x<=box.b.x ; x++){
 		for(int y=box.a.y ; y<=box.b.y ; y++){

@@ -40,4 +40,8 @@ bool collisionPP(point, point);
 int whereIsY (hitBox v1, hitBox v2);
 int whereIsX (hitBox v1, hitBox v2);
 
+point snap(vector);
+
+void posPrintW(point, char*);
+
 #endif //LIB_HPP

@@ -1,36 +1,84 @@
 #include <ncurses.h>
+#include <iostream>
+#include <chrono>
+#include <time.h>
+#include <stdlib.h>
 #include "lib.hpp"
 #include "level.hpp"
 #include "bulletManager.hpp"
 #include "entity.hpp"
 #include "kuba.hpp"
 #include "player.hpp"
+#include "shooter.hpp"
 #include "platform.hpp"
+using namespace std;
 
+// Funzione per generare una piattaforma casuale all'interno di un'area definita da w
+hitBox newRandomPlat (hitBox w) {
+    hitBox nw;
+    nw.a.x = w.a.x + rand()%(w.a.x + 8);     
+    nw.a.y = w.a.y + rand()%(w.a.y + 4);
+    nw.b.x = nw.b.x + 3 + rand()%(w.b.x);
+    nw.b.y = nw.b.y + 3 + rand()%(w.b.y);                      
 
-level::level (int nl, bulletManager B) {
-    this->nlevel = nl;                // Assegno il numero del livello 
-    int numPlat = 3 + rand()%6;       // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme in quel livello
-    int len = COLS-3 / numPlat;       // Larghezza massima delle piattaforme in base al loro numero
-    int height = 12;                  // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
-    hitBox p1;                        // Hitbox della prima piattaforma
-    p1.a.x = 3;                       // valore arbitrario di distanza da tenere dal lato sinistro
+    return nw; 
+}
+
+// Funzione che genera una lista di n piattaforme in modo ricorsivo
+lPlatform createnPlat (int np, hitBox ht, int len) {
+    if (np > 0) {
+        lPlatform tmp1 = new Pplatform;
+        /*
+        tmp1->plat = new platform(ht.a.x, ht.a.y, ht.b.x, ht.b.y);
+        ht.a.x += 7;
+        ht.b.x += 7;
+        */
+        hitBox hpl = newRandomPlat (ht);
+        tmp1->plat = new platform(hpl.a.x, hpl.a.y, hpl.b.x, hpl.b.y);
+        ht.a.x += len;
+        ht.b.x += len;
+        tmp1->next = createnPlat (np-1, ht, len);
+        return tmp1;
+    } else return NULL;
+}
+
+level::level (int nl, bulletManager* B) {
+    this->nlevel = nl;                 // Assegno il numero del livello 
+    int numPlat = 3 + rand()%6;        // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme in quel livello
+    int len = (COLS-3) / numPlat;      // Larghezza massima delle piattaforme in base al loro numero
+    int height = 12;                   // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
+    hitBox p1;                         // Hitbox della prima piattaforma
+    p1.a.x = 3;                        // valore arbitrario di distanza da tenere dal lato sinistro
     p1.a.y = height;
-    p2.b.x = len;
-    p2.b.y = 3;                       // altezza del player
-
+    p1.b.x = len;
+    p1.b.y = 3;                       // altezza del player
+    
     // Generazione lista di piattaforme per questo livello.
-    this->plat = new lPlatforms;
-    this->plat->pl = platform (0, 1, COLS, 0);        // Base del livello
-    lPlatforms tmp1 = this->plat->next;
+    this->platforms = new Pplatform;
+    this->platforms->plat = new platform (0, 32, COLS, 34);  // Base del livello     
+    //lPlatform tmp1 = this->platforms->next;
+    hitBox nw;
+    nw.a.x = 20;
+    nw.a.y = 18;
+    nw.b.x = 22;
+    nw.b.y = 20;
+    this->platforms->next = createnPlat (numPlat, nw, len);
+
+    /*
     for (int i=0; i<numPlat; i++) {
-        tmp1->pl = randomPlat(p1);
+        tmp1 = new Pplatform;
+        //hitBox nw = newRandomPlat(p1);
+        tmp1->plat = new platform(nw.a.x, nw.a.y, nw.b.x, nw.b.y);
         tmp1 = tmp1->next;
-        p1.a.x += len;
-        p1.b.x += len;
+        nw.a.x += 7;
+        nw.b.x += 7;
     }
+
     tmp1 = NULL;
-    delete tmp1;
+    //delete tmp1;
+    */
+/*
+    Da migliorare:::
 
     // Generazione lista nemici per il livello
     this->enemies = new lEnemies;
@@ -47,16 +95,24 @@ level::level (int nl, bulletManager B) {
     }
     tmp2 = NULL;
     delete tmp2;
+*/
 }
 
- void level::print_platforms () {
-    lPlatforms tmp = this->plat;
+/*
+void level::setNext(level* l){ 
+    this->next = l; 
+}
+*/
+
+void level::print_platforms () {
+    lPlatform tmp = this->platforms;
     while (tmp != NULL) {
-		tmp->pl.print();
-		tmp = tmp->next;   
+        tmp->plat->print();
+	    tmp = tmp->next;
 	}
+    tmp = NULL;
     delete tmp;
- }
+}
 
 infoCrash level::check (hitBox ch, char d) {
     infoCrash info;      // Variabile da restituire                             
@@ -65,9 +121,9 @@ infoCrash level::check (hitBox ch, char d) {
     hitBox r;
     
     // Controllo piattaforme
-    lPlatforms tmp1 = this->plat;
+    lPlatform tmp1 = this->platforms;
     for (j=0; tmp1 != NULL && here == false; j++) {
-        r = tmp1->pl.getHitbox();
+        r = tmp1->plat->getHitbox();
         if (d == 'a') {
             if (whereIsY (r, ch) == 3 && r.b.x == ch.a.x-1) {
                 info.type = 'p';
@@ -95,7 +151,11 @@ infoCrash level::check (hitBox ch, char d) {
         }
         tmp1 = tmp1->next;
     }
+    tmp1 = NULL;
     delete tmp1;
+
+/*
+    Da migliorare :::
 
     // Controllo nemici
     lEnemies tmp2 = this->enemies;
@@ -129,7 +189,7 @@ infoCrash level::check (hitBox ch, char d) {
         tmp2 = tmp->next;
     }
     delete tmp2;
-
+*/ 
     /* 
     
     Controllo powerups ...
@@ -137,7 +197,7 @@ infoCrash level::check (hitBox ch, char d) {
     */
 
    if (!here) {
-    info.tipe = 'n';
+    info.type = 'n';
     info.i = -1;
    }
 
@@ -146,4 +206,14 @@ infoCrash level::check (hitBox ch, char d) {
 
 int level::lnumber () {
     return this->nlevel;
+}
+
+int level::givenplat () {
+    lPlatform tmp = this->platforms;
+    int k=0;
+    while (tmp != NULL) {
+        k++;
+        tmp = tmp->next;
+    }
+    return k;
 }

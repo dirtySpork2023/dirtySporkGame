@@ -37,5 +37,7 @@ bool collisionHH(hitBox, hitBox);
 bool collisionHP(hitBox, point);
 bool collisionHV(hitBox, vector);
 bool collisionPP(point, point);
+int whereIsY (hitBox v1, hitBox v2);
+int whereIsX (hitBox v1, hitBox v2);
 
 #endif //LIB_HPP

@@ -2,13 +2,15 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <time.h>
+#include <stdlib.h>
 #include "lib.hpp"
 #include "level.hpp"
 #include "bulletManager.hpp"
 #include "entity.hpp"
+#include "player.hpp"
 #include "kuba.hpp"
 #include "shooter.hpp"
-#include "player.hpp"
 #include "platform.hpp"
 using namespace std;
 
@@ -48,15 +50,9 @@ void init(){
 	ofstream Documento ("salvataggio.txt");
 }
 
-    struct strLevel {
-		level liv;
-		strLevel* next;
-	};
-	
-	typedef strLevel* lLevels;
 
-	
 int main(){
+	srand(time(NULL));
 
 	init();
 
@@ -67,18 +63,14 @@ int main(){
 	char input;
 	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
-	lLevels levels = new strLevel;           // Lista dei livelli
-	lLevels pointL = levels;
-
+	level* pointL; 
 
 	while( !quit ){
 		//level setup here
-
-		pointL->liv = level (numL, B);
-
-		player P = player(10, 10, &liv, &B, 0.1, 10, 12, 0);
-		kuba* K = new kuba(80, 10, &liv, &B);
-		shooter* S = new shooter(120, 10, &liv, &B);
+		pointL = new level (numL, &B);
+		player P = player(10, 10, pointL, &B, 0.1, 10, 12, 0);
+		kuba* K = new kuba(80, 10, pointL, &B);
+		shooter* S = new shooter(120, 10, pointL, &B);
 		
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
@@ -101,26 +93,16 @@ int main(){
 			*/
 
             // Update
-			level tmp = pointL->liv;
 
 			P.update(input, deltaTime);
 			
-			// Update enemies:
-			/*  Update con liste:
-			while (tmp.enemies != NULL && tmp.enemies->type == 'k' ) {
-				tmp.enemies->ent->update(&P, deltaTime);
-				tmp.enemies = tmp.enemies->next;  
-			} 
-			while (tmp.enemies != NULL && tmp.enemies->type == 's' ) {
-				tmp.enemies->ent->update(P.getPos(), deltaTime);
-				tmp.enemies = tmp.enemies->next;
-			}
-			*/
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
+
+			mvprintw(10, 10, "Numero piattaform: %d", pointL->givenplat());
 			
 			// Update platforms:
-			tmp.print_platforms ();
+			pointL->print_platforms();
 			
 		    B.update(deltaTime);
 

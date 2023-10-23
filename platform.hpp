@@ -4,19 +4,14 @@
 #include "lib.hpp"
 
 class platform {
-private:
+protected:
     hitBox box;
 public:
-    platform (int x, int y);
+    platform (int a, int b, int c, int d);
+    // void setNext(platform p);
+    // platform* getNext ();
     void print();
-    point getPos;
     hitBox getHitbox();
 };
-
-platform randomPlat (hitBox where);
-
-int whereIsY (hitBox v1, hitBox v2);
-
-int whereIsX (hitBox v1, hitBox v2);
 
 #endif //PLATFORM_HPP

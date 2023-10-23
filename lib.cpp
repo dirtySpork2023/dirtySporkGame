@@ -40,3 +40,30 @@ bool collisionPP(point A, point B){
 	if( A.x==B.x && A.y==B.y ) return true;
 	else return false;
 }
+
+// Funzione che ritorna dove si trova in ALTEZZA v2 rispetto a v1
+// 1: sopra || 2: sotto || 3: conincidono in quelche punto
+int whereIsY (hitBox v1, hitBox v2) {
+    int k;
+    if (v2.a.y < v1.b.y) {
+        k = 2;
+    } else if (v2.b.y > v1.a.y) {
+        k=1;
+    } else k=3;
+
+    return k;
+}
+
+
+// Funzione che ritorna dove si trova in LARGHEZZA v2 rispetto a v1
+// 1: sinistra || 2: destra || 3: conincidono in quelche punto
+int whereIsX (hitBox v1, hitBox v2) {
+    int k;
+    if (v2.b.x < v1.a.x) {
+        k = 1;
+    } else if (v2.a.x > v1.b.x) {
+        k = 2;
+    } else k = 3;
+
+    return k;
+}

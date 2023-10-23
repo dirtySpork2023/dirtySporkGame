@@ -15,7 +15,7 @@ protected:
 public:
 	kuba(int x, int y, level* lM, bulletManager* bM, int h, double moveSpeed, int damage);
 	kuba(int x, int y, level* lM, bulletManager* bM);
-	void update(player* target, timeSpan deltaTime);
+	void update(entity* target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 };
 

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include <ncurses.h>
 #include <iostream>
 #include <fstream>

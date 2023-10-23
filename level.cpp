@@ -204,7 +204,7 @@ infoCrash level::check (hitBox ch, char d) {
    return info;
 }
 
-int level::lnumber () {
+int level::number () {
     return this->nlevel;
 }
 

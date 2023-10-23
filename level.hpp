@@ -52,7 +52,7 @@ public:
     //void setNext(level* l);
     void print_platforms ();
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
-    int lnumber ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
+    int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
 };
 
 #endif //LEVEL_HPP

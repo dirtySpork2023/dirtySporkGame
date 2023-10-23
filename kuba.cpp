@@ -19,7 +19,7 @@ kuba::kuba(int x, int y, level* lM, bulletManager* bM):
 
 }
 
-void kuba::update(player* target, timeSpan deltaTime){
+void kuba::update(entity* target, timeSpan deltaTime){
 	entity::update(deltaTime);
 
 	// WIP

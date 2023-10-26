@@ -1,7 +1,10 @@
 #ifndef YUCK_HPP
 #define YUCK_HPP
 
-#include "shooter.hpp"
+#include "bulletManager.hpp"
+
+class level;
+class shooter;
 
 class yuck: public shooter{
 protected:

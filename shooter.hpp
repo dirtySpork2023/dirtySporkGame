@@ -1,9 +1,12 @@
 #ifndef SHOOTER_HPP
 #define SHOOTER_HPP
 
-#include "level.hpp"
+#include "lib.hpp"
 #include "bulletManager.hpp"
+
 #include "entity.hpp"
+
+class level;
 
 // detto TBM per gli amici (tennis ball machine)
 class shooter: public entity{

@@ -1,13 +1,14 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
-#include "kuba.hpp"
-#include "player.hpp"
-#include "shooter.hpp"
 #include "lib.hpp"
-#include "entity.hpp"
-#include "platform.hpp"
 #include "bulletManager.hpp"
+#include "entity.hpp"
+#include "shooter.hpp"
+#include "player.hpp"
+#include "kuba.hpp"
+#include "platform.hpp"
+
 
 
 /*

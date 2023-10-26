@@ -2,8 +2,11 @@
 #define PLAYER_HPP
 
 #include "lib.hpp"
-#include "shooter.hpp"
 #include "bulletManager.hpp"
+
+#include "shooter.hpp"
+
+class level;
 
 #define MAX_HEALTH 100
 #define HEALTH_BAR_LENGTH 20

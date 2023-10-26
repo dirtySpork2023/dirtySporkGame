@@ -2,6 +2,7 @@
 #include "lib.hpp"
 #include "kuba.hpp"
 #include "bulletManager.hpp"
+#include "level.hpp"
 using namespace std;
 
 kuba::kuba(int x, int y, level* lM, bulletManager* bM, int h, double moveSpeed, int damage): entity(x,y,lM,bM,h){
@@ -19,7 +20,7 @@ kuba::kuba(int x, int y, level* lM, bulletManager* bM):
 
 }
 
-void kuba::update(entity* target, timeSpan deltaTime){
+void kuba::update(player* target, timeSpan deltaTime){
 	entity::update(deltaTime);
 
 	// WIP

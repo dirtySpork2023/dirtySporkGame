@@ -2,13 +2,12 @@
 #define ENTITY_HPP
 
 #include "lib.hpp"
-#include "level.hpp"
 #include "bulletManager.hpp"
+
+class level; // necessario per compilare
 
 #define ENTITY_G 175
 #define DAMAGE_TIMESPAN 0.10
-
-class level; // necessario per compilare
 
 class entity {
 protected:

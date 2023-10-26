@@ -4,14 +4,17 @@
 #include <chrono>
 #include <time.h>
 #include <stdlib.h>
+
 #include "lib.hpp"
-#include "level.hpp"
 #include "bulletManager.hpp"
 #include "entity.hpp"
+#include "shooter.hpp"
 #include "player.hpp"
 #include "kuba.hpp"
-#include "shooter.hpp"
 #include "platform.hpp"
+#include "level.hpp"
+
+
 using namespace std;
 
 void init(){

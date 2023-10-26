@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include "entity.hpp"
 #include "shooter.hpp"
+#include "level.hpp"
 
 shooter::shooter(int x, int y, level* lM, bulletManager* bM, int h, double fireRate, int damage): entity(x,y,lM,bM,h){
 	this->fireRate = fireRate;

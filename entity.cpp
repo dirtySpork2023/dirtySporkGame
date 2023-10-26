@@ -27,7 +27,6 @@ void entity::update(timeSpan deltaTime){
 	hurt(bM->check(box));
 	lastDamage += deltaTime;
 	applyGravity(deltaTime);
-	setGrounded( lvl->check(box, 's').type!='n' );
 }
 
 void entity::applyGravity(timeSpan deltaTime){
@@ -48,7 +47,8 @@ void entity::applyGravity(timeSpan deltaTime){
 }
 
 void entity::move(char input){
-	if( lvl->check(box, input).type == 'n'){
+	infoCrash i = lvl->check(box, input);
+	if( i.type=='n' ){
 		if( input=='a' ){
 			box.a.x -= 1;
 			box.b.x -= 1;
@@ -63,22 +63,24 @@ void entity::move(char input){
 			for(int y=box.a.y ; y<=box.b.y ; y++){
 				mvprintw(y, box.a.x-1, " ");
 			}
-		}else if( input=='w' ){
-			box.a.y -= 1;
-			box.b.y -= 1;
-			setGrounded(false);
-			// cleanup
-			for(int x=box.a.x ; x<=box.b.x ; x++){
-				mvprintw(box.b.y+1, x, " ");
-			}
-		}else if( input=='s' ){
+		}else if( input=='s' && i.type=='n'){
 			box.a.y += 1;
 			box.b.y += 1;
-			//TODO if( lvl->check(box, input).type != 'n') setGrounded(true); // setgrounded is in update()
+			if( lvl->check(box, input).type != 'n') //controlla se nella nuova posizione è a terra
+				setGrounded(true);
 			// cleanup
 			for(int x=box.a.x ; x<=box.b.x ; x++){
 				mvprintw(box.a.y-1, x, " ");
 			}
+		}
+	}
+	if( input=='w' ){
+		box.a.y -= 1;
+		box.b.y -= 1;
+		setGrounded(false);
+		// cleanup
+		for(int x=box.a.x ; x<=box.b.x ; x++){
+			mvprintw(box.b.y+1, x, " ");
 		}
 	}
 }

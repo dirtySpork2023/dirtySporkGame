@@ -48,16 +48,14 @@ void init(){
 	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
 	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
 	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
-	attrset(COLOR_PAIR(PAINT_DEFAULT));
-
-	ofstream Documento ("salvataggio.txt");
+	attrset(COLOR_PAIR(PAINT_DEFAULT));	
 }
 
 
 int main(){
 	srand(time(NULL));
 
-	init();
+	init(); //inizializza ncurses
 
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 
@@ -122,9 +120,7 @@ int main(){
 
 			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
-			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
-			move(36, 0);
-			for(int i=0 ; i<COLS ; i++){ printw("#"); }
+			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);	
 
 			B.print();
 			P.print(deltaTime);
@@ -158,8 +154,6 @@ void init(){
 	curs_set(0);
 
 	//	COLOR_BLACK
-		COLOR_RED
-		COLOR_GREEN
 		COLOR_YELLOW
 		COLOR_BLUE
 		COLOR_MAGENTA
@@ -265,3 +259,5 @@ int main(){
 	endwin();
 }
 */	
+#include <ncurses.h>
+#include <iostream>

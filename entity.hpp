@@ -4,7 +4,7 @@
 #include "lib.hpp"
 #include "bulletManager.hpp"
 
-class level; // necessario per compilare
+class level;
 
 #define ENTITY_G 175
 #define DAMAGE_TIMESPAN 0.10
@@ -20,6 +20,7 @@ protected:
 	double yMod; // parte decimale della posizione in verticale
 	bool isGrounded; // true se il player è sopra qualcosa di solido ( => non sta cadendo <=> può saltare)
 
+	void setGrounded(bool grounded); // quando entity è a terra (o sopra un nemico), bisogna invocare questo metodo
 	void applyGravity(timeSpan deltaTime); // abbassa entity in base alla forza di gravità e il tempo passato
 	void move(char input); // muove entity di un blocco verso una direzione WASD
 	void setPrintColor(int paint = PAINT_DEFAULT); // colora di rosso entity se ha subito danno recentemente
@@ -31,7 +32,6 @@ public:
 	hitBox getHitBox(); // ritorna la hitBox
 	int getHealth(); // ritorna i punti vita
 	bool hurt(int value); // danneggia entity e ritorna 'se è morto'
-	void setGrounded(bool grounded); // quando entity è a terra (o sopra un nemico), bisogna invocare questo metodo // TODO rifare
 	~entity(); // distruttore: cancella l'entity solo graficamente
 };
 

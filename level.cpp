@@ -44,7 +44,7 @@ lPlatform createnPlat (int np, hitBox ht, int len) {
 
 level::level (int nl, bulletManager* B) {
     this->nlevel = nl;                 // Assegno il numero del livello 
-    int numPlat = 3 + rand()%6;        // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme in quel livello
+    int numPlat = rand()%(6-3) + 3;    // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme in quel livello
     int len = (COLS-3) / numPlat;      // Larghezza massima delle piattaforme in base al loro numero
     int height = 12;                   // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
     hitBox p1;                         // Hitbox della prima piattaforma

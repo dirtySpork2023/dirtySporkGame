@@ -9,6 +9,9 @@ main.o: main.cpp
 lib.o: lib.cpp lib.hpp
 	g++ -c lib.cpp
 
+bulletManager.o: bulletManager.cpp bulletManager.hpp
+	g++ -c bulletManager.cpp
+
 player.o: player.cpp player.hpp
 	g++ -c player.cpp
 
@@ -23,9 +26,6 @@ shooter.o: shooter.cpp shooter.hpp
 
 yuck.o: yuck.cpp yuck.hpp
 	g++ -c yuck.cpp
-
-bulletManager.o: bulletManager.cpp bulletManager.hpp
-	g++ -c bulletManager.cpp
 
 level.o: level.cpp level.hpp
 	g++ -c level.cpp

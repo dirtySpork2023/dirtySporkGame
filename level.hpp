@@ -54,6 +54,8 @@ public:
     void print_platforms ();
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
+    // prova
+    hitBox coordinate(int i);
 };
 
 #endif //LEVEL_HPP

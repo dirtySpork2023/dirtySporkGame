@@ -44,7 +44,7 @@ bool collisionPP(point A, point B){
 }
 
 // Funzione che ritorna dove si trova in ALTEZZA v2 rispetto a v1
-// 1: sopra || 2: sotto || 3: conincidono in quelche punto
+// 1: sopra || 2: sotto || 3: coincidono in quelche punto
 int whereIsY (hitBox v1, hitBox v2) {
     int k;
     if (v2.a.y < v1.b.y) {
@@ -57,7 +57,7 @@ int whereIsY (hitBox v1, hitBox v2) {
 }
 
 // Funzione che ritorna dove si trova in LARGHEZZA v2 rispetto a v1
-// 1: sinistra || 2: destra || 3: conincidono in quelche punto
+// 1: sinistra || 2: destra || 3: coincidono in quelche punto
 int whereIsX (hitBox v1, hitBox v2) {
     int k;
     if (v2.b.x < v1.a.x) {

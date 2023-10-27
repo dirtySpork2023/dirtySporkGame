@@ -16,10 +16,10 @@ using namespace std;
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
 hitBox newRandomPlat (hitBox w) {
     hitBox nw;
-    nw.a.x = w.a.x + rand()%(w.a.x + 8);     
-    nw.a.y = w.a.y + rand()%(w.a.y + 4);
-    nw.b.x = nw.b.x + 3 + rand()%(w.b.x);
-    nw.b.y = nw.b.y + 3 + rand()%(w.b.y);                      
+    nw.a.x = w.a.x + (rand()%5);     
+    nw.a.y = w.a.y + (rand()%4);
+    nw.b.x = (nw.a.x + 3) + (rand()%(w.b.x - nw.a.x + 3));
+    nw.b.y = (nw.a.y + 3) + (rand()%(w.b.y - nw.a.y + 3));
 
     return nw; 
 }
@@ -44,9 +44,9 @@ lPlatform createnPlat (int np, hitBox ht, int len) {
 
 level::level (int nl, bulletManager* B) {
     this->nlevel = nl;                 // Assegno il numero del livello 
-    int numPlat = rand()%(6-3) + 3;    // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme in quel livello
-    int len = (COLS-3) / numPlat;      // Larghezza massima delle piattaforme in base al loro numero
-    int height = 12;                   // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
+    int numPlat = (rand()%3) + 3;    // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme in quel livello
+    int len = (COLS-8) / numPlat;      // Larghezza massima delle piattaforme in base al loro numero
+    int height = 4;                   // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
     hitBox p1;                         // Hitbox della prima piattaforma
     p1.a.x = 3;                        // valore arbitrario di distanza da tenere dal lato sinistro
     p1.a.y = height;
@@ -137,13 +137,13 @@ infoCrash level::check (hitBox ch, char d) {
                 here = true;
             }
         } else if (d == 'w') {
-            if (whereIsX (r, ch) == 3 && r.b.y == ch.a.y+1) {
+            if (whereIsX (r, ch) == 3 && r.b.y == ch.a.y-1) {
                 info.type = 'p';
                 info.i = j;
                 here = true;                
             } 
         } else if (d == 's') {
-            if (whereIsX (r, ch) == 3 && r.a.y == ch.b.y-1) {
+            if (whereIsX (r, ch) == 3 && r.a.y == ch.b.y+1) {
                 info.type = 'p';
                 info.i = j;
                 here = true;
@@ -216,4 +216,20 @@ int level::givenplat () {
         tmp = tmp->next;
     }
     return k;
+    tmp = NULL;
+    delete tmp;
+}
+
+hitBox level::coordinate(int i) {
+    lPlatform tmp = this->platforms;
+    int k=0;
+    while (tmp != NULL && k<i) {
+        k++;
+        tmp = tmp->next;
+    }
+    hitBox ht = tmp->plat->getHitbox();
+    tmp = NULL;
+    delete tmp;
+
+    return ht;
 }

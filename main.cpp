@@ -67,7 +67,7 @@ int main(){
 	level* pointL; 
 
 	while( !quit ){
-		//level setup here
+		//level setup
 		pointL = new level (numL, &B);
 		player P = player(10, 10, pointL, &B, 0.1, 10, 12, 0);
 		kuba* K = new kuba(80, 10, pointL, &B);
@@ -83,28 +83,13 @@ int main(){
 
 			input = getch();
 
-			// setGrounded
-            /*
-			if( P.getPos().y==35 ) P.setGrounded(true);
-			else P.setGrounded(false);
-			if( K!=NULL && K->getPos().y==35 ) K->setGrounded(true);
-			else if(K!=NULL) K->setGrounded(false);
-			if( S!=NULL && S->getPos().y==35 ) S->setGrounded(true);
-			else if(S!=NULL) S->setGrounded(false);
-			*/
-
             // Update
 
 			P.update(input, deltaTime);
-			
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
-
-			mvprintw(10, 10, "Numero piattaform: %d", pointL->givenplat());
-			
-			// Update platforms:
-			pointL->print_platforms();
-			
+	
+			pointL->print_platforms();			
 		    B.update(deltaTime);
 
 			// death
@@ -121,7 +106,7 @@ int main(){
 			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);	
-
+			mvprintw(1, 1, "Numero piattaform: %d", pointL->givenplat());
 			B.print();
 			P.print(deltaTime);
 			if(K!=NULL) K->print(deltaTime);

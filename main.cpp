@@ -106,8 +106,8 @@ int main(){
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);	
 			mvprintw(1, 1, "Numero piattaforme: %d", pointL->givenplat());
-			mvprintw(4, 4, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(1).a.x, pointL->coordinate(1).a.y, pointL->coordinate(1).b.x, pointL->coordinate(1).b.y );
-			mvprintw(6, 6, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
+			mvprintw(4, 0, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(1).a.x, pointL->coordinate(1).a.y, pointL->coordinate(1).b.x, pointL->coordinate(1).b.y );
+			mvprintw(6, 0, "Coordinate piattaforma 2: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
 			pointL->print_platforms();
 			B.print();
 			P.print(deltaTime);

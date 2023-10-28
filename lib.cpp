@@ -69,6 +69,25 @@ int whereIsX (hitBox v1, hitBox v2) {
     return k;
 }
 
+
+// Quattro funzioni per verificare se la hitBox r 
+// sta per toccare la hitbox ch nelle varie direzioni
+bool isTouchingA (hitBox r, hitBox ch) {
+	return (whereIsY (r, ch) == 3 && r.b.x == ch.a.x-1);
+} 
+
+bool isTouchingD (hitBox r, hitBox ch) {
+	return (whereIsY (r, ch) == 3 && r.a.x == ch.b.x+1);
+}
+
+bool isTouchingW (hitBox r, hitBox ch) {
+	return (whereIsX (r, ch) == 3 && r.b.y == ch.a.y-1);
+}
+
+bool isTouchingS (hitBox r, hitBox ch) {
+	return (whereIsX (r, ch) == 3 && r.a.y == ch.b.y+1);
+}
+
 point snap(vector v){
 	point result;
 	result.x = (int)v.x;

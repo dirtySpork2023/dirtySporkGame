@@ -133,38 +133,62 @@ infoCrash level::check (hitBox ch, char d) {
     bool here = false;   // True se trovo qualcosa                                   
     int j;               // Contatore per sapere la posizione in lista
     hitBox r;
-    
-    // Controllo piattaforme
+
     lPlatform tmp1 = this->platforms;
-    for (j=0; tmp1 != NULL && here == false; j++) {
-        r = tmp1->plat->getHitbox();
-        if (d == 'a') {
-            if (whereIsY (r, ch) == 3 && r.b.x == ch.a.x-1) {
-                info.type = 'p';
-                info.i = j;
-                here = true;
-            }
-        } else if (d == 'd') {
-            if (whereIsY (r, ch) == 3 && r.a.x == ch.b.x+1) {
-                info.type = 'p';
-                info.i= j;
-                here = true;
-            }
-        } else if (d == 'w') {
-            if (whereIsX (r, ch) == 3 && r.b.y == ch.a.y-1) {
-                info.type = 'p';
-                info.i = j;
-                here = true;                
-            } 
-        } else if (d == 's') {
-            if (whereIsX (r, ch) == 3 && r.a.y == ch.b.y+1) {
-                info.type = 'p';
-                info.i = j;
-                here = true;
-            }
+
+    if (d == 'a') {
+        for (j=0; tmp1 != NULL && here == false; j++) {             // Verifico se c'e contatto con una piattaforma
+            here = isTouchingA (tmp1->plat->getHitbox(), ch);
+            tmp1 = tmp1->next;
         }
-        tmp1 = tmp1->next;
+        
+        if (here) {
+            info.i = j;
+            info.type = 'p';
+        } else {
+            // enemies
+        }
+
+    } else if (d == 'd') {
+        for (j=0; tmp1 != NULL && here == false; j++) {
+            here = isTouchingD (tmp1->plat->getHitbox(), ch);
+            tmp1 = tmp1->next;
+        }
+        
+        if (here) {
+            info.i = j;
+            info.type = 'p';
+        } else {
+
+        }
+    } else if (d == 'w') {
+        for (j=0; tmp1 != NULL && here == false; j++) {
+            here = isTouchingW (tmp1->plat->getHitbox(), ch);
+            tmp1 = tmp1->next;
+        }
+        
+        if (here) {
+            info.i = j;
+            info.type = 'p';
+        } else {
+
+        }
+        
+    } else if (d == 's') {
+        for (j=0; tmp1 != NULL && here == false; j++) {
+            here = isTouchingS (tmp1->plat->getHitbox(), ch);
+            tmp1 = tmp1->next;
+        }
+        
+        if (here) {
+            info.i = j;
+            info.type = 'p';
+        } else {
+
+        }
+
     }
+
     tmp1 = NULL;
     delete tmp1;
 

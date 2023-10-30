@@ -3,8 +3,10 @@
 
 #include "bulletManager.hpp"
 
+#include "shooter.hpp"
+
 class level;
-class shooter;
+
 
 class yuck: public shooter{
 protected:

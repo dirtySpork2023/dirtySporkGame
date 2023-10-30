@@ -72,7 +72,7 @@ int main(){
 		player P = player(10, 10, pointL, &B, 0.1, 10, 12, 0);
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
-		
+		yuck* Y = new yuck(150, 10, pointL, &B);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
@@ -88,6 +88,7 @@ int main(){
 			P.update(input, deltaTime);
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
+			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
 				
 		    B.update(deltaTime);
 
@@ -101,6 +102,13 @@ int main(){
 				delete S;
 				S = NULL;
 			}
+			if(S==NULL && K==NULL && Y!=NULL){
+				Y->wakeUp();
+			}
+			if(Y!=NULL && Y->getHealth()==0){
+				delete Y;
+				Y = NULL;
+			}
 
 			// output
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
@@ -113,6 +121,7 @@ int main(){
 			P.print(deltaTime);
 			if(K!=NULL) K->print(deltaTime);
 			if(S!=NULL) S->print(deltaTime);
+			if(Y!=NULL) Y->print(deltaTime);
 
 			refresh();
 		}

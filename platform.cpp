@@ -26,10 +26,27 @@ platform* platform::getNext () {
 }
 */
 
+/*
+
+    |""""""""""""""""""""""|
+    |______________________|
+
+    <------------------>
+    
+    |MMmMMmMmMMMmM|
+    \_____________/         |MMmMMmMm|
+                            |        |
+                            \________/
+
+*/
+
+
+
+
 // Stampa della piattaforma
 void platform::print () {
-    for (int i=this->box.a.x; i<this->box.b.x; i++) {
-        for (int j=this->box.a.y; j<this->box.b.y; j++) {
+    for (int i=this->box.a.x; i<=this->box.b.x; i++) {
+        for (int j=this->box.a.y; j<=this->box.b.y; j++) {
             mvprintw(j, i, "#");
         }
     }

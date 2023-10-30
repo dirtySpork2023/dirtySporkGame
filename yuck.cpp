@@ -1,4 +1,5 @@
 #include "yuck.hpp"
+#include "ncurses.h"
 using namespace std;
 
 yuck::yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm): shooter(x,y,lM,bM,h,fr,dm){
@@ -28,14 +29,16 @@ yuck::yuck(int x, int y, level* lM, bulletManager* bM): shooter(x,y,lM,bM){
 
 void yuck::update(point target, timeSpan deltaTime){
 	if(awake){
-		shooter::update(target, deltaTime);
+		entity::update(deltaTime);
+		if(target.x <= box.a.x) facingRight = false;
+		else facingRight = true;
 		lastCharge += deltaTime;
 
 		if(lastCharge < chargeTime){
-			attron("A_STANDOUT");
+			attron(A_STANDOUT);
 			if(facingRight)	mvprintw(box.a.y+2, box.b.x+1, "%1d", (int)lastCharge);
 			else			mvprintw(box.a.y+2, box.a.x-1, "%1d", (int)lastCharge);
-			attroff("A_STANDOUT");
+			attroff(A_STANDOUT);
 		}else if(lastCharge < chargeTime+laserTime){
 			if( lastShot > fireRate ){
 				shoot();
@@ -83,9 +86,9 @@ void yuck::shoot(){
 	if( !facingRight ) speed.x *= -1;
 
 	point muzzle;
-	muzzle.x = box.a.x-1;
 	muzzle.y = box.a.y+2;
-	if( facingRight ) muzzle.x += 6;
+	if( facingRight ) muzzle.x = box.b.x+1;
+	else muzzle.x = box.a.x-1;
 
 	bM->add(muzzle, speed, false, damage, '=');
 }

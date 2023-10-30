@@ -135,7 +135,7 @@ infoCrash level::check (hitBox ch, char d) {
     hitBox r;
 
     lPlatform tmp1 = this->platforms;
-
+    
     if (d == 'a') {
         for (j=0; tmp1 != NULL && here == false; j++) {             // Verifico se c'e contatto con una piattaforma
             here = isTouchingA (tmp1->plat->getHitbox(), ch);

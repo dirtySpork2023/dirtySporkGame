@@ -1,7 +1,7 @@
 all: game
 
-game: main.o lib.o entity.o player.o kuba.o shooter.o bulletManager.o level.o platform.o
-	g++ -o game main.o lib.o entity.o player.o kuba.o shooter.o bulletManager.o level.o platform.o -lncurses
+game: main.o lib.o entity.o player.o kuba.o shooter.o yuck.o bulletManager.o level.o platform.o
+	g++ -o game main.o lib.o entity.o player.o kuba.o shooter.o yuck.o bulletManager.o level.o platform.o -lncurses
 
 main.o: main.cpp
 	g++ -c main.cpp

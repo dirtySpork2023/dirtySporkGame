@@ -23,15 +23,15 @@ void player::update(char input, timeSpan deltaTime){
 	hurt(bM->check(box));
 	entity::update(deltaTime);
 
-	if( input=='a' || input=='A' ){
+	if( input=='a' || input=='A' || input=='q' ){
 		facingRight = false;
 		entity::move('a');
 	}
-	if( input=='d' || input=='D' ){
+	if( input=='d' || input=='D' || input=='e' ){
 		facingRight = true;
 		entity::move('d');
 	}
-	if( isGrounded && (upperCase(input) || input=='w')){
+	if( isGrounded && (upperCase(input) || input=='w' || input=='e' || input=='q')){
 		ySpeed = jumpSpeed;
 		isGrounded = false;
 	}

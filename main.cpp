@@ -54,18 +54,18 @@ void init(){
 
 int main(){
 	srand(time(NULL));
-
+	
 	init(); //inizializza ncurses
-
+	
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
-
+	
 	bulletManager B = bulletManager();
-
+	
 	char input;
 	int numL = 0;                               // Contatore dei livelli
 	bool quit = false;
 	level* pointL; 
-
+	mvprintw(1,1,"se stai leggendo questo avendo eseguito il gioco, porco dio");
 	while( !quit ){
 		//level setup
 		pointL = new level (numL, &B);
@@ -73,7 +73,7 @@ int main(){
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
 		
-
+		
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
@@ -93,7 +93,7 @@ int main(){
 		    B.update(deltaTime);
 
 			// death
-			if( input=='q' ) quit = true;
+			if( input=='Q' ) quit = true;
 			if(K!=NULL && K->getHealth()==0){
 				delete K;
 				K = NULL;

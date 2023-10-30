@@ -17,8 +17,8 @@ yuck::yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm)
 yuck::yuck(int x, int y, level* lM, bulletManager* bM): shooter(x,y,lM,bM){
 	damage *= 4;
 	health *= 4;
-	fireRate = 0.05;
-	chargeTime = 5; // 5 secondi
+	fireRate = 0.03;
+	chargeTime = 3; // 5 secondi
 	laserTime = 3; // 3 secondi
 	lastCharge = 0;
 

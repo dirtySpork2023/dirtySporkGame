@@ -10,10 +10,10 @@
 #include "entity.hpp"
 #include "shooter.hpp"
 #include "player.hpp"
+#include "powerup.hpp"
 #include "kuba.hpp"
 #include "platform.hpp"
 #include "level.hpp"
-
 
 using namespace std;
 
@@ -73,6 +73,7 @@ int main(){
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
 		yuck* Y = new yuck(150, 10, pointL, &B);
+		powerup* U = new powerup(100, 43);
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
@@ -122,6 +123,7 @@ int main(){
 			if(K!=NULL) K->print(deltaTime);
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
+			if(U!=NULL) U->print();
 
 			refresh();
 		}

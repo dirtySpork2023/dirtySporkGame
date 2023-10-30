@@ -66,13 +66,12 @@ void entity::move(char input){
 		}else if( input=='s' && i.type=='n'){
 			box.a.y += 1;
 			box.b.y += 1;
-			if( lvl->check(box, input).type != 'n') //controlla se nella nuova posizione è a terra
-				setGrounded(true);
 			// cleanup
 			for(int x=box.a.x ; x<=box.b.x ; x++){
 				mvprintw(box.a.y-1, x, " ");
 			}
 		}
+		setGrounded(lvl->check(box, 's').type != 'n');
 	}
 	if( input=='w' ){
 		box.a.y -= 1;

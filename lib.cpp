@@ -44,7 +44,7 @@ bool collisionPP(point A, point B){
 }
 
 // Funzione che ritorna dove si trova in ALTEZZA v2 rispetto a v1
-// 1: sopra || 2: sotto || 3: conincidono in quelche punto
+// 1: sopra || 2: sotto || 3: coincidono in quelche punto
 int whereIsY (hitBox v1, hitBox v2) {
     int k;
     if (v2.a.y < v1.b.y) {
@@ -57,7 +57,7 @@ int whereIsY (hitBox v1, hitBox v2) {
 }
 
 // Funzione che ritorna dove si trova in LARGHEZZA v2 rispetto a v1
-// 1: sinistra || 2: destra || 3: conincidono in quelche punto
+// 1: sinistra || 2: destra || 3: coincidono in quelche punto
 int whereIsX (hitBox v1, hitBox v2) {
     int k;
     if (v2.b.x < v1.a.x) {
@@ -67,6 +67,25 @@ int whereIsX (hitBox v1, hitBox v2) {
     } else k = 3;
 
     return k;
+}
+
+
+// Quattro funzioni per verificare se la hitBox r 
+// sta per toccare la hitbox ch nelle varie direzioni
+bool isTouchingA (hitBox r, hitBox ch) {
+	return (whereIsY (r, ch) == 3 && r.b.x == ch.a.x-1);
+} 
+
+bool isTouchingD (hitBox r, hitBox ch) {
+	return (whereIsY (r, ch) == 3 && r.a.x == ch.b.x+1);
+}
+
+bool isTouchingW (hitBox r, hitBox ch) {
+	return (whereIsX (r, ch) == 3 && r.b.y == ch.a.y-1);
+}
+
+bool isTouchingS (hitBox r, hitBox ch) {
+	return (whereIsX (r, ch) == 3 && r.a.y == ch.b.y+1);
 }
 
 point snap(vector v){

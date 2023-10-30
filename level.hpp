@@ -5,6 +5,7 @@
 #include "bulletManager.hpp"
 #include "entity.hpp"
 #include "shooter.hpp"
+#include "yuck.hpp"
 #include "player.hpp"
 #include "kuba.hpp"
 #include "platform.hpp"
@@ -54,6 +55,8 @@ public:
     void print_platforms ();
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
+    // prova
+    hitBox coordinate(int i);
 };
 
 #endif //LEVEL_HPP

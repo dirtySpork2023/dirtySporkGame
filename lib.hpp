@@ -5,6 +5,7 @@
 #define COLOR_PLAYER 8
 #define COLOR_ENEMY 9
 #define COLOR_POWERUP 10
+#define COLOR_PLATFORM 11
 
 // palette da 1 a 255
 #define PAINT_DEFAULT 1
@@ -12,6 +13,7 @@
 #define PAINT_PLAYER 3
 #define PAINT_ENEMY 4
 #define PAINT_POWERUP 5
+#define PAINT_PLATFORM 6
 
 typedef double timeSpan;
 

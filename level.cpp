@@ -3,14 +3,8 @@
 #include <chrono>
 #include <time.h>
 #include <stdlib.h>
-#include "lib.hpp"
+
 #include "level.hpp"
-#include "bulletManager.hpp"
-#include "entity.hpp"
-#include "kuba.hpp"
-#include "player.hpp"
-#include "shooter.hpp"
-#include "platform.hpp"
 using namespace std;
 
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w

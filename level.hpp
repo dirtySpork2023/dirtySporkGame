@@ -3,13 +3,13 @@
 
 #include "lib.hpp"
 #include "bulletManager.hpp"
+#include "entity.hpp"
+#include "shooter.hpp"
+#include "yuck.hpp"
+#include "player.hpp"
+#include "kuba.hpp"
 #include "platform.hpp"
 
-class entity;
-class shooter;
-class yuck;
-class player;
-class kuba;
 
 /*
 Da migliorare :::

@@ -9,6 +9,7 @@
 #include "bulletManager.hpp"
 #include "entity.hpp"
 #include "shooter.hpp"
+#include "yuck.hpp"
 #include "player.hpp"
 #include "powerup.hpp"
 #include "kuba.hpp"
@@ -44,7 +45,7 @@ void init(){
 	init_color(COLOR_PLAYER, 500, 800, 700);
 	init_color(COLOR_ENEMY, 500, 700, 800);
 	init_color(COLOR_POWERUP, 700, 300, 300);
-	init_color(COLOR_PLATFORM, 400, 400, 400);
+	init_color(COLOR_PLATFORM, 200, 200, 200);
 
 	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
 	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);

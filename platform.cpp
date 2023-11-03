@@ -44,12 +44,20 @@ platform* platform::getNext () {
 
 
 // Stampa della piattaforma
-void platform::print () {
-    for (int i=this->box.a.x; i<=this->box.b.x; i++) {
-        for (int j=this->box.a.y; j<=this->box.b.y; j++) {
-            mvprintw(j, i, "#");
-        }
+void platform::printp () {
+    attrset(COLOR_PAIR(PAINT_PLATFORM));
+    mvprintw(this->box.a.y, this->box.a.x, "|");
+    mvprintw(this->box.a.y, this->box.b.x, "|");
+    for (int j=this->box.a.x+1; j<=this->box.b.x-1; j++) {
+        mvprintw(this->box.a.y, j, "\"");
     }
+
+    mvprintw(this->box.b.y, this->box.a.x, "|");
+    mvprintw(this->box.b.y, this->box.b.x, "|");
+    for (int j=this->box.a.x+1; j<=this->box.b.x-1; j++) {
+        mvprintw(this->box.b.y, j, "_");
+    }
+    attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
 hitBox platform::getHitbox() {

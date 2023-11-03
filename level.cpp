@@ -19,7 +19,7 @@ hitBox newRandomPlat (hitBox w, int de) {
     nw.a.x = w.a.x + (rand()%5);     
     nw.a.y = w.a.y + (rand()%4);
     nw.b.x = (nw.a.x + 3) + (rand()%(w.b.x - nw.a.x - de));
-    nw.b.y = (nw.a.y + 3) + (rand()%(w.b.y - nw.a.y));
+    nw.b.y = nw.a.y + 1;
 
     return nw; 
 }
@@ -47,7 +47,7 @@ level::level (int nl, bulletManager* B) {
     //generazione piattaforme inferiori
     this->nlevel = nl;                      // Assegno il numero del livello 
     int numPlatinf = (rand()%3) + 3;        // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme inferiori in quel livello
-    int leninf = (COLS-10) / numPlatinf;       // Larghezza massima delle piattaforme in base al loro numero
+    int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
     int heightinf = 34;                     // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
     hitBox p1;                              // Hitbox della prima piattaforma
     p1.a.x = 4;                             // valore arbitrario di distanza da tenere dal lato sinistro
@@ -121,7 +121,7 @@ void level::setNext(level* l){
 void level::print_platforms () {
     lPlatform tmp = this->platforms;
     while (tmp != NULL) {
-        tmp->plat->print();
+        tmp->plat->printp();
 	    tmp = tmp->next;
 	}
     tmp = NULL;

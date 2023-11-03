@@ -10,7 +10,7 @@ public:
     platform (int a, int b, int c, int d);
     // void setNext(platform p);
     // platform* getNext ();
-    void print();
+    void printp();
     hitBox getHitbox();
 };
 

@@ -7,16 +7,18 @@
 
 class level;
 
+//TODO?
+// invece di sparare dalla bocca genera droni che sparano laser all'altezza del player
 
 class yuck: public shooter{
 protected:
 	bool awake;
-	timeSpan chargeTime; // si può fare const?
-	timeSpan laserTime; // si può fare const?
+	timeSpan chargeTime; //const?
+	timeSpan laserTime;
 	timeSpan lastCharge;
 public:
-	yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm);
-	yuck(int x, int y, level* lM, bulletManager* bM);
+	yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm);
+	yuck(int x, int y, level* lvl, bulletManager* bM);
 	void update(point target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	void shoot();

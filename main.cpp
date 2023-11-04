@@ -82,12 +82,12 @@ int main(){
 	while( !quit ){
 		//level setup
 		pointL = new level (numL, &B);
-		player P = player(10, 10, pointL, &B, 0.1, 10, 12, 0);
+		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
 		yuck* Y = new yuck(150, 10, pointL, &B);
 
-		//creo una riga di monete
+		//creo una lista di monete posizionate in fila
 		int money = 0;
 		coins* H = new coins;
 		coins* tmp = H;
@@ -98,6 +98,7 @@ int main(){
 		}
 		tmp = NULL;
 
+		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
@@ -107,7 +108,7 @@ int main(){
 
 			input = getch();
 
-            // Update
+            // UPDATE
 
 			P.update(input, deltaTime);
 			tmp = H;
@@ -126,10 +127,9 @@ int main(){
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
-
 		    B.update(deltaTime);
 
-			// death
+			// elimino entità morte
 			if( input=='Q' ) quit = true;
 			if(K!=NULL && K->getHealth()==0){
 				delete K;
@@ -147,13 +147,14 @@ int main(){
 				Y = NULL;
 			}
 
-			// output
+			// OUTPUT
+
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
-			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);	
-			mvprintw(1, 1, "Numero piattaforme: %d", pointL->givenplat());
+			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
+			//righe 1-2 scritte da player.print
 			mvprintw(3, 1, "money: %d", money);
-			mvprintw(4, 0, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(1).a.x, pointL->coordinate(1).a.y, pointL->coordinate(1).b.x, pointL->coordinate(1).b.y );
-			mvprintw(5, 0, "Coordinate piattaforma 2: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
+			mvprintw(4, 1, "Numero piattaforme: %d", pointL->givenplat());
+
 			pointL->print_platforms();
 			tmp = H;
 			while( tmp->next!=NULL ){
@@ -165,7 +166,6 @@ int main(){
 			if(K!=NULL) K->print(deltaTime);
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
-			
 			
 
 			refresh();

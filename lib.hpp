@@ -54,4 +54,6 @@ point snap(vector);
 
 void posPrintW(point, const char*);
 
+bool upperCase(char c);
+
 #endif //LIB_HPP

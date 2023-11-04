@@ -3,15 +3,21 @@
 #include "shooter.hpp"
 #include "level.hpp"
 
-shooter::shooter(int x, int y, level* lM, bulletManager* bM, int h, double fireRate, int damage): entity(x,y,lM,bM,h){
-	this->fireRate = fireRate;
-	this->lastShot = 0;
-	this->damage = damage;
+shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fireRate, int damage, char bullet):
+	entity(x,y,lvl,bM,h){
 	this->facingRight = true;
+	this->fireRate = fireRate;
+	this->damage = damage;
+	this->texture = bullet;
+	this->lastShot = 0;
 }
 
-shooter::shooter(int x, int y, level* lM, bulletManager* bM):
-	shooter(x, y, lM, bM, /*HEALTH*/20+5*lM->number(), /*FIRE_RATE*/1/(1 + 0.5*lM->number()), /*DAMAGE*/20 + 10*lM->number()){
+shooter::shooter(int x, int y, level* lvl, bulletManager* bM):
+	shooter(x, y, lvl, bM,
+		/*HEALTH*/20+5*lvl->number(),
+		/*FIRE_RATE*/1/(1 + 0.5*lvl->number()),
+		/*DAMAGE*/20 + 10*lvl->number(),
+		'G'){
 }
 
 void shooter::update(point target, timeSpan deltaTime){

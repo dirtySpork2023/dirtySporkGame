@@ -17,9 +17,9 @@ entity::entity(int x, int y, level* lvl, bulletManager* bM, int hp){
 	this->lvl = lvl;
 
 	//default hitbox. da sovrascrivere se necessario
-	this->box.a.x = x-2;
+	this->box.a.x = x-1;
 	this->box.a.y = y-2;
-	this->box.b.x = x;
+	this->box.b.x = x+1;
 	this->box.b.y = y;
 }
 
@@ -93,7 +93,10 @@ void entity::setPrintColor(int paint){
 }
 
 point entity::getPos(){
-	return this->box.b;
+	//ritorno la posizione più centrale alla base dell'entity
+	point pos = box.b;
+	pos.x = (box.a.x + box.b.x )/2;
+	return pos;
 }
 
 hitBox entity::getHitBox(){

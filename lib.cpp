@@ -98,3 +98,7 @@ point snap(vector v){
 void posPrintW(point pos, const char* str){
 	mvprintw(pos.y, pos.x, str);
 }
+
+bool upperCase(char c){
+	return ('A'<=c && c<= 'Z');
+}

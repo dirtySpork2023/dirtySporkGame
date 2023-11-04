@@ -13,17 +13,17 @@ class entity {
 protected:
 	hitBox box;
 	int health; // punti vita
-	timeSpan lastDamage; // time in seconds elapsed since entity was hurt
-	bulletManager* bM; // reference a classi del livello
-	level* lvl;
+	timeSpan lastDamage; // tempo passato dall'ultima volta che è stato colpito entity
+	bulletManager* bM; // reference al gestore dei proiettili
+	level* lvl; // reference al gestore del livello
 	double ySpeed; // velocità verticale
 	double yMod; // parte decimale della posizione in verticale
-	bool isGrounded; // true se il player è sopra qualcosa di solido ( => non sta cadendo <=> può saltare)
+	bool isGrounded; // 'se il player ha i piedi per terra'
 
-	void setGrounded(bool grounded); // quando entity è a terra (o sopra un nemico), bisogna invocare questo metodo
+	void setGrounded(bool grounded);
 	void applyGravity(timeSpan deltaTime); // abbassa entity in base alla forza di gravità e il tempo passato
-	void move(char input); // muove entity di un blocco verso una direzione WASD
-	void setPrintColor(int paint = PAINT_DEFAULT); // colora di rosso entity se ha subito danno recentemente
+	void move(char input); // muove entity di una posizione verso una direzione WASD
+	void setPrintColor(int paint = PAINT_DEFAULT); // applica il colore con cui stampare
 
 public:
 	entity(int x, int y, level* lM, bulletManager* bM, int hp);
@@ -32,7 +32,7 @@ public:
 	hitBox getHitBox(); // ritorna la hitBox
 	int getHealth(); // ritorna i punti vita
 	bool hurt(int value); // danneggia entity e ritorna 'se è morto'
-	~entity(); // distruttore: cancella l'entity solo graficamente
+	~entity();
 };
 
 #endif //ENTITY_HPP

@@ -11,14 +11,15 @@ class level;
 // detto TBM per gli amici (tennis ball machine)
 class shooter: public entity{
 protected:
-	double fireRate;
-	timeSpan lastShot;
-	int damage; // danno di ogni proiettile
 	bool facingRight;
+	double fireRate;
+	int damage; // danno di ogni proiettile
+	char texture;
+	timeSpan lastShot;
 
 public:
-	shooter(int x, int y, level* lM, bulletManager* bM, int h, double fireRate, int damage);
-	shooter(int x, int y, level* lM, bulletManager* bM);
+	shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fireRate, int damage, char bullet);
+	shooter(int x, int y, level* lvl, bulletManager* bM);
 	void update(point target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	void shoot(point p);

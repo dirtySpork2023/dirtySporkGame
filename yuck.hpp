@@ -21,6 +21,7 @@ public:
 	void print(timeSpan deltaTime);
 	void shoot();
 	void wakeUp();
+	~yuck();
 };
 
 #endif //YUCK_HPP

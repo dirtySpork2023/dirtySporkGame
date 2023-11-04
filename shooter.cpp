@@ -11,7 +11,7 @@ shooter::shooter(int x, int y, level* lM, bulletManager* bM, int h, double fireR
 }
 
 shooter::shooter(int x, int y, level* lM, bulletManager* bM):
-	shooter(x, y, lM, bM, /*HEALTH*/20+5*lM->number(), /*FIRE_RATE*/1/(0.2 + 0.5*lM->number()), /*DAMAGE*/20 + 10*lM->number()){
+	shooter(x, y, lM, bM, /*HEALTH*/20+5*lM->number(), /*FIRE_RATE*/1/(1 + 0.5*lM->number()), /*DAMAGE*/20 + 10*lM->number()){
 }
 
 void shooter::update(point target, timeSpan deltaTime){

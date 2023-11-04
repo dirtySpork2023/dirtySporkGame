@@ -7,16 +7,23 @@
 
 #include "lib.hpp"
 #include "bulletManager.hpp"
+#include "coin.hpp"
 #include "entity.hpp"
 #include "shooter.hpp"
 #include "yuck.hpp"
 #include "player.hpp"
-#include "powerup.hpp"
 #include "kuba.hpp"
 #include "platform.hpp"
 #include "level.hpp"
 
 using namespace std;
+
+
+#define COIN_SPACING 7
+struct coins{
+	coin* C;
+	coins* next;
+};
 
 void init(){
 	initscr();
@@ -44,14 +51,14 @@ void init(){
 	init_color(COLOR_RED, 1000, 0, 0);
 	init_color(COLOR_PLAYER, 500, 800, 700);
 	init_color(COLOR_ENEMY, 500, 700, 800);
-	init_color(COLOR_POWERUP, 700, 300, 300);
+	init_color(COLOR_COIN, 1000, 1000, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
 
 	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
 	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
 	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
 	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
-	init_pair(PAINT_POWERUP, COLOR_POWERUP, COLOR_BLACK);
+	init_pair(PAINT_COIN, COLOR_COIN, COLOR_BLACK);
 	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));	
@@ -79,7 +86,16 @@ int main(){
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
 		yuck* Y = new yuck(150, 10, pointL, &B);
-		powerup* U = new powerup(100, 43);
+
+		//creo una riga di 4 monete
+		coins* H = new coins;
+		coins* tmp = H;
+		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
+			tmp->C = new coin(100+i, 42, 20);
+			tmp->next = new coins;
+			tmp = tmp->next;
+		}
+		tmp = NULL;
 
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
@@ -122,14 +138,19 @@ int main(){
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);	
 			mvprintw(1, 1, "Numero piattaforme: %d", pointL->givenplat());
 			mvprintw(4, 0, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(1).a.x, pointL->coordinate(1).a.y, pointL->coordinate(1).b.x, pointL->coordinate(1).b.y );
-			mvprintw(6, 0, "Coordinate piattaforma 2: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
+			mvprintw(5, 0, "Coordinate piattaforma 2: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
 			pointL->print_platforms();
 			B.print();
 			P.print(deltaTime);
 			if(K!=NULL) K->print(deltaTime);
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
-			if(U!=NULL) U->print();
+			coins* tmp = H;
+			while( tmp->next!=NULL ){
+				tmp->C->print(deltaTime);
+				tmp = tmp->next;
+			}
+			
 
 			refresh();
 		}

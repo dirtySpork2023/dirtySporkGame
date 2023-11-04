@@ -17,7 +17,7 @@ yuck::yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm)
 yuck::yuck(int x, int y, level* lM, bulletManager* bM): shooter(x,y,lM,bM){
 	damage *= 4;
 	health *= 4;
-	fireRate = 0.03;
+	fireRate = 0.04;
 	chargeTime = 3; // 5 secondi
 	laserTime = 3; // 3 secondi
 	lastCharge = 0;
@@ -36,8 +36,8 @@ void yuck::update(point target, timeSpan deltaTime){
 
 		if(lastCharge < chargeTime){
 			attron(A_STANDOUT);
-			if(facingRight)	mvprintw(box.a.y+2, box.b.x+1, "%1d", (int)lastCharge);
-			else			mvprintw(box.a.y+2, box.a.x-1, "%1d", (int)lastCharge);
+			if(facingRight)	mvprintw(box.a.y+2, box.b.x+1, "%1d", (int)(lastCharge*2));
+			else			mvprintw(box.a.y+2, box.a.x-1, "%1d", (int)(lastCharge*2));
 			attroff(A_STANDOUT);
 		}else if(lastCharge < chargeTime+laserTime){
 			if( lastShot > fireRate ){
@@ -95,4 +95,10 @@ void yuck::shoot(){
 
 void yuck::wakeUp(){
 	awake = true;
+}
+
+yuck::~yuck(){
+	entity::~entity();
+	mvprintw(box.a.y+2, box.b.x+1, " ");
+	mvprintw(box.a.y+2, box.a.x-1, " ");
 }

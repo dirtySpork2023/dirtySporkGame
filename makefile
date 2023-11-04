@@ -1,7 +1,7 @@
 all: game
 
-game: main.o lib.o bulletManager.o entity.o shooter.o player.o powerup.o kuba.o yuck.o platform.o level.o
-	g++ -o game main.o lib.o bulletManager.o entity.o shooter.o player.o powerup.o kuba.o yuck.o platform.o level.o -lncurses
+game: main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o
+	g++ -o game main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o -lncurses
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -12,6 +12,9 @@ lib.o: lib.cpp lib.hpp
 bulletManager.o: bulletManager.cpp bulletManager.hpp
 	g++ -c bulletManager.cpp
 
+coin.o: coin.cpp coin.hpp
+	g++ -c coin.cpp
+
 entity.o: entity.cpp entity.hpp
 	g++ -c entity.cpp
 
@@ -20,9 +23,6 @@ shooter.o: shooter.cpp shooter.hpp
 
 player.o: player.cpp player.hpp
 	g++ -c player.cpp
-
-powerup.o: powerup.cpp powerup.hpp
-	g++ -c powerup.cpp
 
 kuba.o: kuba.cpp kuba.hpp
 	g++ -c kuba.cpp

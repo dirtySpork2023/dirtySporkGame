@@ -63,7 +63,7 @@ void entity::move(char input){
 			for(int y=box.a.y ; y<=box.b.y ; y++){
 				mvprintw(y, box.a.x-1, " ");
 			}
-		}else if( input=='s' && i.type=='n'){
+		}else if( input=='s' /*&& i.type=='n'*/){
 			box.a.y += 1;
 			box.b.y += 1;
 			// cleanup

@@ -95,6 +95,6 @@ point snap(vector v){
 	return result;
 }
 
-void posPrintW(point pos, char* str){
+void posPrintW(point pos, const char* str){
 	mvprintw(pos.y, pos.x, str);
 }

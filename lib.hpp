@@ -52,6 +52,6 @@ bool isTouchingS (hitBox r, hitBox ch);
 
 point snap(vector);
 
-void posPrintW(point, char*);
+void posPrintW(point, const char*);
 
 #endif //LIB_HPP

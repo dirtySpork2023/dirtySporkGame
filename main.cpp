@@ -49,8 +49,8 @@ void init(){
 	init_color(COLOR_BLACK, 100, 100, 100);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
-	init_color(COLOR_PLAYER, 500, 800, 700);
-	init_color(COLOR_ENEMY, 500, 700, 800);
+	init_color(COLOR_PLAYER, 500, 1000, 600);
+	init_color(COLOR_ENEMY, 500, 600, 1000);
 	init_color(COLOR_COIN, 1000, 1000, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
 
@@ -87,7 +87,8 @@ int main(){
 		shooter* S = new shooter(120, 10, pointL, &B);
 		yuck* Y = new yuck(150, 10, pointL, &B);
 
-		//creo una riga di 4 monete
+		//creo una riga di monete
+		int money = 0;
 		coins* H = new coins;
 		coins* tmp = H;
 		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
@@ -109,10 +110,23 @@ int main(){
             // Update
 
 			P.update(input, deltaTime);
+			tmp = H;
+			while( tmp->next!=NULL ){
+				int value = -1;
+				//se la moneta esiste ancora controllo se il player può prenderla
+				if( tmp->C!=NULL ) value = tmp->C->check(P.getHitBox());
+				if(value==-1){
+					tmp = tmp->next;
+				}else{
+					money += value;
+					delete tmp->C; //NON rimuovo nodi per pigrizia, li rendo solo vuoti
+					tmp->C = NULL;
+				}
+			}
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
-				
+
 		    B.update(deltaTime);
 
 			// death
@@ -137,19 +151,21 @@ int main(){
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);	
 			mvprintw(1, 1, "Numero piattaforme: %d", pointL->givenplat());
+			mvprintw(3, 1, "money: %d", money);
 			mvprintw(4, 0, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(1).a.x, pointL->coordinate(1).a.y, pointL->coordinate(1).b.x, pointL->coordinate(1).b.y );
 			mvprintw(5, 0, "Coordinate piattaforma 2: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
 			pointL->print_platforms();
+			tmp = H;
+			while( tmp->next!=NULL ){
+				if( tmp->C!=NULL ) tmp->C->print(deltaTime);
+				tmp = tmp->next;
+			}
 			B.print();
 			P.print(deltaTime);
 			if(K!=NULL) K->print(deltaTime);
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
-			coins* tmp = H;
-			while( tmp->next!=NULL ){
-				tmp->C->print(deltaTime);
-				tmp = tmp->next;
-			}
+			
 			
 
 			refresh();

@@ -18,10 +18,10 @@ coin::coin(int x, int y, int value){
 }
 
 int coin::check(hitBox p){
-	if(collisionHH(p, box)==false)
-		return 0;
-	
-	return value;
+	if( collisionHP(p, box.a) || collisionHP(p, box.b) )
+		return value;
+	else
+		return -1;
 }
 
 void coin::print(timeSpan deltaTime){
@@ -44,6 +44,5 @@ void coin::print(timeSpan deltaTime){
 }
 
 coin::~coin(){
-	posPrintW(box.a, " ");
-	posPrintW(box.b, " ");
+	posPrintW(box.a, "   ");
 }

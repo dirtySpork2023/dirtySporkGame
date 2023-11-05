@@ -5,20 +5,15 @@
 using namespace std;
 
 bulletManager::bulletManager(){
-	// la lista inizialmente è vuota
 	head = NULL;
-	tail = NULL;
 	num = 0;
 }
 
+// aggiunta in testa alla lista
 void bulletManager::add(point p, vector speed, bool gravity, int damage, char texture){
 	node* tmp = new node;
-	tmp->next = NULL;
-	if( tail!=NULL )
-		tail->next = tmp;
-	tail = tmp;
-	if( head==NULL )
-		head = tmp;
+	tmp->next = head;
+	head = tmp;
 
 	vector v;
  	v.x = (double)p.x;
@@ -26,21 +21,11 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
  	tmp->pos = v;
 	tmp->oldPos = p;
 	tmp->speed.x = speed.x;
-	tmp->speed.y = speed.y/1.5;
+	tmp->speed.y = speed.y;
 	tmp->gravity = gravity;
 	tmp->damage = damage;
 	tmp->texture = texture;
 	num++;
-}
-
-//INUTILIZZATO
-void bulletManager::removeOldest(){
-	if(head!=NULL && head->next!=NULL){
-		node* tmp = head->next;
-		delete head;
-		head = tmp;
-		num--;
-	}
 }
 
 void bulletManager::update(double deltaTime){
@@ -75,9 +60,6 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 		// se la testa della lista in esame è anche la testa della lista totale, devo aggiornarla
 		if( p==head ){
 			head = head->next;
-			// aggiorno anche tail se la lista adesso è diventata vuota
-			if( head==NULL )
-				tail = NULL;
 		}
 
 		// elimino la testa e proseguo perchè potrebbero esserci altri proiettili che collidono
@@ -86,8 +68,6 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 		return removeNode(target, tmp, damage);
 	}else{
 		p->next = removeNode(target, p->next, damage);
-		if( p->next==NULL && p->next!=tail ) // TODO la seconda parte del AND si può togliere
-			tail = p;
 		return p;
 	}
 }

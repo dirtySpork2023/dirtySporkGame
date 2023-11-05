@@ -129,7 +129,7 @@ bool entity::hurt(int value){
 entity::~entity(){
 	for(int x=box.a.x ; x<=box.b.x ; x++){
 		for(int y=box.a.y ; y<=box.b.y ; y++){
-			mvprintw(y,x," ");
+			mvprintw(y, x, " ");
 		}
 	}
 }

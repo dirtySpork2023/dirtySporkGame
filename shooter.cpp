@@ -52,8 +52,9 @@ void shooter::print(timeSpan deltaTime){
 
 void shooter::shoot(point p){
 	point muzzle;
-	muzzle.x = box.a.x+1;
 	muzzle.y = box.a.y-1;
+	if( facingRight ) muzzle.x = box.b.x+1;
+	else muzzle.x = box.a.x-1;
 
 	vector speed;
 	if( facingRight ) speed.x = 100;
@@ -61,7 +62,7 @@ void shooter::shoot(point p){
 
 	int Dx = p.x-muzzle.x-1;
 	int Dy = p.y-muzzle.y-1;
-	speed.y = -0.75*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
+	speed.y = -0.5*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
 	// velocità verticale esatta necessaria per colpire il player.
 
 	// TODO rendere fissa l'altezza a cui arriva il proiettile e

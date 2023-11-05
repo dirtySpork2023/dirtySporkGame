@@ -154,7 +154,6 @@ int main(){
 			//righe 1-2 scritte da player.print
 			mvprintw(3, 1, "money: %d", money);
 			mvprintw(4, 1, "Numero piattaforme: %d", pointL->givenplat());
-			mvprintw(5, 1, "Numero di proiettili: %d", B.getNum());
 
 			pointL->print_platforms();
 			tmp = H;

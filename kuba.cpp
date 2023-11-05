@@ -18,9 +18,9 @@ kuba::kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed,
 
 kuba::kuba(int x, int y, level* lvl, bulletManager* bM):
 	kuba(x, y, lvl, bM,
-		/*HEALTH*/40+20*lvl->number(),
-		/*SPEED*/0.1,
-		/*DAMAGE*/20+10*lvl->number()){
+		/* HEALTH */ 40+20*lvl->number(),
+		/* SPEED */ 0.1,
+		/* DAMAGE */ 20+10*lvl->number()){
 }
 
 void kuba::update(player* target, timeSpan deltaTime){

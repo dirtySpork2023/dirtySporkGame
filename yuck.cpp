@@ -16,9 +16,9 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm
 
 yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
 	yuck(x,y,lvl,bM,
-		/*HEALTH*/200+50*lvl->number(),
-		/*FIRE_RATE*/0.025,
-		/*DAMAGE*/8 + 4*lvl->number()){
+		/* HEALTH */ 200+50*lvl->number(),
+		/* FIRE_RATE */ 0.025,
+		/* DAMAGE */ 8 + 4*lvl->number()){
 }
 
 void yuck::update(point target, timeSpan deltaTime){

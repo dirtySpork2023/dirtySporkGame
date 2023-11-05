@@ -29,6 +29,7 @@ void entity::update(timeSpan deltaTime){
 	applyGravity(deltaTime);
 }
 
+// muove entity in base alla forza di gravità e il tempo passato
 void entity::applyGravity(timeSpan deltaTime){
 	if( isGrounded ){
 		ySpeed = 0;
@@ -46,6 +47,7 @@ void entity::applyGravity(timeSpan deltaTime){
 	}
 }
 
+// muove entity di una posizione verso una direzione WASD
 void entity::move(char input){
 	infoCrash i = lvl->check(box, input);
 	if( i.type=='n' ){
@@ -89,6 +91,7 @@ void entity::move(char input){
 	}
 }
 
+// applica il colore con cui stampare
 void entity::setPrintColor(int paint){
 	if(lastDamage <= DAMAGE_TIMESPAN){
 		attrset(COLOR_PAIR( PAINT_DAMAGE ));
@@ -97,21 +100,24 @@ void entity::setPrintColor(int paint){
 	}
 }
 
+// ritorna la posizione più centrale alla base dell'entity
 point entity::getPos(){
-	//ritorno la posizione più centrale alla base dell'entity
 	point pos = box.b;
 	pos.x = (box.a.x + box.b.x )/2;
 	return pos;
 }
 
+// ritorna la hitBox
 hitBox entity::getHitBox(){
 	return this->box;
 }
 
+// ritorna i punti vita
 int entity::getHealth(){
 	return this->health;
 }
 
+// danneggia entity e ritorna 'se è morto'
 bool entity::hurt(int value){
 	if( value!=0 ){
 		lastDamage = 0;

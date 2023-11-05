@@ -19,15 +19,13 @@ class bulletManager {
 private:
 	node* head; // lista in cui ogni nodo è un proiettile
 	int num; //numero di proiettili in lista
-	node* removeNode(hitBox target, node* p, int &damage); // rimuove ricorsivamente tutti i proiettili che colpiscono 'target'
-														   // scrive anche in 'damage' la somma di tutti i danni
+	node* removeNode(hitBox target, node* p, int &damage);
 public:
 	bulletManager();
 	void add(point p, vector speed, bool gravity, int damage, char texture);
 	void update(double deltaTime);
-	int check(hitBox box); // elimina i proiettili che collidono con 'box' e ritorna il danno complessivo
-	void print(); // stampa tutti i proiettili nella lista
-	int getNum();
+	int check(hitBox box);
+	void print();
 };
 
 #endif //BULLET_HP

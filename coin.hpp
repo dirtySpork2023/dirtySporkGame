@@ -6,8 +6,8 @@
 class coin{
 protected:
 	hitBox box;
-	int value; // value of the coin
-	timeSpan t; // animation time
+	int value; // valore della moneta
+	timeSpan t; // tempo dell'animazione
 public:
 	coin(int x, int y, int value);
 	int check(hitBox p);

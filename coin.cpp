@@ -17,6 +17,7 @@ coin::coin(int x, int y, int value){
 	this->t = 0;
 }
 
+// ritorna il valore della moneta se è presa, altrimenti ritorna -1
 int coin::check(hitBox p){
 	if( collisionHP(p, box.a) || collisionHP(p, box.b) )
 		return value;
@@ -24,6 +25,7 @@ int coin::check(hitBox p){
 		return -1;
 }
 
+// stampa la moneta animando l'animazione
 void coin::print(timeSpan deltaTime){
 	t += deltaTime;
 	if( t>STT ) t -= STT;

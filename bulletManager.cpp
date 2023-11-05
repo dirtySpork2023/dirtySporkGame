@@ -28,6 +28,7 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
 	num++;
 }
 
+// applica gravità e aggiorna la posizione di tutti i proiettili
 void bulletManager::update(double deltaTime){
 	node* tmp = head;
 	while( tmp!=NULL ) {
@@ -40,6 +41,8 @@ void bulletManager::update(double deltaTime){
 	}
 }
 
+// rimuove ricorsivamente tutti i proiettili che colpiscono 'target'
+// scrive anche in 'damage' la somma di tutti i danni
 node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( p==NULL ) return NULL;
 	
@@ -72,12 +75,14 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	}
 }
 
+// elimina i proiettili che collidono con 'box' e ritorna il danno complessivo
 int bulletManager::check(hitBox target){
-	int result = 0; // variabile in cui tenere conto dei danni
+	int result = 0;
 	head = removeNode(target, head, result);
 	return result;
 }
 
+// stampa tutti i proiettili nella lista
 void bulletManager::print(){
 	node* tmp = head;
 	while( tmp!=NULL ){
@@ -92,8 +97,4 @@ void bulletManager::print(){
 
 		tmp = tmp->next;
 	}
-}
-
-int bulletManager::getNum(){
-	return num;
 }

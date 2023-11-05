@@ -67,5 +67,7 @@ void shooter::shoot(point p){
 	// TODO rendere fissa l'altezza a cui arriva il proiettile e
 	//		variabile la velocità orizzontale
 	// speed.x = 
+
+	// BUG: può accadere che shooter si spara da solo
 	bM->add(muzzle,speed,true,damage,'G');
 }

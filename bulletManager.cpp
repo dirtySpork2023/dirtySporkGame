@@ -31,12 +31,9 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
 	tmp->damage = damage;
 	tmp->texture = texture;
 	num++;
-
-	if( num > MAX_BULLETS ){ // se la lista è troppo lunga
-		removeOldest();		 // rimuovo il proiettile più vecchio
-	}
 }
 
+//INUTILIZZATO
 void bulletManager::removeOldest(){
 	if(head!=NULL && head->next!=NULL){
 		node* tmp = head->next;
@@ -60,8 +57,17 @@ void bulletManager::update(double deltaTime){
 
 node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( p==NULL ) return NULL;
-	else if( collisionHV(target, p->pos) ){ // se il proiettile in testa colpisce target
+	
+	bool doRemove = false; 
+	if( collisionHV(target, p->pos) ){
+		doRemove = true;
 		damage += p->damage;
+	}
+	if( outOfBounds(p->pos) ){
+		doRemove = true;
+	}
+
+	if( doRemove ){
 		num--;
 		// cleanup
 		posPrintW(snap(p->pos), " ");
@@ -96,7 +102,7 @@ void bulletManager::print(){
 	node* tmp = head;
 	while( tmp!=NULL ){
 		//stampo anche se la posizione non è cambiata
-		posPrintW(snap(tmp->pos), &tmp->texture);
+		posPrintW(snap(tmp->pos), tmp->texture);
 
 		if( !collisionPP(tmp->oldPos, snap(tmp->pos)) ){
 			// cleanup
@@ -106,4 +112,8 @@ void bulletManager::print(){
 
 		tmp = tmp->next;
 	}
+}
+
+int bulletManager::getNum(){
+	return num;
 }

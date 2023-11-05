@@ -53,7 +53,10 @@ bool isTouchingS (hitBox r, hitBox ch);
 point snap(vector);
 
 void posPrintW(point, const char*);
+void posPrintW(point, char);
 
 bool upperCase(char c);
+
+bool outOfBounds(vector);
 
 #endif //LIB_HPP

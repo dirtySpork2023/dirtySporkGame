@@ -3,7 +3,6 @@
 
 #include "lib.hpp"
 
-#define MAX_BULLETS 1000 // numero massimo di proiettili che possono esistere allo stesso tempo in un livello
 #define BULLET_G 100 // gravità dei proiettili
 
 struct node {
@@ -30,6 +29,7 @@ public:
 	void update(double deltaTime);
 	int check(hitBox box); // elimina i proiettili che collidono con 'box' e ritorna il danno complessivo
 	void print(); // stampa tutti i proiettili nella lista
+	int getNum();
 };
 
 #endif //BULLET_HP

@@ -75,7 +75,7 @@ int main(){
 	bulletManager B = bulletManager();
 	
 	char input;
-	int numL = 0;                               // Contatore dei livelli
+	int numL = 0; // Contatore dei livelli
 	bool quit = false;
 	level* pointL; 
 
@@ -110,6 +110,7 @@ int main(){
 
             // UPDATE
 
+			B.update(deltaTime);
 			P.update(input, deltaTime);
 			tmp = H;
 			while( tmp->next!=NULL ){
@@ -127,7 +128,6 @@ int main(){
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
-		    B.update(deltaTime);
 
 			// elimino entità morte
 			if( input=='Q' ) quit = true;
@@ -154,6 +154,7 @@ int main(){
 			//righe 1-2 scritte da player.print
 			mvprintw(3, 1, "money: %d", money);
 			mvprintw(4, 1, "Numero piattaforme: %d", pointL->givenplat());
+			mvprintw(5, 1, "Numero di proiettili: %d", B.getNum());
 
 			pointL->print_platforms();
 			tmp = H;

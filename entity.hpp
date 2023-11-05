@@ -20,7 +20,6 @@ protected:
 	double yMod; // parte decimale della posizione in verticale
 	bool isGrounded; // 'se il player ha i piedi per terra'
 
-	void setGrounded(bool grounded);
 	void applyGravity(timeSpan deltaTime); // abbassa entity in base alla forza di gravità e il tempo passato
 	void move(char input); // muove entity di una posizione verso una direzione WASD
 	void setPrintColor(int paint = PAINT_DEFAULT); // applica il colore con cui stampare

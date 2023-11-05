@@ -82,10 +82,9 @@ void player::shoot(){
 	if( !facingRight ) speed.x *= -1;
 
 	point muzzle;
-	muzzle.x = box.a.x+1;
 	muzzle.y = box.a.y+1;
-	if( facingRight ) muzzle.x += 2;
-	else muzzle.x -= 2;
+	if( facingRight ) muzzle.x = box.b.x+1;
+	else muzzle.x = box.a.x-1;
 
 	bM->add(muzzle, speed, false, damage, texture);
 }

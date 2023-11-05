@@ -59,9 +59,13 @@ void shooter::shoot(point p){
 	if( facingRight ) speed.x = 100;
 	else speed.x = -100;
 
-	// int Dx = (p.x-muzzle.x-1);
-	// int Dy = (p.y-muzzle.y-1);
-	speed.y = -0.75*BULLET_G*(p.x-muzzle.x-1) / speed.x  +  (p.y-muzzle.y-1)*speed.x / (p.x-muzzle.x-1);
+	int Dx = p.x-muzzle.x-1;
+	int Dy = p.y-muzzle.y-1;
+	speed.y = -0.75*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
 	// velocità verticale esatta necessaria per colpire il player.
+
+	// TODO rendere fissa l'altezza a cui arriva il proiettile e
+	//		variabile la velocità orizzontale
+	// speed.x = 
 	bM->add(muzzle,speed,true,damage,'G');
 }

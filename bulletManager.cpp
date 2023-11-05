@@ -62,17 +62,16 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( p==NULL ) return NULL;
 	else if( collisionHV(target, p->pos) ){ // se il proiettile in testa colpisce target
 		damage += p->damage;
-
+		num--;
 		// cleanup
-		mvprintw((int)p->pos.y, (int)p->pos.x, " "); // TODO questo serve a qualcosa?
-
-		num--; // TODO move down
+		posPrintW(snap(p->pos), " ");
 
 		// se la testa della lista in esame è anche la testa della lista totale, devo aggiornarla
 		if( p==head ){
 			head = head->next;
-			if( head==NULL ) // TODO questo non serve
-				tail = NULL; // TODO questo non serve
+			// aggiorno anche tail se la lista adesso è diventata vuota
+			if( head==NULL )
+				tail = NULL;
 		}
 
 		// elimino la testa e proseguo perchè potrebbero esserci altri proiettili che collidono
@@ -96,35 +95,15 @@ int bulletManager::check(hitBox target){
 void bulletManager::print(){
 	node* tmp = head;
 	while( tmp!=NULL ){
-		if( collisionPP(tmp->oldPos, snap(tmp->pos)) ){
-			// la posizione non è cambiata
-			mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c", tmp->texture ); // TODO serve ristampare? non credo
-		}else{
-			// posPrintW(tmp->oldPos, " "); // TODO funziona??
-			mvprintw(tmp->oldPos.y, tmp->oldPos.x, " ");
+		//stampo anche se la posizione non è cambiata
+		posPrintW(snap(tmp->pos), &tmp->texture);
+
+		if( !collisionPP(tmp->oldPos, snap(tmp->pos)) ){
+			// cleanup
+			posPrintW(tmp->oldPos, " ");
 			tmp->oldPos = snap(tmp->pos);
 		}
 
-
-		// cleanup
-
 		tmp = tmp->next;
 	}
 }
-
-/*
-OLD
-void bulletManager::print(){
-	node* tmp = head;
-	while( tmp!=NULL ){
-		mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c", tmp->texture );
-		// cleanup
-		if(tmp->oldPos.x != (int)tmp->pos.x || tmp->oldPos.y != (int)tmp->pos.y){
-			mvprintw(tmp->oldPos.y, tmp->oldPos.x, " ");
-			tmp->oldPos.x = (int)tmp->pos.x;
-			tmp->oldPos.y = (int)tmp->pos.y;
-		}
-		tmp = tmp->next;
-	}
-}
- */

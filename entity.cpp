@@ -63,7 +63,7 @@ void entity::move(char input){
 			for(int y=box.a.y ; y<=box.b.y ; y++){
 				mvprintw(y, box.a.x-1, " ");
 			}
-		}else if( input=='s' /*&& i.type=='n'*/){
+		}else if( input=='s' ){
 			box.a.y += 1;
 			box.b.y += 1;
 			// cleanup
@@ -71,12 +71,17 @@ void entity::move(char input){
 				mvprintw(box.a.y-1, x, " ");
 			}
 		}
-		setGrounded(lvl->check(box, 's').type != 'n');
+		// controllo se il player è a terra nella nuova posizione
+		if( lvl->check(box, 's').type!='n' && ySpeed>=0 ){
+			isGrounded = true;
+		}else{
+			isGrounded = false;
+		}
 	}
 	if( input=='w' ){
 		box.a.y -= 1;
 		box.b.y -= 1;
-		setGrounded(false);
+		isGrounded = false;
 		// cleanup
 		for(int x=box.a.x ; x<=box.b.x ; x++){
 			mvprintw(box.b.y+1, x, " ");
@@ -118,14 +123,6 @@ bool entity::hurt(int value){
 		return true;
 	}else{
 		return false;
-	}
-}
-
-void entity::setGrounded(bool grounded){
-	if(grounded && ySpeed>=0 ){
-		isGrounded = true;
-	}else{
-		isGrounded = false;
 	}
 }
 

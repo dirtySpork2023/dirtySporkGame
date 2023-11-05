@@ -55,10 +55,6 @@ void yuck::update(point target, timeSpan deltaTime){
 				posPrintW(pos, "/");
 				break;
 			}
-			
-			/*
-			if(facingRight)	mvprintw(box.a.y+2, box.b.x+1, "%1d", (int)(lastCharge*8)%10);
-			else			mvprintw(box.a.y+2, box.a.x-1, "%1d", (int)(lastCharge*8)%10);*/
 		}else if(lastCharge < chargeTime+laserTime){
 			// laser
 			if( lastShot > fireRate ){

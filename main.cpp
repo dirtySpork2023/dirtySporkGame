@@ -96,6 +96,12 @@ int main(){
 			tmp->next = new coins;
 			tmp = tmp->next;
 		}
+		/*tmp = new coins;
+		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
+			tmp->C = new coin(50+i, 20, 20);
+			tmp->next = new coins;
+			tmp = tmp->next;
+		}*/
 		tmp = NULL;
 
 		//ciclo principale del gioco

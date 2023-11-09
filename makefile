@@ -1,4 +1,5 @@
 all: game
+	./game
 
 game: main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o
 	g++ -o game main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o -lncurses

@@ -133,9 +133,17 @@ bool entity::hurt(int value){
 }
 
 entity::~entity(){
+	// cleanup
 	for(int x=box.a.x ; x<=box.b.x ; x++){
 		for(int y=box.a.y ; y<=box.b.y ; y++){
 			mvprintw(y, x, " ");
 		}
+	}
+	
+	// esplosione
+	point pos = this->getPos();
+
+	for(int i=0; i<5; i++){
+		bM->add(pos, randVector(), true, 0, ':');
 	}
 }

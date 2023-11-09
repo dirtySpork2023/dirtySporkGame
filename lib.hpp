@@ -51,6 +51,7 @@ bool isTouchingW (hitBox r, hitBox ch);
 bool isTouchingS (hitBox r, hitBox ch);
 
 point snap(vector);
+vector randVector();
 
 void posPrintW(point, const char*);
 void posPrintW(point, char);

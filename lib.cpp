@@ -1,6 +1,8 @@
 #include "lib.hpp"
 
 #include <ncurses.h>
+#include <time.h>
+#include <stdlib.h>
 using namespace std;
 
 bool collisionHH(hitBox B, hitBox T){
@@ -92,6 +94,14 @@ point snap(vector v){
 	point result;
 	result.x = (int)v.x;
 	result.y = (int)v.y;
+	return result;
+}
+
+// restituisce un vettore con inclinazione a caso e modulo compreso tra min e max
+vector randVector(){
+	vector result;
+	result.x = rand()%61 - 30;
+	result.y = -rand()%50 + 20;
 	return result;
 }
 

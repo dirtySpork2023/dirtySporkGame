@@ -11,6 +11,7 @@ public:
     // void setNext(platform p);
     // platform* getNext ();
     void printp();
+    void printb();
     hitBox getHitbox();
 };
 

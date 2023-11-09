@@ -91,7 +91,7 @@ int main(){
 			input = getch();
 
             // Update
-
+			if(P.getHealth() == 0) input = ' ';
 			P.update(input, deltaTime);
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
@@ -123,6 +123,7 @@ int main(){
 			mvprintw(1, 1, "Numero piattaforme: %d", pointL->givenplat());
 			mvprintw(4, 0, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(1).a.x, pointL->coordinate(1).a.y, pointL->coordinate(1).b.x, pointL->coordinate(1).b.y );
 			mvprintw(6, 0, "Coordinate piattaforma 2: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
+			mvprintw(8, 0, "Numero piattaforme: %d", pointL->givenplat());
 			pointL->print_platforms();
 			B.print();
 			P.print(deltaTime);

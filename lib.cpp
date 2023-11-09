@@ -47,9 +47,9 @@ bool collisionPP(point A, point B){
 // 1: sopra || 2: sotto || 3: coincidono in quelche punto
 int whereIsY (hitBox v1, hitBox v2) {
     int k;
-    if (v2.a.y < v1.b.y) {
+    if (v2.a.y > v1.b.y) {
         k = 2;
-    } else if (v2.b.y > v1.a.y) {
+    } else if (v2.b.y < v1.a.y) {
         k=1;
     } else k=3;
 

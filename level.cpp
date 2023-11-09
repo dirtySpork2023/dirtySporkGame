@@ -42,24 +42,30 @@ level::level (int nl, bulletManager* B) {
     this->nlevel = nl;                      // Assegno il numero del livello 
     int numPlatinf = (rand()%3) + 3;        // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme inferiori in quel livello
     int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
-    int heightinf = 34;                     // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
+    int heightinf = LINES - 14;             // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
     hitBox p1;                              // Hitbox della prima piattaforma
     p1.a.x = 4;                             // valore arbitrario di distanza da tenere dal lato sinistro
     p1.a.y = heightinf;
-    p1.b.x = leninf + 4;
+    p1.b.x = leninf + 5;
     p1.b.y = 38;                            // base - altezza del player
     int dens = 10 - numPlatinf;
 
 
     this->platforms = new Pplatform;
-    this->platforms->plat = new platform (0, 44, COLS, 46);           // Base del livello     
-    this->platforms->next = createnPlat (numPlatinf, p1, leninf, dens);
+    this->platforms->plat = new platform (0, LINES-4, COLS, LINES-2);           // Base del livello
+    this->platforms->next = new Pplatform;
+    lPlatform bs = this->platforms->next;
+    bs->plat = new platform (0, 12, 1, LINES-3);
+    bs->next = new Pplatform;
+    bs = bs->next;
+    bs->plat = new platform (COLS-1, 12, COLS, LINES-6);
+    bs->next = createnPlat (numPlatinf, p1, leninf, dens);
 
 
     // generazione piattaforme superiori
     int numPlatsup = (rand()%3) + 2;
     int lensup = (COLS-10) / numPlatsup;
-    int heightsup = 24;                   
+    int heightsup = LINES - 24;                   
     p1.a.x = 4; 
     p1.a.y = heightsup;
     p1.b.x = lensup + 4;
@@ -114,7 +120,15 @@ void level::setNext(level* l){
 
 void level::print_platforms () {
     lPlatform tmp = this->platforms;
-    while (tmp != NULL) {
+    int i = 0;
+
+    while (i < 3 && tmp != NULL) {          // Stampa della base e delle pareti
+        tmp->plat->printb();
+	    tmp = tmp->next;
+        i++;
+    }
+
+    while (tmp != NULL) {                   // Stampa delle piattaforme sospese
         tmp->plat->printp();
 	    tmp = tmp->next;
 	}
@@ -131,7 +145,7 @@ infoCrash level::check (hitBox ch, char d) {
     lPlatform tmp1 = this->platforms;
     
     if (d == 'a') {
-        for (j=0; tmp1 != NULL && here == false; j++) {             // Verifico se c'e contatto con una piattaforma
+        for (j=0; tmp1 != NULL && !here; j++) {             // Verifico se c'e contatto con una piattaforma
             here = isTouchingA (tmp1->plat->getHitbox(), ch);
             tmp1 = tmp1->next;
         }

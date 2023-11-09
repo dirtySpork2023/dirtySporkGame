@@ -5,20 +5,15 @@
 using namespace std;
 
 bulletManager::bulletManager(){
-	// la lista inizialmente è vuota
 	head = NULL;
-	tail = NULL;
 	num = 0;
 }
 
+// aggiunta in testa alla lista
 void bulletManager::add(point p, vector speed, bool gravity, int damage, char texture){
 	node* tmp = new node;
-	tmp->next = NULL;
-	if( tail!=NULL )
-		tail->next = tmp;
-	tail = tmp;
-	if( head==NULL )
-		head = tmp;
+	tmp->next = head;
+	head = tmp;
 
 	vector v;
  	v.x = (double)p.x;
@@ -26,26 +21,14 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
  	tmp->pos = v;
 	tmp->oldPos = p;
 	tmp->speed.x = speed.x;
-	tmp->speed.y = speed.y/1.5;
+	tmp->speed.y = speed.y;
 	tmp->gravity = gravity;
 	tmp->damage = damage;
 	tmp->texture = texture;
 	num++;
-
-	if( num > MAX_BULLETS ){ // se la lista è troppo lunga
-		removeOldest();		 // rimuovo il proiettile più vecchio
-	}
 }
 
-void bulletManager::removeOldest(){
-	if(head!=NULL && head->next!=NULL){
-		node* tmp = head->next;
-		delete head;
-		head = tmp;
-		num--;
-	}
-}
-
+// applica gravità e aggiorna la posizione di tutti i proiettili
 void bulletManager::update(double deltaTime){
 	node* tmp = head;
 	while( tmp!=NULL ) {
@@ -58,21 +41,28 @@ void bulletManager::update(double deltaTime){
 	}
 }
 
+// rimuove ricorsivamente tutti i proiettili che colpiscono 'target'
+// scrive anche in 'damage' la somma di tutti i danni
 node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( p==NULL ) return NULL;
-	else if( collisionHV(target, p->pos) ){ // se il proiettile in testa colpisce target
+	
+	bool doRemove = false; 
+	if( collisionHV(target, p->pos) ){
+		doRemove = true;
 		damage += p->damage;
+	}
+	if( outOfBounds(p->pos) ){
+		doRemove = true;
+	}
 
+	if( doRemove ){
+		num--;
 		// cleanup
-		mvprintw((int)p->pos.y, (int)p->pos.x, " "); // TODO questo serve a qualcosa?
-
-		num--; // TODO move down
+		posPrintW(snap(p->pos), " ");
 
 		// se la testa della lista in esame è anche la testa della lista totale, devo aggiornarla
 		if( p==head ){
 			head = head->next;
-			if( head==NULL ) // TODO questo non serve
-				tail = NULL; // TODO questo non serve
 		}
 
 		// elimino la testa e proseguo perchè potrebbero esserci altri proiettili che collidono
@@ -81,50 +71,30 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 		return removeNode(target, tmp, damage);
 	}else{
 		p->next = removeNode(target, p->next, damage);
-		if( p->next==NULL && p->next!=tail ) // TODO la seconda parte del AND si può togliere
-			tail = p;
 		return p;
 	}
 }
 
+// elimina i proiettili che collidono con 'box' e ritorna il danno complessivo
 int bulletManager::check(hitBox target){
-	int result = 0; // variabile in cui tenere conto dei danni
+	int result = 0;
 	head = removeNode(target, head, result);
 	return result;
 }
 
+// stampa tutti i proiettili nella lista
 void bulletManager::print(){
 	node* tmp = head;
 	while( tmp!=NULL ){
-		if( collisionPP(tmp->oldPos, snap(tmp->pos)) ){
-			// la posizione non è cambiata
-			mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c", tmp->texture ); // TODO serve ristampare? non credo
-		}else{
-			// posPrintW(tmp->oldPos, " "); // TODO funziona??
-			mvprintw(tmp->oldPos.y, tmp->oldPos.x, " ");
+		//stampo anche se la posizione non è cambiata
+		posPrintW(snap(tmp->pos), tmp->texture);
+
+		if( !collisionPP(tmp->oldPos, snap(tmp->pos)) ){
+			// cleanup
+			posPrintW(tmp->oldPos, " ");
 			tmp->oldPos = snap(tmp->pos);
 		}
 
-
-		// cleanup
-
 		tmp = tmp->next;
 	}
 }
-
-/*
-OLD
-void bulletManager::print(){
-	node* tmp = head;
-	while( tmp!=NULL ){
-		mvprintw((int)tmp->pos.y, (int)tmp->pos.x, "%c", tmp->texture );
-		// cleanup
-		if(tmp->oldPos.x != (int)tmp->pos.x || tmp->oldPos.y != (int)tmp->pos.y){
-			mvprintw(tmp->oldPos.y, tmp->oldPos.x, " ");
-			tmp->oldPos.x = (int)tmp->pos.x;
-			tmp->oldPos.y = (int)tmp->pos.y;
-		}
-		tmp = tmp->next;
-	}
-}
- */

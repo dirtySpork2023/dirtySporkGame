@@ -4,7 +4,7 @@
 // colori da 8 a 255 (i colori 0-7 sono predefiniti ma modificabili)
 #define COLOR_PLAYER 8
 #define COLOR_ENEMY 9
-#define COLOR_POWERUP 10
+#define COLOR_COIN 10
 #define COLOR_PLATFORM 11
 
 // palette da 1 a 255
@@ -12,7 +12,7 @@
 #define PAINT_DAMAGE 2
 #define PAINT_PLAYER 3
 #define PAINT_ENEMY 4
-#define PAINT_POWERUP 5
+#define PAINT_COIN 5
 #define PAINT_PLATFORM 6
 
 typedef double timeSpan;
@@ -51,7 +51,13 @@ bool isTouchingW (hitBox r, hitBox ch);
 bool isTouchingS (hitBox r, hitBox ch);
 
 point snap(vector);
+vector randVector();
 
-void posPrintW(point, char*);
+void posPrintW(point, const char*);
+void posPrintW(point, char);
+
+bool upperCase(char c);
+
+bool outOfBounds(vector);
 
 #endif //LIB_HPP

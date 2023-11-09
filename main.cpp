@@ -7,16 +7,23 @@
 
 #include "lib.hpp"
 #include "bulletManager.hpp"
+#include "coin.hpp"
 #include "entity.hpp"
 #include "shooter.hpp"
 #include "yuck.hpp"
 #include "player.hpp"
-#include "powerup.hpp"
 #include "kuba.hpp"
 #include "platform.hpp"
 #include "level.hpp"
 
 using namespace std;
+
+
+#define COIN_SPACING 7
+struct coins{
+	coin* C;
+	coins* next;
+};
 
 void init(){
 	initscr();
@@ -42,16 +49,16 @@ void init(){
 	init_color(COLOR_BLACK, 100, 100, 100);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
-	init_color(COLOR_PLAYER, 500, 800, 700);
-	init_color(COLOR_ENEMY, 500, 700, 800);
-	init_color(COLOR_POWERUP, 700, 300, 300);
+	init_color(COLOR_PLAYER, 500, 1000, 600);
+	init_color(COLOR_ENEMY, 500, 600, 1000);
+	init_color(COLOR_COIN, 1000, 1000, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
 
 	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
 	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
 	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
 	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
-	init_pair(PAINT_POWERUP, COLOR_POWERUP, COLOR_BLACK);
+	init_pair(PAINT_COIN, COLOR_COIN, COLOR_BLACK);
 	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));	
@@ -68,19 +75,36 @@ int main(){
 	bulletManager B = bulletManager();
 	
 	char input;
-	int numL = 0;                               // Contatore dei livelli
+	int numL = 0; // Contatore dei livelli
 	bool quit = false;
 	level* pointL; 
 
 	while( !quit ){
 		//level setup
 		pointL = new level (numL, &B);
-		player P = player(10, 10, pointL, &B, 0.1, 10, 12, 0);
+		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
 		yuck* Y = new yuck(150, 10, pointL, &B);
-		powerup* U = new powerup(100, 43);
 
+		//creo una lista di monete posizionate in fila
+		int money = 0;
+		coins* H = new coins;
+		coins* tmp = H;
+		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
+			tmp->C = new coin(100+i, 42, 20);
+			tmp->next = new coins;
+			tmp = tmp->next;
+		}
+		/*tmp = new coins;
+		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
+			tmp->C = new coin(50+i, 20, 20);
+			tmp->next = new coins;
+			tmp = tmp->next;
+		}*/
+		tmp = NULL;
+
+		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit ){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
@@ -90,16 +114,28 @@ int main(){
 
 			input = getch();
 
-            // Update
-			if(P.getHealth() == 0) input = ' ';
+            // UPDATE
+
+			B.update(deltaTime);
 			P.update(input, deltaTime);
+			tmp = H;
+			while( tmp->next!=NULL ){
+				int value = -1;
+				//se la moneta esiste ancora controllo se il player può prenderla
+				if( tmp->C!=NULL ) value = tmp->C->check(P.getHitBox());
+				if(value==-1){
+					tmp = tmp->next;
+				}else{
+					money += value;
+					delete tmp->C; //NON rimuovo nodi per pigrizia, li rendo solo vuoti
+					tmp->C = NULL;
+				}
+			}
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
-				
-		    B.update(deltaTime);
 
-			// death
+			// elimino entità morte
 			if( input=='Q' ) quit = true;
 			if(K!=NULL && K->getHealth()==0){
 				delete K;
@@ -117,20 +153,26 @@ int main(){
 				Y = NULL;
 			}
 
-			// output
+			// OUTPUT
+
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
-			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);	
-			mvprintw(1, 1, "Numero piattaforme: %d", pointL->givenplat());
-			mvprintw(4, 0, "Coordinate piattaforma 1: %d %d %d %d", pointL->coordinate(1).a.x, pointL->coordinate(1).a.y, pointL->coordinate(1).b.x, pointL->coordinate(1).b.y );
-			mvprintw(6, 0, "Coordinate piattaforma 2: %d %d %d %d", pointL->coordinate(2).a.x, pointL->coordinate(2).a.y, pointL->coordinate(2).b.x, pointL->coordinate(2).b.y );
-			mvprintw(8, 0, "Numero piattaforme: %d", pointL->givenplat());
+			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
+			//righe 1-2 scritte da player.print
+			mvprintw(3, 1, "money: %d", money);
+			mvprintw(4, 1, "Numero piattaforme: %d", pointL->givenplat());
+
 			pointL->print_platforms();
+			tmp = H;
+			while( tmp->next!=NULL ){
+				if( tmp->C!=NULL ) tmp->C->print(deltaTime);
+				tmp = tmp->next;
+			}
 			B.print();
 			P.print(deltaTime);
 			if(K!=NULL) K->print(deltaTime);
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
-			if(U!=NULL) U->print();
+			
 
 			refresh();
 		}

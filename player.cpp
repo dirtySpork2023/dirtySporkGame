@@ -6,13 +6,13 @@
 #include "bulletManager.hpp"
 using namespace std;
 
-player::player(int x, int y, level* l, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor): shooter(x,y,l,b,MAX_HEALTH,gunFireRate,gunDamage){
+player::player(int x, int y, level* lvl, bulletManager* b, int weapon, float jumpHeight, float armor):
+	shooter(x,y,lvl,b,MAX_HEALTH,1,1,'?'){ //fireRate, damage e texture sono temporanei qui
+
+	setGun(weapon);
+
 	this->jumpSpeed = -sqrt(jumpHeight * ENTITY_G * 2.1);
 	this->armor = armor; // 0-1 moltiplica i danni subiti
-}
-
-bool upperCase(char c){
-	return ('A'<=c && c<= 'Z');
 }
 
 //aggiorna la posizione del player e/o spara
@@ -82,10 +82,30 @@ void player::shoot(){
 	if( !facingRight ) speed.x *= -1;
 
 	point muzzle;
-	muzzle.x = box.a.x+1;
 	muzzle.y = box.a.y+1;
-	if( facingRight ) muzzle.x += 2;
-	else muzzle.x -= 2;
+	if( facingRight ) muzzle.x = box.b.x+1;
+	else muzzle.x = box.a.x-1;
 
-	bM->add(muzzle, speed, false, damage, 'o');
+	bM->add(muzzle, speed, false, damage, texture);
+}
+
+void player::setGun(int id){
+	if( id==PISTOL ){
+		// DPS = 30
+		fireRate = 0.5;
+		damage = 15;
+		texture = '-';
+	}
+	if( id==SHOTGUN ){
+		// DPS = 40
+		fireRate = 1;
+		damage = 40;
+		texture = 'E';
+	}
+	if( id==RIFLE ){
+		// DPS = 100
+		fireRate = 0.1;
+		damage = 10;
+		texture = 'o';
+	}
 }

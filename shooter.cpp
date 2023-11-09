@@ -3,15 +3,21 @@
 #include "shooter.hpp"
 #include "level.hpp"
 
-shooter::shooter(int x, int y, level* lM, bulletManager* bM, int h, double fireRate, int damage): entity(x,y,lM,bM,h){
-	this->fireRate = fireRate;
-	this->lastShot = 0;
-	this->damage = damage;
+shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fireRate, int damage, char bullet):
+	entity(x,y,lvl,bM,h){
 	this->facingRight = true;
+	this->fireRate = fireRate;
+	this->damage = damage;
+	this->texture = bullet;
+	this->lastShot = 0;
 }
 
-shooter::shooter(int x, int y, level* lM, bulletManager* bM):
-	shooter(x, y, lM, bM, /*HEALTH*/20+5*lM->number(), /*FIRE_RATE*/1/(0.2 + 0.5*lM->number()), /*DAMAGE*/20 + 10*lM->number()){
+shooter::shooter(int x, int y, level* lvl, bulletManager* bM):
+	shooter(x, y, lvl, bM,
+		/* HEALTH */ 20+5*lvl->number(),
+		/* FIRE_RATE */ 1/(1 + 0.5*lvl->number()),
+		/* DAMAGE */ 20 + 10*lvl->number(),
+		'G'){
 }
 
 void shooter::update(point target, timeSpan deltaTime){
@@ -46,16 +52,23 @@ void shooter::print(timeSpan deltaTime){
 
 void shooter::shoot(point p){
 	point muzzle;
-	muzzle.x = box.a.x+1;
 	muzzle.y = box.a.y-1;
+	if( facingRight ) muzzle.x = box.b.x+1;
+	else muzzle.x = box.a.x-1;
 
 	vector speed;
 	if( facingRight ) speed.x = 100;
 	else speed.x = -100;
 
-	// int Dx = (p.x-muzzle.x-1);
-	// int Dy = (p.y-muzzle.y-1);
-	speed.y = -0.75*BULLET_G*(p.x-muzzle.x-1) / speed.x  +  (p.y-muzzle.y-1)*speed.x / (p.x-muzzle.x-1);
+	int Dx = p.x-muzzle.x-1;
+	int Dy = p.y-muzzle.y-1;
+	speed.y = -0.5*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
 	// velocità verticale esatta necessaria per colpire il player.
+
+	// TODO rendere fissa l'altezza a cui arriva il proiettile e
+	//		variabile la velocità orizzontale
+	// speed.x = 
+
+	// BUG: può accadere che shooter si spara da solo
 	bM->add(muzzle,speed,true,damage,'G');
 }

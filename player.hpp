@@ -10,6 +10,9 @@ class level;
 
 #define MAX_HEALTH 100
 #define HEALTH_BAR_LENGTH 20
+#define PISTOL 0
+#define SHOTGUN 1
+#define RIFLE 2
 
 class player: public shooter {
 protected:
@@ -17,11 +20,12 @@ protected:
 	double jumpSpeed;
 
 public:
-	player(int x, int y, level* l, bulletManager* b, double gunFireRate, int gunDamage, float jumpHeight, float armor);
+	player(int x, int y, level* lvl, bulletManager* b, int weapon, float jumpHeight, float armor);
 	void update(char input, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	bool hurt(int value);
 	void shoot();
+	void setGun(int id);
 };
 
 #endif //PLAYER_HPP

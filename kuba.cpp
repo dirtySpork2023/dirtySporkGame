@@ -5,7 +5,8 @@
 #include "level.hpp"
 using namespace std;
 
-kuba::kuba(int x, int y, level* lM, bulletManager* bM, int h, double moveSpeed, int damage): entity(x,y,lM,bM,h){
+kuba::kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed, int damage):
+	entity(x,y,lvl,bM,h){
 	this->xSpeed = moveSpeed;
 	this->lastMove = 0;
 
@@ -15,27 +16,31 @@ kuba::kuba(int x, int y, level* lM, bulletManager* bM, int h, double moveSpeed, 
 	this->box.a.y = y-1;
 }
 
-kuba::kuba(int x, int y, level* lM, bulletManager* bM):
-	kuba(x, y, lM, bM, /*HEALTH*/40+20*lM->number(), /*SPEED*/0.1, /*DAMAGE*/20+10*lM->number() ){
-
+kuba::kuba(int x, int y, level* lvl, bulletManager* bM):
+	kuba(x, y, lvl, bM,
+		/* HEALTH */ 40+20*lvl->number(),
+		/* SPEED */ 0.1,
+		/* DAMAGE */ 20+10*lvl->number()){
 }
 
 void kuba::update(player* target, timeSpan deltaTime){
 	entity::update(deltaTime);
 
-	// WIP
+	// TODO use level check and take a point as input instead of player*
+	// should hurt all entities in its path, not only the player
+
 	if( lastMove>=xSpeed ){
-		if(box.b.x > target->getPos().x+3){
+		if(this->getPos().x > target->getPos().x+3){
 			entity::move('a');
 			lastMove = 0;
-		}else if(box.b.x < target->getPos().x-3){
+		}else if(this->getPos().x < target->getPos().x-3){
 			entity::move('d');
 			lastMove = 0;
-		}else if(box.b.x == target->getPos().x+3 && box.b.y == target->getPos().y){
+		}else if(this->getPos().x == target->getPos().x+3 && this->getPos().y == target->getPos().y){
 			target->hurt(damage);
 			entity::move('d');
 			lastMove = -xSpeed*2;
-		}else if(box.b.x == target->getPos().x-3 && box.b.y == target->getPos().y){
+		}else if(this->getPos().x == target->getPos().x-3 && this->getPos().y == target->getPos().y){
 			target->hurt(damage);
 			entity::move('a');
 			lastMove = -xSpeed*2;

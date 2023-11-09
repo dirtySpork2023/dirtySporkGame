@@ -3,7 +3,6 @@
 
 #include "lib.hpp"
 
-#define MAX_BULLETS 1000 // numero massimo di proiettili che possono esistere allo stesso tempo in un livello
 #define BULLET_G 100 // gravità dei proiettili
 
 struct node {
@@ -19,17 +18,14 @@ struct node {
 class bulletManager {
 private:
 	node* head; // lista in cui ogni nodo è un proiettile
-	node* tail; //proiettile più recente
 	int num; //numero di proiettili in lista
-	void removeOldest(); // rimozione in testa alla lista
-	node* removeNode(hitBox target, node* p, int &damage); // rimuove ricorsivamente tutti i proiettili che colpiscono 'target'
-														   // scrive anche in 'damage' la somma di tutti i danni
+	node* removeNode(hitBox target, node* p, int &damage);
 public:
 	bulletManager();
-	void add(point p, vector speed, bool gravity, int damage, char texture); // aggiunta in coda alla lista
+	void add(point p, vector speed, bool gravity, int damage, char texture);
 	void update(double deltaTime);
-	int check(hitBox box); // elimina i proiettili che collidono con 'box' e ritorna il danno complessivo
-	void print(); // stampa tutti i proiettili nella lista
+	int check(hitBox box);
+	void print();
 };
 
 #endif //BULLET_HP

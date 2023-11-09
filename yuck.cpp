@@ -1,12 +1,12 @@
-#include "yuck.hpp"
 #include "ncurses.h"
+#include "yuck.hpp"
+#include "level.hpp"
 using namespace std;
 
-yuck::yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm): shooter(x,y,lM,bM,h,fr,dm){
-	this->chargeTime = chargeTime;
-	fireRate = 0.1;
-	chargeTime = 5; // 5 secondi
-	laserTime = 3; // 3 secondi
+yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm):
+	shooter(x,y,lvl,bM,h,fr,dm,'='){
+	chargeTime = 3; // secondi
+	laserTime = 3; // secondi
 	lastCharge = 0;
 
 	box.a.x -= 1;
@@ -14,32 +14,49 @@ yuck::yuck(int x, int y, level* lM, bulletManager* bM, int h, double fr, int dm)
 	box.a.y -= 1;
 }
 
-yuck::yuck(int x, int y, level* lM, bulletManager* bM): shooter(x,y,lM,bM){
-	damage *= 4;
-	health *= 4;
-	fireRate = 0.03;
-	chargeTime = 3; // 5 secondi
-	laserTime = 3; // 3 secondi
-	lastCharge = 0;
-
-	box.a.x -= 1;
-	box.b.x += 1;
-	box.a.y -= 1;
+yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
+	yuck(x,y,lvl,bM,
+		/* HEALTH */ 200+50*lvl->number(),
+		/* FIRE_RATE */ 0.025,
+		/* DAMAGE */ 8 + 4*lvl->number()){
 }
 
 void yuck::update(point target, timeSpan deltaTime){
-	if(awake){
+	if(!awake){
+		bM->check(box);		// non applico danni ma elimino comunque i proiettili che collidono
 		entity::update(deltaTime);
-		if(target.x <= box.a.x) facingRight = false;
-		else facingRight = true;
+	}else{
+		entity::update(deltaTime);
 		lastCharge += deltaTime;
+		if(target.x < box.a.x && facingRight){
+			facingRight = false;
+			//cleanup
+			mvprintw(box.a.y+2, box.b.x+1, " ");
+		}else if(target.x > box.b.x && !facingRight){
+			facingRight = true;
+			mvprintw(box.a.y+2, box.a.x-1, " ");
+		}
 
 		if(lastCharge < chargeTime){
-			attron(A_STANDOUT);
-			if(facingRight)	mvprintw(box.a.y+2, box.b.x+1, "%1d", (int)lastCharge);
-			else			mvprintw(box.a.y+2, box.a.x-1, "%1d", (int)lastCharge);
-			attroff(A_STANDOUT);
+			// caricamento
+			point pos;
+			pos.y = box.a.y+2;
+			if(facingRight) pos.x = box.b.x+1;
+			else pos.x = box.a.x-1;
+
+			switch ( (int)(lastCharge*6)%3 ){
+			case 0:					//^modifica la velocità dell'animazione
+				posPrintW(pos, "_");
+				break;
+			case 1:
+				posPrintW(pos, "\\");
+				break;
+			case 2:
+				posPrintW(pos, "/");
+				break;
+			}
 		}else if(lastCharge < chargeTime+laserTime){
+			// laser
 			if( lastShot > fireRate ){
 				shoot();
 				lastShot = 0;
@@ -47,13 +64,11 @@ void yuck::update(point target, timeSpan deltaTime){
 				lastShot += deltaTime;
 			}
 		}else{
-			lastCharge = 0;
+			//reset
+			lastCharge -= chargeTime+laserTime;
 		}
-
-	}else{
-		bM->check(box);					// faccio un bM->check prima senza salvare i danni
-		entity::update(deltaTime);		// perchè quando dormiente yuck è immortale come un sasso
-	}									// ci sarà un bM->check ridondante all'interno di entity
+	}
+		
 }
 
 void yuck::print(timeSpan deltaTime){
@@ -65,12 +80,12 @@ void yuck::print(timeSpan deltaTime){
 		mvprintw(box.a.y+2, box.a.x, "#-- #");
 		mvprintw(box.b.y,   box.a.x, "#####");
 	}else if(facingRight){
-		mvprintw(box.a.y,   box.a.x, "+---+");
+		mvprintw(box.a.y,   box.a.x, "+-V-+");
 		mvprintw(box.a.y+1, box.a.x, "|o o|");
 		mvprintw(box.a.y+2, box.a.x, "| <>|");
 		mvprintw(box.b.y,   box.a.x, "!___|");
 	}else{
-		mvprintw(box.a.y,   box.a.x, "+---+");
+		mvprintw(box.a.y,   box.a.x, "+-V-+");
 		mvprintw(box.a.y+1, box.a.x, "|o o|");
 		mvprintw(box.a.y+2, box.a.x, "|<> |");
 		mvprintw(box.b.y,   box.a.x, "|___!");
@@ -90,9 +105,15 @@ void yuck::shoot(){
 	if( facingRight ) muzzle.x = box.b.x+1;
 	else muzzle.x = box.a.x-1;
 
-	bM->add(muzzle, speed, false, damage, '=');
+	bM->add(muzzle, speed, false, damage, texture);
 }
 
 void yuck::wakeUp(){
 	awake = true;
+}
+
+yuck::~yuck(){
+	entity::~entity();
+	mvprintw(box.a.y+2, box.b.x+1, " ");
+	mvprintw(box.a.y+2, box.a.x-1, " ");
 }

@@ -1,6 +1,8 @@
 #include "lib.hpp"
 
 #include <ncurses.h>
+#include <time.h>
+#include <stdlib.h>
 using namespace std;
 
 bool collisionHH(hitBox B, hitBox T){
@@ -95,6 +97,28 @@ point snap(vector v){
 	return result;
 }
 
-void posPrintW(point pos, char* str){
+// restituisce un vettore con inclinazione a caso e modulo compreso tra min e max
+vector randVector(){
+	vector result;
+	result.x = rand()%61 - 30;
+	result.y = -rand()%50 + 20;
+	return result;
+}
+
+void posPrintW(point pos, const char* str){
 	mvprintw(pos.y, pos.x, str);
+}
+
+void posPrintW(point pos, char ch){
+	mvprintw(pos.y, pos.x, "%c", ch);
+}
+
+// ritorna true se il carattere è maiuscolo
+bool upperCase(char c){
+	return ('A'<=c && c<= 'Z');
+}
+
+// ritorna true se la posizione è fuori dallo schermo, con una tolleranza di 10 caselle
+bool outOfBounds(vector pos){
+	return ( pos.x < -10 || COLS+10 < pos.x || pos.y < -10 || LINES+10 < pos.y );
 }

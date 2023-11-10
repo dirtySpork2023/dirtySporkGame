@@ -60,15 +60,16 @@ void platform::printp () {
     attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
-void platform::printb () {
+void platform::printc (char c) {
     attrset(COLOR_PAIR(PAINT_PLATFORM));
     for (int i = this->box.a.x; i < this->box.b.x; i++) {
         for (int j = this->box.a.y; j < this->box.b.y; j++) {
-            mvprintw(j, i, "#");
+            mvprintw(j, i, "%c", c);
         }
     }
     attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
+
 
 hitBox platform::getHitbox() {
     return this->box;

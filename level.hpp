@@ -11,18 +11,6 @@
 #include "platform.hpp"
 
 
-/*
-Da migliorare :::
-
-// Lista dei nemici presenti in un livello
-struct enemy{
-    entity* ent;
-    char type;      // tipologia del nemico [k = kuba || s = shooter]
-    enemy* next;
-};
-
-typedef enemy* lEnemies;
-*/
 
 struct Pplatform {
     platform* plat;
@@ -30,9 +18,9 @@ struct Pplatform {
 };
 typedef Pplatform* lPlatform;
 
-hitBox newRandomPlat (hitBox where);
+hitBox newRandomPlat (hitBox where, int de);
 
-lPlatform createnPlat (int np, hitBox ht, int len);
+lPlatform createnPlat (int np, hitBox ht, int len, int d);
 
 // Struct da restituire nella funzione check
 struct infoCrash {

@@ -55,3 +55,5 @@ MIKE - mercato, powerup
 - si può comprare tutto (armi, powerup)
 - powerup: armatura, guarigione, danno aggiuntivo, 
 - è un carro sottoclasse di entity quando muore spawna un pò di soldi
+
+

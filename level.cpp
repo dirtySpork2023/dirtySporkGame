@@ -12,7 +12,7 @@ hitBox newRandomPlat (hitBox w, int de) {
     hitBox nw;
     nw.a.x = w.a.x + (rand()%5);     
     nw.a.y = w.a.y + (rand()%4);
-    nw.b.x = (nw.a.x + 3) + (rand()%(w.b.x - nw.a.x - de));
+    nw.b.x = (nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));
     nw.b.y = nw.a.y + 1;
 
     return nw; 
@@ -40,31 +40,32 @@ level::level (int nl, bulletManager* B) {
 
     //generazione piattaforme inferiori
     this->nlevel = nl;                      // Assegno il numero del livello 
-    int numPlatinf = (rand()%3) + 3;        // Genero un valore fra 3 e 6 che rappresenta il numero di piattaforme inferiori in quel livello
+    int numPlatinf = (rand()%3) + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
     int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
-    int heightinf = LINES - 14;             // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
+    int blevel = LINES - 10;
+    int heightinf = blevel - 7;             // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
     hitBox p1;                              // Hitbox della prima piattaforma
     p1.a.x = 8;                             // valore arbitrario di distanza da tenere dal lato sinistro
-    p1.a.y = heightinf;
+    p1.a.y = heightinf - 4;
     p1.b.x = leninf+5;
-    p1.b.y = 40;                            // base - altezza del player
+    p1.b.y = heightinf;                            // base - altezza del player
     int dens = 8 - numPlatinf;
 
-
+    
     this->platforms = new Pplatform;
-    this->platforms->plat = new platform (-10, LINES-2, COLS+10, LINES);           // Base del livello
+    this->platforms->plat = new platform (-10, blevel, COLS+10, blevel + 1);           // Base del livello
     this->platforms->next = new Pplatform;
     lPlatform bs = this->platforms->next;
-    bs->plat = new platform (0, 8, 2, LINES-6);                      // Parete sinistra
+    bs->plat = new platform (0, 8, 2, blevel - 3);                      // Parete sinistra
     bs->next = new Pplatform; 
     bs = bs->next;
-    bs->plat = new platform (COLS-2, 8, COLS, LINES-6);              // Parete destra
+    bs->plat = new platform (COLS-2, 8, COLS, blevel - 3);              // Parete destra
     bs->next = new Pplatform;
     bs = bs->next;
-    bs->plat = new platform (-1, LINES-8, 0, LINES-2);               // Porta sinistra
+    bs->plat = new platform (-1, LINES-8, 0, blevel);               // Porta sinistra
     bs->next = new Pplatform; 
     bs = bs->next;
-    bs->plat = new platform (COLS, LINES-8, COLS+1, LINES-2);         // Porta destra
+    bs->plat = new platform (COLS, LINES-8, COLS+1, blevel);         // Porta destra
     
     bs->next = createnPlat (numPlatinf, p1, leninf, dens);
 
@@ -72,11 +73,11 @@ level::level (int nl, bulletManager* B) {
     // generazione piattaforme superiori
     int numPlatsup = (rand()%3) + 2;
     int lensup = (COLS-10) / numPlatsup;
-    int heightsup = LINES - 22;                   
+    int heightsup = heightinf - 8;                   
     p1.a.x = 8; 
-    p1.a.y = heightsup;
+    p1.a.y = heightsup - 4;
     p1.b.x = lensup+5;
-    p1.b.y = 31;
+    p1.b.y = heightsup;
     dens = 12 - numPlatsup;
     
     lPlatform tmp = this->platforms;
@@ -127,7 +128,7 @@ void level::setNext(level* l){
 
 void level::print_platforms () {
     lPlatform tmp = this->platforms;
-    tmp->plat->printc('#');                 // stampa della base
+    tmp->plat->printc('"');                 // stampa della base
     tmp = tmp->next;
 
     for (int i = 0; i < 4 && tmp != NULL; i++) {          // Stampa delle pareti

@@ -36,10 +36,11 @@ lPlatform createnPlat (int np, hitBox ht, int len, int d) {
     } else return NULL;
 }
 
-level::level (int nl, bulletManager* B) {
+level::level (int nl, int d, bulletManager* B) {
 
     //generazione piattaforme inferiori
     this->nlevel = nl;                      // Assegno il numero del livello 
+    this->diff = d;                         // Difficoltà
     int numPlatinf = (rand()%3) + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
     int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
     int blevel = LINES - 10;
@@ -86,45 +87,19 @@ level::level (int nl, bulletManager* B) {
 	}  
     tmp->next = createnPlat (numPlatsup, p1, lensup, dens);
 
-    /*
-    for (int i=0; i<numPlat; i++) {
-        tmp1 = new Pplatform;
-        //hitBox nw = newRandomPlat(p1);
-        tmp1->plat = new platform(nw.a.x, nw.a.y, nw.b.x, nw.b.y);
-        tmp1 = tmp1->next;
-        nw.a.x += 7;
-        nw.b.x += 7;
-    }
+    // Generazione nemici 
 
-    tmp1 = NULL;
-    //delete tmp1;
-    */
-/*
-    Da migliorare:::
-
-    // Generazione lista nemici per il livello
-    this->enemies = new lEnemies;
-    lEnemies tmp2 = enemies;
-    for (int i=0; i<2; i++) {
-        if (i<1) {
-            tmp2->ent = new kuba(80, 10, &this, &B);
-            tmp2->type = 'k';
-        } else {
-            tmp2->ent = new shooter(120, 10, &this, &B);
-            tmp2->type = 's';
-        }
-        tmp2=tmp2->next;
-    }
-    tmp2 = NULL;
-    delete tmp2;
-*/
+    if (this->nlevel == 1) {
+        this->kubas = new Pkuba;
+        this->kubas->K = new kuba(80, 10, pointL, &B);
+        this->kubas->next = NULL;
+        this->shooters = NULL;
+    } else if (this->nlevel == 2) {
+        this->shooters = new Pshooter;
+        this->shooters->S = new shooter(120, 10, pointL, &B);
+        this->kubas = NULL;
+    } 
 }
-
-/*
-void level::setNext(level* l){ 
-    this->next = l; 
-}
-*/
 
 void level::print_platforms () {
     lPlatform tmp = this->platforms;
@@ -260,6 +235,10 @@ infoCrash level::check (hitBox ch, char d) {
 
 int level::number () {
     return this->nlevel;
+}
+
+int level::givediff () {
+    return this->diff;
 }
 
 int level::givenplat () {

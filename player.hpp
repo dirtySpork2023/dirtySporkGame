@@ -9,7 +9,7 @@
 class level;
 
 #define MAX_HEALTH 100
-#define HEALTH_BAR_LENGTH 20
+#define RB_HEIGHT 9 // resource bar height
 #define PISTOL 0
 #define SHOTGUN 1
 #define RIFLE 2

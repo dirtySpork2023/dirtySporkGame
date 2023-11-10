@@ -97,6 +97,7 @@ void entity::setPrintColor(int paint){
 		attrset(COLOR_PAIR( PAINT_DAMAGE ));
 	}else{
 		attrset(COLOR_PAIR( paint ));
+		attron(A_BOLD);
 	}
 }
 

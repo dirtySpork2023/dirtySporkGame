@@ -117,8 +117,3 @@ void posPrintW(point pos, char ch){
 bool upperCase(char c){
 	return ('A'<=c && c<= 'Z');
 }
-
-// ritorna true se la posizione è fuori dallo schermo, con una tolleranza di 10 caselle
-bool outOfBounds(vector pos){
-	return ( pos.x < -10 || COLS+10 < pos.x || pos.y < -10 || LINES+10 < pos.y );
-}

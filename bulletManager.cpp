@@ -46,19 +46,21 @@ void bulletManager::update(double deltaTime){
 node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( p==NULL ) return NULL;
 	
-	bool doRemove = false; 
+	bool doRemove = false;
 	if( collisionHV(target, p->pos) ){
 		doRemove = true;
 		damage += p->damage;
 	}
 	if( outOfBounds(p->pos) ){
 		doRemove = true;
+		
 	}
 
 	if( doRemove ){
 		num--;
+
 		// cleanup
-		posPrintW(snap(p->pos), " ");
+		posPrintW(p->oldPos, " ");
 
 		// se la testa della lista in esame è anche la testa della lista totale, devo aggiornarla
 		if( p==head ){
@@ -73,6 +75,11 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 		p->next = removeNode(target, p->next, damage);
 		return p;
 	}
+}
+
+// ritorna true se la posizione è fuori dallo schermo
+bool bulletManager::outOfBounds(vector pos){
+	return ( pos.x < 0 || COLS < pos.x || pos.y < 0 || LINES-9 < pos.y );
 }
 
 // elimina i proiettili che collidono con 'box' e ritorna il danno complessivo

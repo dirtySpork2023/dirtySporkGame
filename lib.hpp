@@ -6,6 +6,7 @@
 #define COLOR_ENEMY 9
 #define COLOR_COIN 10
 #define COLOR_PLATFORM 11
+#define COLOR_HP 12
 
 // palette da 1 a 255
 #define PAINT_DEFAULT 1
@@ -14,6 +15,8 @@
 #define PAINT_ENEMY 4
 #define PAINT_COIN 5
 #define PAINT_PLATFORM 6
+#define PAINT_HP 7
+#define PAINT_ARMOR 8
 
 typedef double timeSpan;
 
@@ -57,7 +60,5 @@ void posPrintW(point, const char*);
 void posPrintW(point, char);
 
 bool upperCase(char c);
-
-bool outOfBounds(vector);
 
 #endif //LIB_HPP

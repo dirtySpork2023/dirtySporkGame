@@ -144,7 +144,7 @@ entity::~entity(){
 	// esplosione
 	point pos = this->getPos();
 
-	for(int i=0; i<5; i++){
+	for(int i=0; i<10; i++){
 		bM->add(pos, randVector(), true, 0, ':');
 	}
 }

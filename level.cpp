@@ -12,7 +12,7 @@ hitBox newRandomPlat (hitBox w, int de) {
     hitBox nw;
     nw.a.x = w.a.x + (rand()%5);     
     nw.a.y = w.a.y + (rand()%4);
-    nw.b.x = (nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));
+    nw.b.x = nw.a.x + (15 + rand()%(35 - 12));    //(nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));  8 + rand()%(w.b.x - nw.a.x - 8)
     nw.b.y = nw.a.y + 1;
 
     return nw; 
@@ -47,7 +47,7 @@ level::level (int nl, bulletManager* B) {
     hitBox p1;                              // Hitbox della prima piattaforma
     p1.a.x = 8;                             // valore arbitrario di distanza da tenere dal lato sinistro
     p1.a.y = heightinf - 4;
-    p1.b.x = leninf+5;
+    p1.b.x = leninf + 5;
     p1.b.y = heightinf;                            // base - altezza del player
     int dens = 8 - numPlatinf;
 
@@ -73,10 +73,10 @@ level::level (int nl, bulletManager* B) {
     // generazione piattaforme superiori
     int numPlatsup = (rand()%3) + 2;
     int lensup = (COLS-10) / numPlatsup;
-    int heightsup = heightinf - 8;                   
+    int heightsup = heightinf - 10;                   
     p1.a.x = 8; 
-    p1.a.y = heightsup - 4;
-    p1.b.x = lensup+5;
+    p1.a.y = heightsup - 2;
+    p1.b.x = lensup + 5;
     p1.b.y = heightsup;
     dens = 12 - numPlatsup;
     

@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <cmath>
 
 #include "entity.hpp"
 #include "shooter.hpp"
@@ -57,66 +58,28 @@ void shooter::shoot(point p){
 	if( facingRight ) muzzle.x = box.b.x+1;
 	else muzzle.x = box.a.x-1;
 
-	/*
-
-	vector speed;
-	if( facingRight ) speed.x = 100;
-	else speed.x = -100;
-
-	int Dx = p.x-muzzle.x-1;
-	int Dy = p.y-muzzle.y-1;
-	speed.y = -0.5*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
-	// velocità verticale esatta necessaria per colpire il player.
-
-	*/
-	// BUG: può accadere che shooter si spara da solo
-	// TODO rendere fissa l'altezza a cui arriva il proiettile e
-	//		variabile la velocità orizzontale
-	// speed.x = 
-
-/*	const double height = 5;
-	const double maxS = 300;
-
-	vector speed;
-	speed.y = -sqrt(height * BULLET_G * 2);
-
-	double Dx = p.x - muzzle.x;
-	double Dy = p.y - muzzle.y;
-	double delta = Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dx*Dx*Dy;
 	
-	mvprintw(2, 3, "Dx = %.5f | Dy = %.5f", Dx, Dy);
-	mvprintw(3, 3, "delta = %.5f", delta);
-
-	if(delta>=0){
-		speed.x = (-speed.y + sqrt(speed.y*speed.y + 2*BULLET_G*Dy))*Dx/2*-Dy;
-		if(speed.x>maxS) speed.x = maxS;
-		else if(speed.x<-maxS) speed.x = -maxS;
-		mvprintw(4, 3, "Vx = %.5f", speed.x);
-		bM->add(muzzle,speed,true,damage,'A');
-		speed.x = (-speed.y - sqrt(speed.y*speed.y + 2*BULLET_G*Dy))*Dx/2*-Dy;
-		if(speed.x>maxS) speed.x = maxS;
-		else if(speed.x<-maxS) speed.x = -maxS;
-		mvprintw(5, 3, "Vx = %.5f", speed.x);
-		bM->add(muzzle,speed,true,damage,'B');
-	}*/
-	
-
 /*	speed.x = std::min(	(-speed.y*Dx + sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy,
 						(-speed.y*Dx - sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy);*/
 
 
-	// CONSTANT TIME
-	const timeSpan t = 1;
+	// tempo di volo costante
+	const timeSpan t = 1.2;
 	int Dx = p.x - muzzle.x;
 	int Dy = p.y - muzzle.y;
 
 	vector speed;
 	speed.x = (Dx)/t;
 	speed.y = -0.5*BULLET_G*t + (Dy)/t;
+
+	/* velocità orizzontale costante
+	if( facingRight ) speed.x = 100;
+	else speed.x = -100;
+	speed.y = -0.5*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
+	*/	
 	
 	if( box.a.x-2<p.x && p.x<2+box.b.x && box.a.y<p.y ){
-		// il player sta sotto shooter quindi aspetto che se ne vada
-		// senno shooter si colpisce da solo
+		//se il player è sotto shooter sparare sarebbe un suicidio
 		lastShot=fireRate;
 	}else{
 		bM->add(muzzle,speed,true,damage,'G');

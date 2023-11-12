@@ -66,18 +66,18 @@ void player::print(timeSpan deltaTime){
 	mvwprintw(w, 2, 50, " ARMOR");
 	mvwprintw(w, 3, 50, " MONEY");
 	/* ncurses */::box(w, 0, 0);
-	mvwprintw(w, 1, 56, ": <");
+	mvwprintw(w, 1, 56, ": <|");
 	wattrset(w, COLOR_PAIR(PAINT_HP));
 	for(int i=0; i<health; i++) wprintw(w, "M");
 	for(int i=health; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	wprintw(w, ">");
-	mvwprintw(w, 2, 56, ": <");
+	wprintw(w, "|>");
+	mvwprintw(w, 2, 56, ": <|");
 	wattrset(w, COLOR_PAIR(PAINT_ARMOR));
 	for(int i=0; i<armor*100 ; i++) wprintw(w, "M");
 	for(int i=armor*100; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	wprintw(w, ">");
+	wprintw(w, "|>");
 	mvwprintw(w, 3, 56, ": not known from class player");
 /*	for(int y=RB_HEIGHT-2; y>0; y--){
 		mvwprintw(w, y, COLS/2, "|");
@@ -97,6 +97,7 @@ void player::print(timeSpan deltaTime){
 
 	mvwprintw(w, 2, COLS/2+1, "Armor: %2.0f%%", armor*100);*/
 	wrefresh(w);
+	delwin(w);
 }
 
 bool player::hurt(int value){

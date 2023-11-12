@@ -39,12 +39,12 @@ void shooter::print(timeSpan deltaTime){
 	entity::setPrintColor(PAINT_ENEMY);
 
 	if( facingRight ){
-		mvprintw(box.a.y,   box.a.x, "_//");
-		mvprintw(box.a.y+1, box.a.x, "W/p");
+		mvprintw(box.a.y,   box.a.x, " //");
+		mvprintw(box.a.y+1, box.a.x, "//b");
 		mvprintw(box.b.y,   box.a.x, "O=O");
 	}else{
-		mvprintw(box.a.y,   box.a.x, "\\\\_");
-		mvprintw(box.a.y+1, box.a.x, "q\\W");
+		mvprintw(box.a.y,   box.a.x, "\\\\ ");
+		mvprintw(box.a.y+1, box.a.x, "d\\\\");
 		mvprintw(box.b.y,   box.a.x, "O=O");
 	}
 
@@ -114,10 +114,10 @@ void shooter::shoot(point p){
 	speed.x = (Dx)/t;
 	speed.y = -0.5*BULLET_G*t + (Dy)/t;
 	
-	if( -4<Dx && Dx<4 && muzzle.y<p.y ){
+	if( box.a.x-2<p.x && p.x<2+box.b.x && box.a.y<p.y ){
 		// il player sta sotto shooter quindi aspetto che se ne vada
 		// senno shooter si colpisce da solo
-		lastShot=fireRate*0.8;
+		lastShot=fireRate;
 	}else{
 		bM->add(muzzle,speed,true,damage,'G');
 	}

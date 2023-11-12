@@ -79,7 +79,7 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 
 // ritorna true se la posizione è fuori dallo schermo
 bool bulletManager::outOfBounds(vector pos){
-	return ( pos.x < 0 || COLS < pos.x || pos.y < 0 || LINES-9 < pos.y );
+	return ( pos.x < 0 || COLS < pos.x || pos.y < -20 || LINES-9 < pos.y );
 }
 
 // elimina i proiettili che collidono con 'box' e ritorna il danno complessivo

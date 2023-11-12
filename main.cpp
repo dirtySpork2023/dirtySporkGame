@@ -157,7 +157,7 @@ int main(){
 			mvprintw(0, 14, "|deltaTime: %f ", deltaTime);
 			attroff(A_DIM);
 			mvprintw(1, 3, "MONEY: %d @", money);
-			mvprintw(2, 3, "Numero piattaforme: %d", pointL->givenplat());
+			//mvprintw(2, 3, "Numero piattaforme: %d", pointL->givenplat());
 
 			pointL->print_platforms();
 			tmp = H;

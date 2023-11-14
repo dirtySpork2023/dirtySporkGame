@@ -61,4 +61,7 @@ void posPrintW(point, char);
 
 bool upperCase(char c);
 
+void titleScreen();
+
+
 #endif //LIB_HPP

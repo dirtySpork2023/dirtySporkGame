@@ -81,7 +81,8 @@ int main(){
 	int numL = 0; // Contatore dei livelli
 	bool quit = false;
 	level* pointL;
-
+	
+	titleScreen(); 
 	while( !quit ){
 		//level setup
 		pointL = new level (numL, &B);

@@ -46,12 +46,12 @@ void init(){
 	 	COLOR_PAIRS numero tot di coppie di colori
 	 */
 
-	init_color(COLOR_BLACK, 100, 100, 100);
-	init_color(COLOR_WHITE, 1000, 1000, 1000);
-	init_color(COLOR_RED, 1000, 0, 0);
-	init_color(COLOR_PLAYER, 500, 1000, 600);
-	init_color(COLOR_ENEMY, 500, 600, 1000);
-	init_color(COLOR_COIN, 1000, 1000, 0);
+	init_color(COLOR_BLACK, 120, 120, 130); //TODO change white/blacl to forward background
+	init_color(COLOR_WHITE, 900, 900, 1000);
+	init_color(COLOR_RED, 1000, 500, 0);
+	init_color(COLOR_PLAYER, 900, 1000, 900); //500, 800, 600
+	init_color(COLOR_ENEMY, 300, 600, 700);
+	init_color(COLOR_COIN, 800, 800, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
 
 	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
@@ -61,7 +61,8 @@ void init(){
 	init_pair(PAINT_COIN, COLOR_COIN, COLOR_BLACK);
 	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
 
-	attrset(COLOR_PAIR(PAINT_DEFAULT));	
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
+	
 }
 
 
@@ -77,11 +78,12 @@ int main(){
 	char input;
 	int numL = 0; // Contatore dei livelli
 	bool quit = false;
+	int diff = 0;
 	level* pointL; 
 
 	while( !quit ){
 		//level setup
-		pointL = new level (numL, &B);
+		pointL = new level (numL, diff, &B);
 		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
@@ -154,7 +156,6 @@ int main(){
 			}
 
 			// OUTPUT
-
 			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
 			//righe 1-2 scritte da player.print

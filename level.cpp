@@ -10,7 +10,7 @@ using namespace std;
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
 hitBox newRandomPlat (hitBox w, int de) {
     hitBox nw;
-    nw.a.x = w.a.x + (rand()%5);     
+    nw.a.x = w.a.x + (rand()%5);  
     nw.a.y = w.a.y + (rand()%4);
     nw.b.x = nw.a.x + (15 + rand()%(35 - 12));    //(nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));  8 + rand()%(w.b.x - nw.a.x - 8)
     nw.b.y = nw.a.y + 1;
@@ -35,6 +35,7 @@ lPlatform createnPlat (int np, hitBox ht, int len, int d) {
         return tmp1;
     } else return NULL;
 }
+
 
 level::level (int nl, int d, bulletManager* B) {
 
@@ -89,16 +90,52 @@ level::level (int nl, int d, bulletManager* B) {
 
     // Generazione nemici 
 
-    if (this->nlevel == 1) {
+    int heightEnemies = 10;
+    int firstK = 75;
+
+    // Generazione lista di Kuba in base al livello
+
+    if (this->nlevel < 7 && this->nlevel != 2 && this->nlevel != 5) {           // 1 Kuba
         this->kubas = new Pkuba;
-        this->kubas->K = new kuba(80, 10, pointL, &B);
+        this->kubas->K = new kuba(firstK, heightEnemies, this, B);
         this->kubas->next = NULL;
-        this->shooters = NULL;
-    } else if (this->nlevel == 2) {
+    } else if (this->nlevel == 2) this->kubas = NULL;                          // 0 kuba
+    else if (this->nlevel == 5 || this->nlevel == 7  || this->nlevel == 8) {   // 2 Kuba
+        this->kubas = new Pkuba;
+        this->kubas->K = new kuba(firstK, heightEnemies, this, B);
+        this->kubas->next = new Pkuba;
+        this->kubas->next->K = new kuba(firstK + 10, heightEnemies, this, B);
+        this->kubas->next->next = NULL;
+    } else {                                                                    // 3 Kuba
+        lKuba tmpk = this->kubas;
+        firstK -= 20;
+        for (int i=0; i<3; i++) {
+            tmpk = new Pkuba;
+            tmpk->K = new kuba(firstK + 10, heightEnemies, this, B);
+            tmpk = tmpk->next;
+        }
+        tmpk = NULL;
+        delete tmpk;
+    }
+  
+    // Generazione lista di shoter in base al livello
+    int firstS = 110;
+    if (this->nlevel == 1) this->shooters = NULL;                               // 0 shooters
+    else if (this->nlevel < 6) {                                                // 1 shooter
         this->shooters = new Pshooter;
-        this->shooters->S = new shooter(120, 10, pointL, &B);
-        this->kubas = NULL;
-    } 
+        this->shooters->S = new shooter(firstS, heightEnemies, this, B);
+        this->shooters->next = NULL;
+    } else {                                                                    // 2 shooter
+        this->shooters = new Pshooter;
+        this->shooters->S = new shooter(firstS, heightEnemies, this, B);
+        this->shooters->next = new Pshooter;
+        this->shooters->next->S = new shooter(firstS + 5, heightEnemies, this, B);
+        this->shooters->next->next = NULL;
+    }
+
+    // Generazione Yuck
+    if (this->nlevel % 4 == 0) this->Y = new yuck(140, heightEnemies, this, B);
+    else this->Y = NULL;
 }
 
 void level::print_platforms () {

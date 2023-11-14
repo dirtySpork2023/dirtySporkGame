@@ -47,6 +47,7 @@ protected:
     lPlatform platforms;        // Lista delle piattaforme del livello
     lKuba kubas;                // Lista di kuba
     lShooter shooters;          // Lista di shooters
+    yuck* Y;                    // Yuck è al massimo 1
 
 public:
     level (int nl, int d, bulletManager* bM);

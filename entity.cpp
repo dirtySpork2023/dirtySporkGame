@@ -54,24 +54,12 @@ void entity::move(char input){
 		if( input=='a' ){
 			box.a.x -= 1;
 			box.b.x -= 1;
-			// cleanup
-			for(int y=box.a.y ; y<=box.b.y ; y++){
-				mvprintw(y, box.b.x+1, " ");
-			}
 		}else if( input=='d' ){
 			box.a.x += 1;
 			box.b.x += 1;
-			// cleanup
-			for(int y=box.a.y ; y<=box.b.y ; y++){
-				mvprintw(y, box.a.x-1, " ");
-			}
 		}else if( input=='s' ){
 			box.a.y += 1;
 			box.b.y += 1;
-			// cleanup
-			for(int x=box.a.x ; x<=box.b.x ; x++){
-				mvprintw(box.a.y-1, x, " ");
-			}
 		}
 		// controllo se il player è a terra nella nuova posizione
 		if( lvl->check(box, 's').type!='n' && ySpeed>=0 ){
@@ -84,10 +72,6 @@ void entity::move(char input){
 		box.a.y -= 1;
 		box.b.y -= 1;
 		isGrounded = false;
-		// cleanup
-		for(int x=box.a.x ; x<=box.b.x ; x++){
-			mvprintw(box.b.y+1, x, " ");
-		}
 	}
 }
 
@@ -134,13 +118,6 @@ bool entity::hurt(int value){
 }
 
 entity::~entity(){
-	// cleanup
-	for(int x=box.a.x ; x<=box.b.x ; x++){
-		for(int y=box.a.y ; y<=box.b.y ; y++){
-			mvprintw(y, x, " ");
-		}
-	}
-	
 	// esplosione
 	point pos = this->getPos();
 

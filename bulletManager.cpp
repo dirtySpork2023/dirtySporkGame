@@ -19,7 +19,6 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
  	v.x = (double)p.x;
  	v.y = (double)p.y;
  	tmp->pos = v;
-	tmp->oldPos = p;
 	tmp->speed.x = speed.x;
 	tmp->speed.y = speed.y;
 	tmp->gravity = gravity;
@@ -59,9 +58,6 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( doRemove ){
 		num--;
 
-		// cleanup
-		posPrintW(p->oldPos, " ");
-
 		// se la testa della lista in esame è anche la testa della lista totale, devo aggiornarla
 		if( p==head ){
 			head = head->next;
@@ -92,15 +88,6 @@ int bulletManager::check(hitBox target){
 // stampa tutti i proiettili nella lista
 void bulletManager::print(){
 	node* tmp = head;
-	// cancello solo i proiettili che hanno cambiato posizione
-	while( tmp!=NULL ){
-		if( !collisionPP(tmp->oldPos, snap(tmp->pos)) ){
-			posPrintW(tmp->oldPos, " ");
-			tmp->oldPos = snap(tmp->pos);
-		}
-		tmp = tmp->next;
-	}
-	tmp = head;
 	while( tmp!=NULL ){
 		posPrintW(snap(tmp->pos), tmp->texture);
 		tmp = tmp->next;

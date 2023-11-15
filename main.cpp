@@ -165,7 +165,7 @@ int main(){
 			//BUG il background cancella il caricamento di yuck
 			attrset(COLOR_PAIR(PAINT_BACKGROUND));
 			for(int y=0; y<LINES-10; y++){
-				for(int x=2; x<COLS-2; x+=4){
+				for(int x=0; x<COLS-2; x+=4){
 					// brick texture
 					if(y%2==0)
 						mvprintw(y, x, "_|__");

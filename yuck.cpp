@@ -39,22 +39,6 @@ void yuck::update(point target, timeSpan deltaTime){
 
 		if(lastCharge < chargeTime){
 			// caricamento
-			point pos;
-			pos.y = box.a.y+2;
-			if(facingRight) pos.x = box.b.x+1;
-			else pos.x = box.a.x-1;
-
-			switch ( (int)(lastCharge*6)%3 ){
-			case 0:					//^modifica la velocità dell'animazione
-				posPrintW(pos, "_");
-				break;
-			case 1:
-				posPrintW(pos, "\\");
-				break;
-			case 2:
-				posPrintW(pos, "/");
-				break;
-			}
 		}else if(lastCharge < chargeTime+laserTime){
 			// laser
 			if( lastShot > fireRate ){
@@ -91,7 +75,23 @@ void yuck::print(timeSpan deltaTime){
 		mvprintw(box.b.y,   box.a.x, "|___!");
 	}
 
-	attrset(COLOR_PAIR(1));
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
+
+	if(lastCharge < chargeTime && awake){
+		point pos;
+		pos.y = box.a.y+2;
+		if(facingRight) pos.x = box.b.x+1;
+		else pos.x = box.a.x-1;
+
+		switch ( (int)(lastCharge*6)%3 ){
+		case 0: posPrintW(pos, "_");
+			break;
+		case 1: posPrintW(pos, "\\");
+			break;
+		case 2: posPrintW(pos, "/");
+			break;
+		}
+	}
 }
 
 void yuck::shoot(){
@@ -111,34 +111,3 @@ void yuck::shoot(){
 void yuck::wakeUp(){
 	awake = true;
 }
-
-yuck::~yuck(){
-	entity::~entity();
-	mvprintw(box.a.y+2, box.b.x+1, " ");
-	mvprintw(box.a.y+2, box.a.x-1, " ");
-}
-
-/*
-struct node{
-	void* obj;
-	char type;
-	node* next;
-}
-
-
-	node H;
-
-	switch(type){
-	case k:
-		kuba* K = obj;
-		
-	case s:
-		shooter* S = obj;
-		if(S.getHealth==0){
-			delete S;
-			S = NULL;
-		}
-	}
-	H=H->next;
-
-*/

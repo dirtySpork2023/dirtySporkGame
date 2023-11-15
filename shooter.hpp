@@ -8,7 +8,6 @@
 
 class level;
 
-// detto TBM per gli amici (tennis ball machine)
 class shooter: public entity{
 protected:
 	bool facingRight;

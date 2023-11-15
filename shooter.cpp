@@ -60,11 +60,6 @@ void shooter::shoot(point p){
 	if( facingRight ) muzzle.x = box.b.x+1;
 	else muzzle.x = box.a.x-1;
 
-	
-/*	speed.x = std::min(	(-speed.y*Dx + sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy,
-						(-speed.y*Dx - sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy);*/
-
-
 	// tempo di volo costante
 	const timeSpan t = 1.2;
 	int Dx = p.x - muzzle.x;

@@ -48,12 +48,14 @@ void init(){
 
 	init_color(COLOR_BLACK, 120, 120, 130); //TODO change white/blacl to forward background
 	init_color(COLOR_WHITE, 900, 900, 1000);
-	init_color(COLOR_RED, 1000, 500, 0);
+	init_color(COLOR_RED, 1000, 0, 0);
+	//init_color(COLOR_GREEN, 0, 1000, 0);
+	init_color(COLOR_BLUE, 200, 200, 700);
 	init_color(COLOR_PLAYER, 900, 1000, 900); //500, 800, 600
 	init_color(COLOR_ENEMY, 300, 600, 700);
 	init_color(COLOR_COIN, 800, 800, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
-	init_color(COLOR_HP, 0, 1000, 0);
+	init_color(COLOR_HP, 200, 700, 200);
 
 	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
 	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
@@ -177,6 +179,7 @@ int main(){
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
 			
+			printResourceBar(P.getHealth(), P.getArmor(), money);
 			
 			refresh();
 		}

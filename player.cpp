@@ -45,7 +45,6 @@ void player::update(char input, timeSpan deltaTime){
 
 //stampa il player
 void player::print(timeSpan deltaTime){
-	// body
 	entity::setPrintColor(PAINT_PLAYER);
 	if( facingRight ){
 		mvprintw(box.a.y,   box.a.x, " p ");
@@ -57,47 +56,6 @@ void player::print(timeSpan deltaTime){
 		mvprintw(box.b.y,   box.a.x, "/\"\\");
 	}
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
-
-
-	// resource bar
-	WINDOW* w = newwin(RB_HEIGHT, COLS, LINES-RB_HEIGHT, 0);
-	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	mvwprintw(w, 1, 50, "HEALTH");
-	mvwprintw(w, 2, 50, " ARMOR");
-	mvwprintw(w, 3, 50, " MONEY");
-	/* ncurses */::box(w, 0, 0);
-	mvwprintw(w, 1, 56, ": <|");
-	wattrset(w, COLOR_PAIR(PAINT_HP));
-	for(int i=0; i<health; i++) wprintw(w, "M");
-	for(int i=health; i<100; i++) wprintw(w, "-");
-	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	wprintw(w, "|>");
-	mvwprintw(w, 2, 56, ": <|");
-	wattrset(w, COLOR_PAIR(PAINT_ARMOR));
-	for(int i=0; i<armor*100 ; i++) wprintw(w, "M");
-	for(int i=armor*100; i<100; i++) wprintw(w, "-");
-	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	wprintw(w, "|>");
-	mvwprintw(w, 3, 56, ": not known from class player");
-/*	for(int y=RB_HEIGHT-2; y>0; y--){
-		mvwprintw(w, y, COLS/2, "|");
-	}
-
-	int width = COLS/2-1;
-	wattron(w, A_BOLD);
-	wmove(w, 1, COLS/2);
-	int i;
-	for(i=0; i*MAX_HEALTH < health*width; i++){
-		wprintw(w, "M");
-	}
-	wattroff(w, A_BOLD);
-	for(; i<width; i++){
-		wprintw(w, ".");
-	}
-
-	mvwprintw(w, 2, COLS/2+1, "Armor: %2.0f%%", armor*100);*/
-	wrefresh(w);
-	delwin(w);
 }
 
 bool player::hurt(int value){
@@ -137,4 +95,8 @@ void player::setGun(int id){
 		damage = 10;
 		texture = 'o';
 	}
+}
+
+double player::getArmor(){
+	return armor;
 }

@@ -16,9 +16,9 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm
 
 yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
 	yuck(x,y,lvl,bM,
-		/* HEALTH */ 200+50*lvl->number(),
+		/* HEALTH */ 200+50*lvl->getDiff(),
 		/* FIRE_RATE */ 0.025,
-		/* DAMAGE */ 8 + 4*lvl->number()){
+		/* DAMAGE */ 8 + 4*lvl->getDiff()){
 }
 
 void yuck::update(point target, timeSpan deltaTime){
@@ -117,3 +117,28 @@ yuck::~yuck(){
 	mvprintw(box.a.y+2, box.b.x+1, " ");
 	mvprintw(box.a.y+2, box.a.x-1, " ");
 }
+
+/*
+struct node{
+	void* obj;
+	char type;
+	node* next;
+}
+
+
+	node H;
+
+	switch(type){
+	case k:
+		kuba* K = obj;
+		
+	case s:
+		shooter* S = obj;
+		if(S.getHealth==0){
+			delete S;
+			S = NULL;
+		}
+	}
+	H=H->next;
+
+*/

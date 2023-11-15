@@ -54,7 +54,7 @@ void kuba::print(timeSpan deltaTime){
 	entity::setPrintColor(PAINT_ENEMY);
 
 	mvprintw(box.a.y, box.a.x, "<O>");
-	mvprintw(box.b.y, box.a.x, "/-\\");
+	mvprintw(box.b.y, box.a.x, "/\"\\");
 
 	attrset(COLOR_PAIR(1));
 }

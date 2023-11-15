@@ -53,6 +53,7 @@ void init(){
 	init_color(COLOR_ENEMY, 300, 600, 700);
 	init_color(COLOR_COIN, 800, 800, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
+	init_color(COLOR_HP, 0, 1000, 0);
 
 	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
 	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
@@ -60,6 +61,8 @@ void init(){
 	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
 	init_pair(PAINT_COIN, COLOR_COIN, COLOR_BLACK);
 	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
+	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
+	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 	
@@ -80,8 +83,9 @@ int main(){
 	bool quit = false;
 
 	int diff = 0;
-	level* pointL; 
-
+	level* pointL;
+	
+	titleScreen(); 
 	while( !quit ){
 		//level setup
 		pointL = new level (numL, diff, &B);
@@ -158,8 +162,8 @@ int main(){
 			mvprintw(0, 3, "fps: %.0f ", 1/deltaTime);
 			mvprintw(0, 14, "|deltaTime: %f ", deltaTime);
 			attroff(A_DIM);
-			mvprintw(1, 1, "money: %d", money);
-			mvprintw(2, 1, "Numero piattaforme: %d", pointL->givenplat());
+			mvprintw(1, 3, "MONEY: %d @", money);
+			//mvprintw(2, 3, "Numero piattaforme: %d", pointL->givenplat());
 
 			pointL->print_platforms();
 			tmp = H;

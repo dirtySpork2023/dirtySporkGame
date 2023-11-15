@@ -1,4 +1,6 @@
 #include <ncurses.h>
+#include <cmath>
+
 #include "entity.hpp"
 #include "shooter.hpp"
 #include "level.hpp"
@@ -38,12 +40,12 @@ void shooter::print(timeSpan deltaTime){
 	entity::setPrintColor(PAINT_ENEMY);
 
 	if( facingRight ){
-		mvprintw(box.a.y,   box.a.x, "_//");
-		mvprintw(box.a.y+1, box.a.x, "W/p");
+		mvprintw(box.a.y,   box.a.x, " //");
+		mvprintw(box.a.y+1, box.a.x, "//b");
 		mvprintw(box.b.y,   box.a.x, "O=O");
 	}else{
-		mvprintw(box.a.y,   box.a.x, "\\\\_");
-		mvprintw(box.a.y+1, box.a.x, "q\\W");
+		mvprintw(box.a.y,   box.a.x, "\\\\ ");
+		mvprintw(box.a.y+1, box.a.x, "d\\\\");
 		mvprintw(box.b.y,   box.a.x, "O=O");
 	}
 
@@ -56,19 +58,30 @@ void shooter::shoot(point p){
 	if( facingRight ) muzzle.x = box.b.x+1;
 	else muzzle.x = box.a.x-1;
 
+	
+/*	speed.x = std::min(	(-speed.y*Dx + sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy,
+						(-speed.y*Dx - sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy);*/
+
+
+	// tempo di volo costante
+	const timeSpan t = 1.2;
+	int Dx = p.x - muzzle.x;
+	int Dy = p.y - muzzle.y;
+
 	vector speed;
+	speed.x = (Dx)/t;
+	speed.y = -0.5*BULLET_G*t + (Dy)/t;
+
+	/* velocità orizzontale costante
 	if( facingRight ) speed.x = 100;
 	else speed.x = -100;
-
-	int Dx = p.x-muzzle.x-1;
-	int Dy = p.y-muzzle.y-1;
 	speed.y = -0.5*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
-	// velocità verticale esatta necessaria per colpire il player.
-
-	// TODO rendere fissa l'altezza a cui arriva il proiettile e
-	//		variabile la velocità orizzontale
-	// speed.x = 
-
-	// BUG: può accadere che shooter si spara da solo
-	bM->add(muzzle,speed,true,damage,'G');
+	*/	
+	
+	if( box.a.x-2<p.x && p.x<2+box.b.x && box.a.y<p.y ){
+		//se il player è sotto shooter sparare sarebbe un suicidio
+		lastShot=fireRate;
+	}else{
+		bM->add(muzzle,speed,true,damage,'G');
+	}
 }

@@ -10,7 +10,7 @@ using namespace std;
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
 hitBox newRandomPlat (hitBox w, int de) {
     hitBox nw;
-    nw.a.x = w.a.x + (rand()%5);     
+    nw.a.x = w.a.x + (rand()%5);  
     nw.a.y = w.a.y + (rand()%4);
     nw.b.x = nw.a.x + (15 + rand()%(35 - 12));    //(nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));  8 + rand()%(w.b.x - nw.a.x - 8)
     nw.b.y = nw.a.y + 1;
@@ -36,10 +36,40 @@ lPlatform createnPlat (int np, hitBox ht, int len, int d) {
     } else return NULL;
 }
 
-level::level (int nl, bulletManager* B) {
+// Funzione che elimina i kuba morti
+lKuba uptKuba (lKuba lk) {
+    if (lk == NULL) return NULL;
+    else if (lk->K->getHealth() == 0) {
+        lKuba tmp = lk;
+        lk = uptKuba (lk->next);
+        delete tmp;
+        return lk;
+    } else {
+        lk->next = uptKuba (lk->next);
+        return lk;
+    }
+}
+
+// Funzione che elimina gli shooters morti
+lShooter uptShooters (lShooter ls) {
+    if (ls == NULL) return NULL;
+    else if (ls->S->getHealth() == 0) {
+        lShooter tmp = ls;
+        ls = uptShooters (ls->next);
+        delete tmp;
+        return ls;
+    } else {
+        ls->next = uptShooters (ls->next);
+        return ls;
+    }
+}
+
+
+level::level (int nl, int d, bulletManager* B) {
 
     //generazione piattaforme inferiori
     this->nlevel = nl;                      // Assegno il numero del livello 
+    this->diff = d;                         // Difficoltà
     int numPlatinf = (rand()%3) + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
     int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
     int blevel = LINES - 10;
@@ -86,45 +116,55 @@ level::level (int nl, bulletManager* B) {
 	}  
     tmp->next = createnPlat (numPlatsup, p1, lensup, dens);
 
-    /*
-    for (int i=0; i<numPlat; i++) {
-        tmp1 = new Pplatform;
-        //hitBox nw = newRandomPlat(p1);
-        tmp1->plat = new platform(nw.a.x, nw.a.y, nw.b.x, nw.b.y);
-        tmp1 = tmp1->next;
-        nw.a.x += 7;
-        nw.b.x += 7;
-    }
+    // Generazione nemici 
 
-    tmp1 = NULL;
-    //delete tmp1;
-    */
-/*
-    Da migliorare:::
+    int heightEnemies = 10;
+    int firstK = 75;
 
-    // Generazione lista nemici per il livello
-    this->enemies = new lEnemies;
-    lEnemies tmp2 = enemies;
-    for (int i=0; i<2; i++) {
-        if (i<1) {
-            tmp2->ent = new kuba(80, 10, &this, &B);
-            tmp2->type = 'k';
-        } else {
-            tmp2->ent = new shooter(120, 10, &this, &B);
-            tmp2->type = 's';
+    // Generazione lista di Kuba in base al livello
+
+    if (this->nlevel < 7 && this->nlevel != 2 && this->nlevel != 5) {           // 1 Kuba
+        this->kubas = new Pkuba;
+        this->kubas->K = new kuba(firstK, heightEnemies, this, B);
+        this->kubas->next = NULL;
+    } else if (this->nlevel == 2) this->kubas = NULL;                          // 0 kuba
+    else if (this->nlevel == 5 || this->nlevel == 7  || this->nlevel == 8) {   // 2 Kuba
+        this->kubas = new Pkuba;
+        this->kubas->K = new kuba(firstK, heightEnemies, this, B);
+        this->kubas->next = new Pkuba;
+        this->kubas->next->K = new kuba(firstK + 10, heightEnemies, this, B);
+        this->kubas->next->next = NULL;
+    } else {                                                                    // 3 Kuba
+        lKuba tmpk = this->kubas;
+        firstK -= 20;
+        for (int i=0; i<3; i++) {
+            tmpk = new Pkuba;
+            tmpk->K = new kuba(firstK + 10, heightEnemies, this, B);
+            tmpk = tmpk->next;
         }
-        tmp2=tmp2->next;
+        tmpk = NULL;
+        delete tmpk;
     }
-    tmp2 = NULL;
-    delete tmp2;
-*/
-}
+  
+    // Generazione lista di shoter in base al livello
+    int firstS = 110;
+    if (this->nlevel == 1) this->shooters = NULL;                               // 0 shooters
+    else if (this->nlevel < 6) {                                                // 1 shooter
+        this->shooters = new Pshooter;
+        this->shooters->S = new shooter(firstS, heightEnemies, this, B);
+        this->shooters->next = NULL;
+    } else {                                                                    // 2 shooter
+        this->shooters = new Pshooter;
+        this->shooters->S = new shooter(firstS, heightEnemies, this, B);
+        this->shooters->next = new Pshooter;
+        this->shooters->next->S = new shooter(firstS + 5, heightEnemies, this, B);
+        this->shooters->next->next = NULL;
+    }
 
-/*
-void level::setNext(level* l){ 
-    this->next = l; 
+    // Generazione Yuck
+    if (this->nlevel % 4 == 0) this->Y = new yuck(140, heightEnemies, this, B);
+    else this->Y = NULL;    
 }
-*/
 
 void level::print_platforms () {
     lPlatform tmp = this->platforms;
@@ -262,6 +302,10 @@ int level::number () {
     return this->nlevel;
 }
 
+int level::givediff () {
+    return this->diff;
+}
+
 int level::givenplat () {
     lPlatform tmp = this->platforms;
     int k=0;
@@ -272,6 +316,40 @@ int level::givenplat () {
     return k;
     tmp = NULL;
     delete tmp;
+}
+
+void level::update (player P, timeSpan deltaTime) {
+
+    // Update nemici
+    if(this->kubas!=NULL) {
+        lKuba tmpk = this->kubas;
+        while (tmpk != NULL) {
+            tmpk->K->update(&P, deltaTime);
+            tmpk = tmpk->next;
+        }
+        delete tmpk;
+    }
+    if (this->shooters != NULL) {
+        lShooter tmps = this->shooters;
+        while (tmps != NULL) {
+            tmps->S->update(P.getPos(), deltaTime);
+            tmps = tmps->next;
+        }
+        delete tmps;
+    }
+	if(this->Y!=NULL) this->Y->update(P.getPos(), deltaTime);
+
+	// Eliminazione entità morte
+	this->kubas = uptKuba (this->kubas);
+    this->shooters = uptShooters (this->shooters);
+	
+    if(this->shooters==NULL && this->kubas==NULL && this->Y!=NULL){
+		this->Y->wakeUp();
+	}
+	if(this->Y!=NULL && this->Y->getHealth()==0){
+		delete this->Y;
+		this->Y = NULL;
+	}
 }
 
 hitBox level::coordinate(int i) {

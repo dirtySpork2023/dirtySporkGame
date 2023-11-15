@@ -46,12 +46,12 @@ void init(){
 	 	COLOR_PAIRS numero tot di coppie di colori
 	 */
 
-	init_color(COLOR_BLACK, 100, 100, 100);
-	init_color(COLOR_WHITE, 1000, 1000, 1000);
-	init_color(COLOR_RED, 1000, 0, 0);
-	init_color(COLOR_PLAYER, 500, 1000, 600);
-	init_color(COLOR_ENEMY, 500, 600, 1000);
-	init_color(COLOR_COIN, 1000, 1000, 0);
+	init_color(COLOR_BLACK, 120, 120, 130); //TODO change white/blacl to forward background
+	init_color(COLOR_WHITE, 900, 900, 1000);
+	init_color(COLOR_RED, 1000, 500, 0);
+	init_color(COLOR_PLAYER, 900, 1000, 900); //500, 800, 600
+	init_color(COLOR_ENEMY, 300, 600, 700);
+	init_color(COLOR_COIN, 800, 800, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
 	init_color(COLOR_HP, 0, 1000, 0);
 
@@ -64,7 +64,8 @@ void init(){
 	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
 	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
 
-	attrset(COLOR_PAIR(PAINT_DEFAULT));	
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
+	
 }
 
 
@@ -78,14 +79,16 @@ int main(){
 	bulletManager B = bulletManager();
 	
 	char input;
-	int numL = 0; // Contatore dei livelli
+	int numL = 1; // Contatore dei livelli
 	bool quit = false;
+
+	int diff = 0;
 	level* pointL;
 	
 	//titleScreen(); 
 	while( !quit ){
 		//level setup
-		pointL = new level (numL, &B);
+		pointL = new level (numL, diff, &B);
 		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
 		kuba* K = new kuba(80, 10, pointL, &B);
 		shooter* S = new shooter(120, 10, pointL, &B);
@@ -129,12 +132,14 @@ int main(){
 					tmp->C = NULL;
 				}
 			}
+
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
 
 			// elimino entità morte
 			if( input=='Q' ) quit = true;
+			
 			if(K!=NULL && K->getHealth()==0){
 				delete K;
 				K = NULL;

@@ -11,7 +11,6 @@
 #include "platform.hpp"
 
 
-
 struct Pplatform {
     platform* plat;
     Pplatform* next;
@@ -22,6 +21,21 @@ hitBox newRandomPlat (hitBox where, int de);
 
 lPlatform createnPlat (int np, hitBox ht, int len, int d);
 
+struct Pkuba {
+    kuba* K;
+    Pkuba* next;
+};
+typedef Pkuba* lKuba;
+
+struct Pshooter {
+    shooter* S;
+    Pshooter* next;
+};
+typedef Pshooter* lShooter;
+
+lKuba uptKuba (lKuba lk);
+lShooter uptShooter (lShooter ls);
+
 // Struct da restituire nella funzione check
 struct infoCrash {
     char type;                // Tipo di oggetto con cui ci si scontra (p: platform || k: kuba || u: upgrades || n: nothing)
@@ -30,20 +44,22 @@ struct infoCrash {
 
 class level {
 protected:
-    int nlevel;                // Numero del livello
-    lPlatform platforms;           // Lista delle piattaforme del livello
-    //lEnemies enemies;            // Lista dei nemici del livello
-    //level* next;               // livello successivo, il costruttore lo setta a NULL
+    int nlevel;                 // Numero del livello
+    int diff;                   // Difficoltà
+    lPlatform platforms;        // Lista delle piattaforme del livello
+    lKuba kubas;                // Lista di kuba
+    lShooter shooters;          // Lista di shooters
+    yuck* Y;                    // Yuck è al massimo 1
 
 public:
-    level (int nl, bulletManager* bM);
+    level (int nl, int d, bulletManager* bM);
     int givenplat();
-    //void setNext(level* l);
     void print_platforms ();
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
-    // prova
-    hitBox coordinate(int i);
+    int givediff ();
+    void update (player P, timeSpan deltaTime);
+    hitBox coordinate(int i);           // usless
 };
 
 #endif //LEVEL_HPP

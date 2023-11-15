@@ -4,9 +4,9 @@
 using namespace std;
 
 yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm):
-	shooter(x,y,lvl,bM,h,fr,dm,'='){
+	shooter(x,y,lvl,bM,h,fr,dm,'+'){
 	chargeTime = 3; // secondi
-	laserTime = 3; // secondi
+	laserTime = 1; // secondi
 	lastCharge = 0;
 
 	box.a.x -= 1;
@@ -17,8 +17,8 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm
 yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
 	yuck(x,y,lvl,bM,
 		/* HEALTH */ 200+50*lvl->getDiff(),
-		/* FIRE_RATE */ 0.025,
-		/* DAMAGE */ 8 + 4*lvl->getDiff()){
+		/* FIRE_RATE */ 0.004,
+		/* DAMAGE */ 2 + 1*lvl->getDiff()){
 }
 
 void yuck::update(point target, timeSpan deltaTime){
@@ -96,7 +96,7 @@ void yuck::print(timeSpan deltaTime){
 
 void yuck::shoot(){
 	vector speed;
-	speed.x = 400;
+	speed.x = 800;
 	speed.y = 0;
 	if( !facingRight ) speed.x *= -1;
 

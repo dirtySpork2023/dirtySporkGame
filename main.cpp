@@ -47,6 +47,7 @@ void init(){
 	 */
 
 	init_color(COLOR_BLACK, 120, 120, 130); //TODO change white/blacl to forward background
+	init_color(COLOR_DARK, 200, 200, 200);
 	init_color(COLOR_WHITE, 900, 900, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
 	//init_color(COLOR_GREEN, 0, 1000, 0);
@@ -65,6 +66,7 @@ void init(){
 	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
 	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
 	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
+	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 	
@@ -159,13 +161,23 @@ int main(){
 			}
 
 			// OUTPUT
-			
+
+			/* il background cancella il caricamento di yuck
+			attrset(COLOR_PAIR(PAINT_BACKGROUND));
+			for(int y=0; y<LINES-10; y++){
+				for(int x=2; x<COLS-2; x++){
+					if((y+x)%2==0){
+						mvprintw(y, x, ":");
+					}else{
+						mvprintw(y, x, ".");
+					}
+				}
+			}
+			attrset(COLOR_PAIR(PAINT_DEFAULT));*/
 			attron(A_DIM);
-			mvprintw(0, 3, "fps: %.0f ", 1/deltaTime);
-			mvprintw(0, 14, "|deltaTime: %f ", deltaTime);
+			mvprintw(0, 3, "fps: %.0f | deltaTime: %f ", 1/deltaTime, deltaTime);
 			attroff(A_DIM);
-			mvprintw(1, 3, "MONEY: %d @", money);
-			//mvprintw(2, 3, "Numero piattaforme: %d", pointL->givenplat());
+
 
 			pointL->print_platforms();
 			tmp = H;

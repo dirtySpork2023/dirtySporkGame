@@ -302,7 +302,7 @@ int level::number () {
     return this->nlevel;
 }
 
-int level::givediff () {
+int level::getDiff () {
     return this->diff;
 }
 

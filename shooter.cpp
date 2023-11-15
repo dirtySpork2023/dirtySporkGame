@@ -12,12 +12,14 @@ shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fire
 	this->damage = damage;
 	this->texture = bullet;
 	this->lastShot = 0;
+
+	// TODO RANDOM lastShot
 }
 
 shooter::shooter(int x, int y, level* lvl, bulletManager* bM):
 	shooter(x, y, lvl, bM,
 		/* HEALTH */ 20+5*lvl->getDiff(),
-		/* FIRE_RATE */ 1/(1 + 0.5*lvl->getDiff()),
+		/* FIRE_RATE */ 1/(0.5 + 0.1*lvl->getDiff()),
 		/* DAMAGE */ 20 + 10*lvl->getDiff(),
 		'G'){
 }

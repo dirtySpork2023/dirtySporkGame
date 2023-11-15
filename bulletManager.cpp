@@ -92,16 +92,17 @@ int bulletManager::check(hitBox target){
 // stampa tutti i proiettili nella lista
 void bulletManager::print(){
 	node* tmp = head;
+	// cancello solo i proiettili che hanno cambiato posizione
 	while( tmp!=NULL ){
-		//stampo anche se la posizione non è cambiata
-		posPrintW(snap(tmp->pos), tmp->texture);
-
 		if( !collisionPP(tmp->oldPos, snap(tmp->pos)) ){
-			// cleanup
 			posPrintW(tmp->oldPos, " ");
 			tmp->oldPos = snap(tmp->pos);
 		}
-
+		tmp = tmp->next;
+	}
+	tmp = head;
+	while( tmp!=NULL ){
+		posPrintW(snap(tmp->pos), tmp->texture);
 		tmp = tmp->next;
 	}
 }

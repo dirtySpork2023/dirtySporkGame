@@ -57,7 +57,7 @@ public:
     void print_platforms ();
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
-    int givediff ();
+    int getDiff ();
     void update (player P, timeSpan deltaTime);
     hitBox coordinate(int i);           // usless
 };

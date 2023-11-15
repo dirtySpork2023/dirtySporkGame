@@ -46,13 +46,13 @@ void init(){
 	 	COLOR_PAIRS numero tot di coppie di colori
 	 */
 
-	init_color(COLOR_BLACK, 120, 120, 130); //TODO change white/blacl to forward background
-	init_color(COLOR_DARK, 200, 200, 200);
-	init_color(COLOR_WHITE, 900, 900, 1000);
+	init_color(COLOR_BLACK, 100, 100, 100);
+	init_color(COLOR_DARK, 130, 130, 130);
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
 	//init_color(COLOR_GREEN, 0, 1000, 0);
 	init_color(COLOR_BLUE, 200, 200, 700);
-	init_color(COLOR_PLAYER, 900, 1000, 900); //500, 800, 600
+	init_color(COLOR_PLAYER, 850, 1000, 850); //500, 800, 600
 	init_color(COLOR_ENEMY, 300, 600, 700);
 	init_color(COLOR_COIN, 800, 800, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
@@ -162,18 +162,18 @@ int main(){
 
 			// OUTPUT
 
-			/* il background cancella il caricamento di yuck
+			//BUG il background cancella il caricamento di yuck
 			attrset(COLOR_PAIR(PAINT_BACKGROUND));
 			for(int y=0; y<LINES-10; y++){
-				for(int x=2; x<COLS-2; x++){
-					if((y+x)%2==0){
-						mvprintw(y, x, ":");
-					}else{
-						mvprintw(y, x, ".");
-					}
+				for(int x=2; x<COLS-2; x+=4){
+					// brick texture
+					if(y%2==0)
+						mvprintw(y, x, "_|__");
+					else
+						mvprintw(y, x, "___|");
 				}
 			}
-			attrset(COLOR_PAIR(PAINT_DEFAULT));*/
+			attrset(COLOR_PAIR(PAINT_DEFAULT));
 			attron(A_DIM);
 			mvprintw(0, 3, "fps: %.0f | deltaTime: %f ", 1/deltaTime, deltaTime);
 			attroff(A_DIM);

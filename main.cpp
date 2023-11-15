@@ -82,7 +82,7 @@ int main(){
 	bool quit = false;
 	level* pointL;
 	
-	titleScreen(); 
+	//titleScreen(); 
 	while( !quit ){
 		//level setup
 		pointL = new level (numL, &B);

@@ -143,6 +143,28 @@ void titleScreen(){
 	*/
 
 	/*
+	              ________, ,_,   ,_,     __         __    ,_________, ,_, ,__,    ,_, ,_,                                        ,__,     ____
+	           /WWWWWWWWWW| |w|   |W|   -WWWW-     -WWWW-  |WWWWWWWWW| |W| |WW\    |W| |M|                         ,___________,  |WW|    /WW/
+	          |WWW"         |W|   |W|  /WWWWWW\   /WWWWWW\     |W|     |W| |W,W\   |W| |W'                         |WWWWWWWWWWW|  |WW|   /WW/
+	          \WWW.___      |W|___|W| |WW/  \WW| |WW/  \WW|    |W|     |W| |W|\W\  |W|                      __________   \WW\     |WW|  /WW/
+	           "-WWWWWwW\   |WWWWWWW| |WW|  |WW| |WW|  |WW|    |W|     |W| |W| \W\ |W|  |MMMMMMM,,    |WW\  \WWWWWWWWWW-  \WW\    |WW| /WW/
+	                 "WWW|  |W|   |W| |WW\__/WW| |WW\__/WW|    |W|     |W| |W|  \W\|W|  |WWWWWWWWWW\  |WWW\  \WWW\__)WWW|  \WW\   |WW|/WW/
+	         ,_______.WWW/  |W|   |W|  \WWWWWW/   \WWWWWW/     |W|     |W| |W|   \W'w|  |WWWMMMWWWWW\ |WWWW\  \WWWWWWWW/    \WW\  |WW/WW/
+	         |WWWWWWWWW-"   |W|   |W|   "MWWM"     "MWWM"      |W|     |W| |W|    \WW|  |WWW|   \WWW| |WW,WW\  \WWW\"WWWW,   \M"  |WWWW/
+																					    |WWW|   /WWW| |WW|\WW\  \WWW\ "WWWW,      |WWW/
+																						|WWWWWWWWWWW/ |WW|-WWW\  \WWW\  "W"       /WW/
+																						|WWWWWWWWWW/  |WWWWWWWW\  \WWW\          /WW/
+																						|WWWMMMM""    |WWW-" \WW\  \M"          /WW/
+																						|WWW|         |WW|    \M""             /WW/
+																						|WWW|         |WW|                    ""M/
+																						|WWW|         |M"
+																						|WWW|
+																						|WWW|         
+																						|WWW'
+																						|W"
+	*/
+
+	/*
 	 p
 	>W=
 	/"\
@@ -197,8 +219,8 @@ void titleScreen(){
 	mvprintw(23, 30, " //     \\\\");
 	mvprintw(24, 30, "//       \\\\");
 
-
 	attroff(A_BOLD);
+
 	mvprintw(LINES-10, COLS/2-12, "PRESS SPACE TO CONTINUE");
 
 	while(getch()!=' '){/*wait*/};

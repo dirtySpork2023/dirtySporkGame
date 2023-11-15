@@ -76,8 +76,9 @@ int main(){
 	bulletManager B = bulletManager();
 	
 	char input;
-	int numL = 0; // Contatore dei livelli
+	int numL = 1; // Contatore dei livelli
 	bool quit = false;
+
 	int diff = 0;
 	level* pointL; 
 
@@ -94,16 +95,10 @@ int main(){
 		coins* H = new coins;
 		coins* tmp = H;
 		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
-			tmp->C = new coin(100+i, 42, 20);
+			tmp->C = new coin(100+i, LINES-12, 20);
 			tmp->next = new coins;
 			tmp = tmp->next;
 		}
-		/*tmp = new coins;
-		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
-			tmp->C = new coin(50+i, 20, 20);
-			tmp->next = new coins;
-			tmp = tmp->next;
-		}*/
 		tmp = NULL;
 
 		//ciclo principale del gioco
@@ -133,12 +128,14 @@ int main(){
 					tmp->C = NULL;
 				}
 			}
+
 		    if(K!=NULL) K->update(&P, deltaTime);
 			if(S!=NULL) S->update(P.getPos(), deltaTime);
 			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
 
 			// elimino entità morte
 			if( input=='Q' ) quit = true;
+			
 			if(K!=NULL && K->getHealth()==0){
 				delete K;
 				K = NULL;
@@ -156,11 +153,13 @@ int main(){
 			}
 
 			// OUTPUT
-			mvprintw(0, 1, "fps: %.0f ", 1/deltaTime);
-			mvprintw(0, 12, "|deltaTime: %f ", deltaTime);
-			//righe 1-2 scritte da player.print
-			mvprintw(3, 1, "money: %d", money);
-			mvprintw(4, 1, "Numero piattaforme: %d", pointL->givenplat());
+			
+			attron(A_DIM);
+			mvprintw(0, 3, "fps: %.0f ", 1/deltaTime);
+			mvprintw(0, 14, "|deltaTime: %f ", deltaTime);
+			attroff(A_DIM);
+			mvprintw(1, 1, "money: %d", money);
+			mvprintw(2, 1, "Numero piattaforme: %d", pointL->givenplat());
 
 			pointL->print_platforms();
 			tmp = H;
@@ -174,7 +173,7 @@ int main(){
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
 			
-
+			
 			refresh();
 		}
 	}

@@ -45,9 +45,8 @@ void player::update(char input, timeSpan deltaTime){
 
 //stampa il player
 void player::print(timeSpan deltaTime){
-	entity::setPrintColor(PAINT_PLAYER);
-
 	// body
+	entity::setPrintColor(PAINT_PLAYER);
 	if( facingRight ){
 		mvprintw(box.a.y,   box.a.x, " p ");
 		mvprintw(box.a.y+1, box.a.x, ">W=");
@@ -57,18 +56,31 @@ void player::print(timeSpan deltaTime){
 		mvprintw(box.a.y+1, box.a.x, "=W<");
 		mvprintw(box.b.y,   box.a.x, "/\"\\");
 	}
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
 
-	// health bar
-	attrset(COLOR_PAIR(1));
-	mvprintw(1, 1, "health: %3d |", health);
-	for(int i=0 ; i<HEALTH_BAR_LENGTH ; i++){
-		if(health - i*MAX_HEALTH/HEALTH_BAR_LENGTH > 0)
-			printw("#");
-		else
-			printw(".");
+
+	// resource bar
+	WINDOW* w = newwin(RB_HEIGHT, COLS, LINES-RB_HEIGHT, 0);
+	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
+	/* ncurses */::box(w, 0, 0);
+	for(int y=RB_HEIGHT-2; y>0; y--){
+		mvwprintw(w, y, COLS/2, "|");
 	}
-	printw("|");
-	mvprintw(2, 1, "armor: %2.0f%%", armor*100);
+
+	int width = COLS/2-1;
+	wattron(w, A_BOLD);
+	wmove(w, 1, COLS/2);
+	int i;
+	for(i=0; i*MAX_HEALTH < health*width; i++){
+		wprintw(w, "M");
+	}
+	wattroff(w, A_BOLD);
+	for(; i<width; i++){
+		wprintw(w, ".");
+	}
+
+	mvwprintw(w, 2, COLS/2+1, "Armor: %2.0f%%", armor*100);
+	wrefresh(w);
 }
 
 bool player::hurt(int value){

@@ -33,6 +33,8 @@ struct Pshooter {
 };
 typedef Pshooter* lShooter;
 
+lKuba uptKuba (lKuba lk);
+lShooter uptShooter (lShooter ls);
 
 // Struct da restituire nella funzione check
 struct infoCrash {
@@ -56,7 +58,8 @@ public:
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
     int givediff ();
-    hitBox coordinate(int i);
+    void update (player P, timeSpan deltaTime);
+    hitBox coordinate(int i);           // usless
 };
 
 #endif //LEVEL_HPP

@@ -36,6 +36,34 @@ lPlatform createnPlat (int np, hitBox ht, int len, int d) {
     } else return NULL;
 }
 
+// Funzione che elimina i kuba morti
+lKuba uptKuba (lKuba lk) {
+    if (lk == NULL) return NULL;
+    else if (lk->K->getHealth() == 0) {
+        lKuba tmp = lk;
+        lk = uptKuba (lk->next);
+        delete tmp;
+        return lk;
+    } else {
+        lk->next = uptKuba (lk->next);
+        return lk;
+    }
+}
+
+// Funzione che elimina gli shooters morti
+lShooter uptShooters (lShooter ls) {
+    if (ls == NULL) return NULL;
+    else if (ls->S->getHealth() == 0) {
+        lShooter tmp = ls;
+        ls = uptShooters (ls->next);
+        delete tmp;
+        return ls;
+    } else {
+        ls->next = uptShooters (ls->next);
+        return ls;
+    }
+}
+
 
 level::level (int nl, int d, bulletManager* B) {
 
@@ -135,7 +163,7 @@ level::level (int nl, int d, bulletManager* B) {
 
     // Generazione Yuck
     if (this->nlevel % 4 == 0) this->Y = new yuck(140, heightEnemies, this, B);
-    else this->Y = NULL;
+    else this->Y = NULL;    
 }
 
 void level::print_platforms () {
@@ -288,6 +316,40 @@ int level::givenplat () {
     return k;
     tmp = NULL;
     delete tmp;
+}
+
+void level::update (player P, timeSpan deltaTime) {
+
+    // Update nemici
+    if(this->kubas!=NULL) {
+        lKuba tmpk = this->kubas;
+        while (tmpk != NULL) {
+            tmpk->K->update(&P, deltaTime);
+            tmpk = tmpk->next;
+        }
+        delete tmpk;
+    }
+    if (this->shooters != NULL) {
+        lShooter tmps = this->shooters;
+        while (tmps != NULL) {
+            tmps->S->update(P.getPos(), deltaTime);
+            tmps = tmps->next;
+        }
+        delete tmps;
+    }
+	if(this->Y!=NULL) this->Y->update(P.getPos(), deltaTime);
+
+	// Eliminazione entità morte
+	this->kubas = uptKuba (this->kubas);
+    this->shooters = uptShooters (this->shooters);
+	
+    if(this->shooters==NULL && this->kubas==NULL && this->Y!=NULL){
+		this->Y->wakeUp();
+	}
+	if(this->Y!=NULL && this->Y->getHealth()==0){
+		delete this->Y;
+		this->Y = NULL;
+	}
 }
 
 hitBox level::coordinate(int i) {

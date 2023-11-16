@@ -95,9 +95,6 @@ int main(){
 		//level setup
 		pointL = new level (numL, diff, &B);
 		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
-		kuba* K = new kuba(80, 10, pointL, &B);
-		shooter* S = new shooter(120, 10, pointL, &B);
-		yuck* Y = new yuck(150, 10, pointL, &B);
 
 		//creo una lista di monete posizionate in fila
 		int money = 0;
@@ -120,12 +117,13 @@ int main(){
 
 			input = getch();
 
-            // UPDATE
+			// UPDATE
 
 			B.update(deltaTime);
 			P.update(input, deltaTime);
 			tmp = H;
-			while( tmp->next!=NULL ){
+			while (tmp->next != NULL)
+			{
 				int value = -1;
 				//se la moneta esiste ancora controllo se il player può prenderla
 				if( tmp->C!=NULL ) value = tmp->C->check(P.getHitBox());
@@ -138,7 +136,7 @@ int main(){
 				}
 			}
 
-		    pointL->update(&P, deltaTime);
+			pointL->update(&P, deltaTime);
 
 			if( input=='Q' ) quit = true;
 
@@ -147,11 +145,11 @@ int main(){
 			attrset(COLOR_PAIR(PAINT_BACKGROUND));
 			// background brick texture
 			for(int y=0; y<LINES-WIN_HEIGHT; y++){
-				for(int x=0; x<COLS-3; x+=4){
-					if(y%2==0)
-						mvprintw(y, x, "_|__");
+				for(int x=0; x<COLS; x++){
+					if( y%2==0 && x%6==1 || y%2==1 && x%6==4)
+						mvprintw(y, x, "|");
 					else
-						mvprintw(y, x, "___|");
+						mvprintw(y, x, "_");
 				}
 			}
 			attrset(COLOR_PAIR(PAINT_DEFAULT));

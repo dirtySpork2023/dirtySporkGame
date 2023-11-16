@@ -20,7 +20,7 @@ kuba::kuba(int x, int y, level* lvl, bulletManager* bM):
 	kuba(x, y, lvl, bM,
 		/* HEALTH */ 30+10*lvl->getDiff(),
 		/* SPEED */ 0.07,
-		/* DAMAGE */ 20+10*lvl->getDiff()){
+		/* DAMAGE */ 15+5*lvl->getDiff()){
 }
 
 void kuba::update(player* target, timeSpan deltaTime){

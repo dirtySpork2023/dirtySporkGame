@@ -19,7 +19,7 @@ kuba::kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed,
 kuba::kuba(int x, int y, level* lvl, bulletManager* bM):
 	kuba(x, y, lvl, bM,
 		/* HEALTH */ 40+20*lvl->getDiff(),
-		/* SPEED */ 0.1,
+		/* SPEED */ 0.07,
 		/* DAMAGE */ 20+10*lvl->getDiff()){
 }
 
@@ -27,7 +27,6 @@ void kuba::update(player* target, timeSpan deltaTime){
 	entity::update(deltaTime);
 
 	// TODO use level check and take a point as input instead of player*
-	// should hurt all entities in its path, not only the player
 
 	if( lastMove>=xSpeed ){
 		if(this->getPos().x > target->getPos().x+3){

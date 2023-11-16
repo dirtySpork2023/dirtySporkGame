@@ -1,5 +1,7 @@
-#include "ncurses.h"
 #include "yuck.hpp"
+
+#include "ncurses.h"
+
 #include "level.hpp"
 using namespace std;
 
@@ -83,7 +85,7 @@ void yuck::print(timeSpan deltaTime){
 		if(facingRight) pos.x = box.b.x+1;
 		else pos.x = box.a.x-1;
 
-		switch ( (int)(lastCharge*6)%3 ){
+		switch ( (int)(lastCharge*4)%3 ){
 		case 0: posPrintW(pos, "_");
 			break;
 		case 1: posPrintW(pos, "\\");

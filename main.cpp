@@ -47,7 +47,7 @@ void init(){
 	 */
 
 	init_color(COLOR_BLACK, 100, 100, 100);
-	init_color(COLOR_DARK, 130, 130, 130);
+	init_color(COLOR_DARK, 170, 170, 170);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
 	//init_color(COLOR_GREEN, 0, 1000, 0);
@@ -69,7 +69,6 @@ void init(){
 	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
-	
 }
 
 
@@ -77,6 +76,9 @@ int main(){
 	srand(time(NULL));
 	
 	init(); //inizializza ncurses
+
+	// bottom window setup
+	WINDOW* bottomWin = newwin(WIN_HEIGHT, COLS, LINES-WIN_HEIGHT, 0);
 	
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 	
@@ -162,11 +164,10 @@ int main(){
 
 			// OUTPUT
 
-			//BUG il background cancella il caricamento di yuck
 			attrset(COLOR_PAIR(PAINT_BACKGROUND));
-			for(int y=0; y<LINES-10; y++){
-				for(int x=0; x<COLS-2; x+=4){
-					// brick texture
+			// background brick texture
+			for(int y=0; y<LINES-WIN_HEIGHT; y++){
+				for(int x=0; x<COLS-3; x+=4){
 					if(y%2==0)
 						mvprintw(y, x, "_|__");
 					else
@@ -191,10 +192,13 @@ int main(){
 			if(S!=NULL) S->print(deltaTime);
 			if(Y!=NULL) Y->print(deltaTime);
 			
-			printResourceBar(P.getHealth(), P.getArmor(), money);
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money);
 			
+
 			refresh();
+			wrefresh(bottomWin);
 		}
 	}
+	delwin(bottomWin);
 	endwin();
 }

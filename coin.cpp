@@ -1,4 +1,5 @@
 #include "coin.hpp"
+
 #include "ncurses.h"
 
 //		SpriteWeights

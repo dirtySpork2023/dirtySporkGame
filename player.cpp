@@ -1,8 +1,9 @@
+#include "player.hpp"
+
 #include <ncurses.h>
 
 #include <cmath>
 #include "lib.hpp"
-#include "player.hpp"
 #include "bulletManager.hpp"
 using namespace std;
 

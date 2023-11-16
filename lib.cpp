@@ -198,27 +198,23 @@ void titleScreen(){
 
 
 
-void printResourceBar(int health, double armor, int money){
-	const int height = 9;
-	// width = COLS
-	// positioned at the bottom of the terminal
-	WINDOW* w = newwin(height, COLS, LINES-height, 0);
-
+void printResourceBar(WINDOW* w, int health, double armor, int money){
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	/* ncurses */::box(w, 0, 0);
+
 	mvwprintw(w, 2, 50, "HEALTH: <|");
 	wattrset(w, COLOR_PAIR(PAINT_HP));
 	for(int i=0; i<health; i++) wprintw(w, "M");
 	for(int i=health; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
+
 	mvwprintw(w, 3, 50, " ARMOR: <|");
 	wattrset(w, COLOR_PAIR(PAINT_ARMOR));
 	for(int i=0; i<armor*100 ; i++) wprintw(w, "M");
 	for(int i=armor*100; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
+
 	mvwprintw(w, 4, 50, " MONEY: <| %d $ |>", money);
-	wrefresh(w);
-	delwin(w);
 }

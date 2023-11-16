@@ -1,6 +1,8 @@
 #ifndef LIB_HPP
 #define LIB_HPP
 
+#include <ncurses.h>
+
 // colori da 8 a 255 (i colori 0-7 sono predefiniti ma modificabili)
 #define COLOR_PLAYER 8
 #define COLOR_ENEMY 9
@@ -19,6 +21,8 @@
 #define PAINT_HP 7
 #define PAINT_ARMOR 8
 #define PAINT_BACKGROUND 9
+
+#define WIN_HEIGHT 9
 
 typedef double timeSpan;
 
@@ -65,6 +69,6 @@ bool upperCase(char c);
 
 void titleScreen();
 
-void printResourceBar(int health, double armor, int money);
+void printResourceBar(WINDOW* w, int health, double armor, int money);
 
 #endif //LIB_HPP

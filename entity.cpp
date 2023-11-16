@@ -1,8 +1,9 @@
+#include "entity.hpp"
+
 #include <ncurses.h>
 
 #include "lib.hpp"
 #include "level.hpp"
-#include "entity.hpp"
 using namespace std;
 
 entity::entity(int x, int y, level* lvl, bulletManager* bM, int hp){

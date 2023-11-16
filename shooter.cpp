@@ -1,8 +1,8 @@
+#include "shooter.hpp"
+
 #include <ncurses.h>
-#include <cmath>
 
 #include "entity.hpp"
-#include "shooter.hpp"
 #include "level.hpp"
 
 shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fireRate, int damage, char bullet):

@@ -18,7 +18,7 @@ kuba::kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed,
 
 kuba::kuba(int x, int y, level* lvl, bulletManager* bM):
 	kuba(x, y, lvl, bM,
-		/* HEALTH */ 40+20*lvl->getDiff(),
+		/* HEALTH */ 30+10*lvl->getDiff(),
 		/* SPEED */ 0.07,
 		/* DAMAGE */ 20+10*lvl->getDiff()){
 }
@@ -29,20 +29,20 @@ void kuba::update(player* target, timeSpan deltaTime){
 	// TODO use level check and take a point as input instead of player*
 
 	if( lastMove>=xSpeed ){
-		if(this->getPos().x > target->getPos().x+3){
+		if(isTouching(this->getHitBox(), target->getHitBox(), 'a')){
+			target->hurt(damage);
+			entity::move('d');
+			lastMove = -xSpeed*2;
+		}else if(isTouching(this->getHitBox(), target->getHitBox(), 'd')){
+			target->hurt(damage);
+			entity::move('a');
+			lastMove = -xSpeed*2;
+		}else if(this->getPos().x > target->getPos().x+3){
 			entity::move('a');
 			lastMove = 0;
 		}else if(this->getPos().x < target->getPos().x-3){
 			entity::move('d');
 			lastMove = 0;
-		}else if(this->getPos().x == target->getPos().x+3 && this->getPos().y == target->getPos().y){
-			target->hurt(damage);
-			entity::move('d');
-			lastMove = -xSpeed*2;
-		}else if(this->getPos().x == target->getPos().x-3 && this->getPos().y == target->getPos().y){
-			target->hurt(damage);
-			entity::move('a');
-			lastMove = -xSpeed*2;
 		}
 	}
 

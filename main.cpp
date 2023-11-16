@@ -71,7 +71,6 @@ void init(){
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
-
 int main(){
 	srand(time(NULL));
 	
@@ -85,7 +84,7 @@ int main(){
 	bulletManager B = bulletManager();
 	
 	char input;
-	int numL = 3; // Contatore dei livelli
+	int numL = 4; // Contatore dei livelli
 	bool quit = false;
 
 	int diff = numL;
@@ -139,7 +138,7 @@ int main(){
 				}
 			}
 
-		    pointL->update(P, deltaTime);
+		    pointL->update(&P, deltaTime);
 
 			if( input=='Q' ) quit = true;
 

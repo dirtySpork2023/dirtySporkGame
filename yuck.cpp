@@ -18,7 +18,7 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm
 
 yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
 	yuck(x,y,lvl,bM,
-		/* HEALTH */ 200+50*lvl->getDiff(),
+		/* HEALTH */ 180+5*lvl->getDiff(),
 		/* FIRE_RATE */ 0.004,
 		/* DAMAGE */ 2 + 1*lvl->getDiff()){
 }

@@ -10,6 +10,18 @@
 #include "kuba.hpp"
 #include "platform.hpp"
 
+/*idea magnifica di marco
+
+quando generi le piattaforme crei una lista di punti di cui ne scegli a random per metterci sopra gli entity
+
+un punto per ogni 3 caselle sopra la piattaforma
+
+
+
+ X  X  X  X
+|""""""""""|
+
+*/
 
 struct Pplatform {
     platform* plat;
@@ -59,7 +71,7 @@ public:
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
     int getDiff ();
-    void update (player P, timeSpan deltaTime);
+    void update (player* P, timeSpan deltaTime);
 };
 
 #endif //LEVEL_HPP

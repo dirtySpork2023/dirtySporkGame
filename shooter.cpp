@@ -1,8 +1,8 @@
 #include "shooter.hpp"
 
 #include <ncurses.h>
-//#include <time.h>
-//#include <stdlib.h>
+#include <time.h>
+#include <stdlib.h>
 
 #include "entity.hpp"
 #include "level.hpp"
@@ -13,15 +13,15 @@ shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fire
 	this->fireRate = fireRate;
 	this->damage = damage;
 	this->texture = bullet;
-	this->lastShot = 0;//-rand()%100/(double)100;
+	this->lastShot = -rand()%100/(double)100;
 }
 
 shooter::shooter(int x, int y, level* lvl, bulletManager* bM):
 	shooter(x, y, lvl, bM,
-		/* HEALTH */ 20+5*lvl->getDiff(),
+		/* HEALTH */ 15+2*lvl->getDiff(),
 		/* FIRE_RATE */ 1/(0.5 + 0.1*lvl->getDiff()),
-		/* DAMAGE */ 20 + 10*lvl->getDiff(),
-		'G'){
+		/* DAMAGE */ 20 + 5*lvl->getDiff(),
+		/* TEXTURE */ 'G'){
 }
 
 void shooter::update(point target, timeSpan deltaTime){

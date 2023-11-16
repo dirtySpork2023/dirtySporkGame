@@ -10,6 +10,8 @@ using namespace std;
 player::player(int x, int y, level* lvl, bulletManager* b, int weapon, float jumpHeight, float armor):
 	shooter(x,y,lvl,b,MAX_HEALTH,1,1,'?'){ //fireRate, damage e texture sono temporanei qui
 
+	lastShot = 0;
+
 	setGun(weapon);
 
 	this->jumpSpeed = -sqrt(jumpHeight * ENTITY_G * 2.1);

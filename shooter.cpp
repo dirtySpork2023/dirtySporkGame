@@ -1,6 +1,8 @@
 #include "shooter.hpp"
 
 #include <ncurses.h>
+//#include <time.h>
+//#include <stdlib.h>
 
 #include "entity.hpp"
 #include "level.hpp"
@@ -11,9 +13,7 @@ shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fire
 	this->fireRate = fireRate;
 	this->damage = damage;
 	this->texture = bullet;
-	this->lastShot = 0;
-
-	// TODO RANDOM lastShot
+	this->lastShot = 0;//-rand()%100/(double)100;
 }
 
 shooter::shooter(int x, int y, level* lvl, bulletManager* bM):

@@ -88,7 +88,7 @@ int main(){
 	int numL = 1; // Contatore dei livelli
 	bool quit = false;
 
-	int diff = 0;
+	int diff = numL;
 	level* pointL;
 	
 	//titleScreen(); 

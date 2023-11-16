@@ -85,7 +85,7 @@ int main(){
 	bulletManager B = bulletManager();
 	
 	char input;
-	int numL = 1; // Contatore dei livelli
+	int numL = 3; // Contatore dei livelli
 	bool quit = false;
 
 	int diff = numL;
@@ -139,28 +139,9 @@ int main(){
 				}
 			}
 
-		    if(K!=NULL) K->update(&P, deltaTime);
-			if(S!=NULL) S->update(P.getPos(), deltaTime);
-			if(Y!=NULL) Y->update(P.getPos(), deltaTime);
+		    pointL->update(P, deltaTime);
 
-			// elimino entità morte
 			if( input=='Q' ) quit = true;
-			
-			if(K!=NULL && K->getHealth()==0){
-				delete K;
-				K = NULL;
-			}
-			if(S!=NULL && S->getHealth()==0){
-				delete S;
-				S = NULL;
-			}
-			if(S==NULL && K==NULL && Y!=NULL){
-				Y->wakeUp();
-			}
-			if(Y!=NULL && Y->getHealth()==0){
-				delete Y;
-				Y = NULL;
-			}
 
 			// OUTPUT
 
@@ -180,7 +161,7 @@ int main(){
 			attroff(A_DIM);
 
 
-			pointL->print_platforms();
+			pointL->printAll(deltaTime);
 			tmp = H;
 			while( tmp->next!=NULL ){
 				if( tmp->C!=NULL ) tmp->C->print(deltaTime);
@@ -188,12 +169,8 @@ int main(){
 			}
 			B.print();
 			P.print(deltaTime);
-			if(K!=NULL) K->print(deltaTime);
-			if(S!=NULL) S->print(deltaTime);
-			if(Y!=NULL) Y->print(deltaTime);
-			
+
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money);
-			
 
 			refresh();
 			wrefresh(bottomWin);

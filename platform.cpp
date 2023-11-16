@@ -13,36 +13,6 @@ platform::platform(int x1, int y1, int x2, int y2) {
     this->box.b.y = y2;
 }
 
-/*
-void platform::setNext(platform p) {
-    this->next = &p;
-}
-*/
-
-/*
-// Ritorna il puntatore alla piattaforma successiva;
-platform* platform::getNext () {
-    return (platform::next);
-}
-*/
-
-/*
-
-    |""""""""""""""""""""""|
-    |______________________|
-
-    <------------------>
-    
-    |MMmMMmMmMMMmM|
-    \_____________/         |MMmMMmMm|
-                            |        |
-                            \________/
-
-*/
-
-
-
-
 // Stampa della piattaforma
 void platform::printp () {
     attrset(COLOR_PAIR(PAINT_PLATFORM));

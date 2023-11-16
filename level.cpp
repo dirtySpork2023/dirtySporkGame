@@ -22,11 +22,6 @@ hitBox newRandomPlat (hitBox w, int de) {
 lPlatform createnPlat (int np, hitBox ht, int len, int d) {
     if (np > 0) {
         lPlatform tmp1 = new Pplatform;
-        /*
-        tmp1->plat = new platform(ht.a.x, ht.a.y, ht.b.x, ht.b.y);
-        ht.a.x += 7;
-        ht.b.x += 7;
-        */
         hitBox hpl = newRandomPlat (ht, d);
         tmp1->plat = new platform(hpl.a.x, hpl.a.y, hpl.b.x, hpl.b.y);
         ht.a.x += len;
@@ -37,33 +32,53 @@ lPlatform createnPlat (int np, hitBox ht, int len, int d) {
 }
 
 // Funzione che elimina i kuba morti
-lKuba uptKuba (lKuba lk) {
+lKuba dltKuba (lKuba lk) {
     if (lk == NULL) return NULL;
     else if (lk->K->getHealth() == 0) {
         lKuba tmp = lk;
-        lk = uptKuba (lk->next);
+        lk = dltKuba (lk->next);
+        delete tmp->K;
         delete tmp;
+        tmp = NULL;
         return lk;
     } else {
-        lk->next = uptKuba (lk->next);
+        lk->next = dltKuba (lk->next);
         return lk;
     }
 }
 
 // Funzione che elimina gli shooters morti
-lShooter uptShooters (lShooter ls) {
+lShooter dltShooters (lShooter ls) {
     if (ls == NULL) return NULL;
     else if (ls->S->getHealth() == 0) {
         lShooter tmp = ls;
-        ls = uptShooters (ls->next);
+        ls = dltShooters (ls->next);
+        delete tmp->S;
         delete tmp;
+        tmp = NULL;
         return ls;
     } else {
-        ls->next = uptShooters (ls->next);
+        ls->next = dltShooters (ls->next);
         return ls;
     }
 }
 
+void print_platforms (lPlatform lsp) {
+    lsp->plat->printc('"');                 // stampa della base
+    lsp = lsp->next;
+
+    for (int i = 0; i < 4 && lsp != NULL; i++) {          // Stampa delle pareti
+        lsp->plat->printc('|');
+	    lsp = lsp->next;
+    }
+
+    while (lsp != NULL) {                   // Stampa delle piattaforme sospese
+        lsp->plat->printp();
+	    lsp = lsp->next;
+	}
+    lsp = NULL;
+    delete lsp;
+}
 
 level::level (int nl, int d, bulletManager* B) {
 
@@ -117,185 +132,103 @@ level::level (int nl, int d, bulletManager* B) {
     tmp->next = createnPlat (numPlatsup, p1, lensup, dens);
 
     // Generazione nemici 
-
     int heightEnemies = 10;
-    int firstK = 75;
+    int weight = this->nlevel;
 
-    // Generazione lista di Kuba in base al livello
+    if (this->nlevel % 4 == 0) {                                // Yuck
+        this->Y = new yuck(140, heightEnemies, this, B);
+        weight -= 2;
+    } else this->Y = NULL;
 
-    if (this->nlevel < 7 && this->nlevel != 2 && this->nlevel != 5) {           // 1 Kuba
-        this->kubas = new Pkuba;
-        this->kubas->K = new kuba(firstK, heightEnemies, this, B);
-        this->kubas->next = NULL;
-    } else if (this->nlevel == 2) this->kubas = NULL;                          // 0 kuba
-    else if (this->nlevel == 5 || this->nlevel == 7  || this->nlevel == 8) {   // 2 Kuba
-        this->kubas = new Pkuba;
-        this->kubas->K = new kuba(firstK, heightEnemies, this, B);
-        this->kubas->next = new Pkuba;
-        this->kubas->next->K = new kuba(firstK + 10, heightEnemies, this, B);
-        this->kubas->next->next = NULL;
-    } else {                                                                    // 3 Kuba
-        lKuba tmpk = this->kubas;
-        firstK -= 20;
-        for (int i=0; i<3; i++) {
-            tmpk = new Pkuba;
-            tmpk->K = new kuba(firstK + 10, heightEnemies, this, B);
-            tmpk = tmpk->next;
-        }
-        tmpk = NULL;
-        delete tmpk;
+    lShooter tmp1;
+    for (int i=0, firstS=110; weight>1 && i<2; firstS+=10, weight-=2, i++) {        // Shooters
+        tmp1 = new Pshooter;
+        tmp1->S = new shooter(firstS, heightEnemies, this, B);
+        tmp1->next = this->shooters;
+        this->shooters = tmp1;
     }
-  
-    // Generazione lista di shoter in base al livello
-    int firstS = 110;
-    if (this->nlevel == 1) this->shooters = NULL;                               // 0 shooters
-    else if (this->nlevel < 6) {                                                // 1 shooter
-        this->shooters = new Pshooter;
-        this->shooters->S = new shooter(firstS, heightEnemies, this, B);
-        this->shooters->next = NULL;
-    } else {                                                                    // 2 shooter
-        this->shooters = new Pshooter;
-        this->shooters->S = new shooter(firstS, heightEnemies, this, B);
-        this->shooters->next = new Pshooter;
-        this->shooters->next->S = new shooter(firstS + 5, heightEnemies, this, B);
-        this->shooters->next->next = NULL;
-    }
+    tmp1 = NULL;
 
-    // Generazione Yuck
-    if (this->nlevel % 4 == 0) this->Y = new yuck(140, heightEnemies, this, B);
-    else this->Y = NULL;    
+    lKuba tmp2;
+    for (int i=0, firstK=75; weight>0 && i<3; firstK+=10, weight--, i++) {      // Kubas
+        tmp2 = new Pkuba;
+        tmp2->K = new kuba(firstK, heightEnemies, this, B);
+        tmp2->next = this->kubas;
+        this->kubas = tmp2;
+    }
+    tmp2 = NULL;
 }
 
-void level::print_platforms () {
-    lPlatform tmp = this->platforms;
-    tmp->plat->printc('"');                 // stampa della base
-    tmp = tmp->next;
-
-    for (int i = 0; i < 4 && tmp != NULL; i++) {          // Stampa delle pareti
-        tmp->plat->printc('|');
-	    tmp = tmp->next;
+void level::printAll (timeSpan deltaTime) {
+    print_platforms (this->platforms);
+    
+    lKuba tmpk = this->kubas;
+    while (tmpk != NULL) {
+        tmpk->K->print(deltaTime);
+        tmpk = tmpk->next;
     }
-
-    while (tmp != NULL) {                   // Stampa delle piattaforme sospese
-        tmp->plat->printp();
-	    tmp = tmp->next;
-	}
-    tmp = NULL;
-    delete tmp;
+    delete tmpk;
+    lShooter tmps = this->shooters;
+    while (tmps != NULL) {
+        tmps->S->print(deltaTime);
+        tmps = tmps->next;
+    }
+    delete tmps;
+    if (this->Y != NULL) this->Y->print(deltaTime);
 }
 
-infoCrash level::check (hitBox ch, char d) {
+infoCrash level::check (hitBox pl, char d) {
     infoCrash info;      // Variabile da restituire                             
-    bool here = false;   // True se trovo qualcosa                                   
-    int j;               // Contatore per sapere la posizione in lista
-    hitBox r;
+    bool here = false;   // True se trovo qualcosa
 
     lPlatform tmp1 = this->platforms;
-    
-    if (d == 'a') {
-        for (j=0; tmp1 != NULL && !here; j++) {             // Verifico se c'e contatto con una piattaforma
-            here = isTouchingA (tmp1->plat->getHitbox(), ch);
-            tmp1 = tmp1->next;
-        }
-        
-        if (here) {
-            info.i = j;
+    while (tmp1 != NULL && !here) {
+        if (isTouching (pl, tmp1->plat->getHitbox(), d)) {
+            here = true;
             info.type = 'p';
-        } else {
-            // enemies
+            info.obj = tmp1->plat;
         }
-
-    } else if (d == 'd') {
-        for (j=0; tmp1 != NULL && here == false; j++) {
-            here = isTouchingD (tmp1->plat->getHitbox(), ch);
-            tmp1 = tmp1->next;
-        }
-        
-        if (here) {
-            info.i = j;
-            info.type = 'p';
-        } else {
-
-        }
-    } else if (d == 'w') {
-        for (j=0; tmp1 != NULL && here == false; j++) {
-            here = isTouchingW (tmp1->plat->getHitbox(), ch);
-            tmp1 = tmp1->next;
-        }
-        
-        if (here) {
-            info.i = j;
-            info.type = 'p';
-        } else {
-
-        }
-        
-    } else if (d == 's') {
-        for (j=0; tmp1 != NULL && here == false; j++) {
-            here = isTouchingS (tmp1->plat->getHitbox(), ch);
-            tmp1 = tmp1->next;
-        }
-        
-        if (here) {
-            info.i = j;
-            info.type = 'p';
-        } else {
-
-        }
-
+        tmp1 = tmp1->next;
     }
-
     tmp1 = NULL;
     delete tmp1;
 
-/*
-    Da migliorare :::
-
-    // Controllo nemici
-    lEnemies tmp2 = this->enemies;
-    for (j=0; tmp2 != NULL && here == false; j++) {
-        r = tmp2->ent.getHitBox;
-        if (d == 'a') {
-            if (whereIsY (r, ch) == 3 && r.b.x == ch.a.x-1) {
-                info.type = 'k';
-                info.i = j;
-                here = true;
-            }
-        } else if (d == 'd') {
-            if (whereIsY (r, ch) == 3 && r.a.x == ch.b.x+1) {
-                info.type = 'k';
-                info.i = j;
-                here = true;
-            }
-        } else if (d == 'w') {
-            if (whereIsX (r, ch) == 3 && r.b.y == ch.a.y+1) {
-                info.type = 'k';
-                info.i = j;
-                here = true;                
-            } 
-        } else if (d == 's') {
-            if (whereIsX (r, ch) == 3 && r.a.y == ch.b.y-1) {
-                info.type = 'k';
-                info.i = j;
-                here = true;
-            }
+    lKuba tmp2 = this->kubas;
+    while (tmp2 != NULL && !here) {
+        if (isTouching (pl, tmp2->K->getHitBox(), d)) {
+            here = true;
+            info.type = 'k';
+            info.obj = tmp2->K;
         }
-        tmp2 = tmp->next;
+        tmp2 = tmp2->next;
     }
+    tmp2 = NULL;
     delete tmp2;
-*/ 
-    /* 
-    
-    Controllo powerups ...
-    
-    */
 
-   if (!here) {
-    info.type = 'n';
-    info.i = -1;
-   }
+    lShooter tmp3 = this->shooters;
+    while (tmp3 != NULL && !here) {
+        if (isTouching (pl, tmp3->S->getHitBox(), d)) {
+            here = true;
+            info.type = 's';
+            info.obj = tmp3->S;
+        }
+        tmp3 = tmp3->next;
+    }
+    tmp3 = NULL;
+    delete tmp3;
 
-   return info;
+    if (this->Y != NULL && isTouching (pl, this->Y->getHitBox(), d)) {
+        here = true;
+        info.type = 'y';
+        info.obj = this->Y;
+    }
+
+    if (!here) {
+        info.type = 'n';
+        info.obj = NULL;
+    }
+
+    return info;
 }
 
 int level::number () {
@@ -306,20 +239,7 @@ int level::getDiff () {
     return this->diff;
 }
 
-int level::givenplat () {
-    lPlatform tmp = this->platforms;
-    int k=0;
-    while (tmp != NULL) {
-        k++;
-        tmp = tmp->next;
-    }
-    return k;
-    tmp = NULL;
-    delete tmp;
-}
-
 void level::update (player P, timeSpan deltaTime) {
-
     // Update nemici
     if(this->kubas!=NULL) {
         lKuba tmpk = this->kubas;
@@ -340,8 +260,8 @@ void level::update (player P, timeSpan deltaTime) {
 	if(this->Y!=NULL) this->Y->update(P.getPos(), deltaTime);
 
 	// Eliminazione entità morte
-	this->kubas = uptKuba (this->kubas);
-    this->shooters = uptShooters (this->shooters);
+	this->kubas = dltKuba (this->kubas);
+    this->shooters = dltShooters (this->shooters);
 	
     if(this->shooters==NULL && this->kubas==NULL && this->Y!=NULL){
 		this->Y->wakeUp();
@@ -350,18 +270,4 @@ void level::update (player P, timeSpan deltaTime) {
 		delete this->Y;
 		this->Y = NULL;
 	}
-}
-
-hitBox level::coordinate(int i) {
-    lPlatform tmp = this->platforms;
-    int k=0;
-    while (tmp != NULL && k<i) {
-        k++;
-        tmp = tmp->next;
-    }
-    hitBox ht = tmp->plat->getHitbox();
-    tmp = NULL;
-    delete tmp;
-
-    return ht;
 }

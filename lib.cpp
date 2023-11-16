@@ -86,44 +86,34 @@ bool upperCase(char c){
 
 void titleScreen(){
 	/*
-	             _________, ,_,   ,_,     __         __    ,_________, ,_, ,__,    ,_, ,_,                                        ,__,     ____
-	           /"  _______| | |   | |   -"  "-     -"  "-  |___, ,___| | | |  \    | | | |                         ,___________,  |  |    /  /
-	          |  /"         | |   | |  /  __  \   /  __  \     | |     | | |   \   | | |_/                         |_____   ___|  |  |   /  /
-	          \  ".____     | |___| | |  /  \  | |  /  \  |    | |     | | | |\ \  | |                      __________   \  \     |  |  /  /
-	           "-.___  "\   | ,___, | |  |  |  | |  |  |  |    | |     | | | | \ \ | |  +-------,,    |""\  \    ___  "-  \  \    |  | /  /
-	                 "\  |  | |   | | |  \__/  | |  \__/  |    | |     | | | |  \ \| |  |         "\  |   \  \   \__)   |  \  \   |  |/  /
-	         ,_______."  /  | |   | |  \      /   \      /     | |     | | | |   \   |  |   +--_    \ |    \  \        /    \  \  |  /  /
-	         |________.-"   |_|   |_|   "-__-"     "-__-"      |_|     |_| |_|    \__|  |   |   \   | |     \  \   \",  ",   \-"  |    /
-																					    |   |   /   | |  |\  \  \   \ ",  ",      |   /
-																						|   +--"    / |  |-"  \  \   \  ","       /  /
-																						|         ,/  |     _  \  \   \          /  /
-																						|   +---""    |  ,-" \  \  \-"          /  /
-																						|   |         |  |    \-""             /  /
-																						|   |         |  |                    ""-/
-																						|   |         |-"
-																						|   |
-																						|   |         
-																						|  _'
-																						|-"
+	              ________, ,_,   ,_,     __         __    ,_________, ,_, ,__,    ,_, ,_,                                        ,__,     ____
+	           /WWWWWWWWWW| |w|   |W|   -WWWW-     -WWWW-  |WWWWWWWWW| |W| |WW\    |W| |M|                         ,___________,  |WW|    /WW/
+	          |WWW"         |W|   |W|  /WWWWWW\   /WWWWWW\     |W|     |W| |W,W\   |W| |W'                         |WWWWWWWWWWW|  |WW|   /WW/
+	          \WWW.___      |W|___|W| |WW/  \WW| |WW/  \WW|    |W|     |W| |W|\W\  |W|                      __________   \WW\     |WW|  /WW/
+	           "-WWWWWwW\   |WWWWWWW| |WW|  |WW| |WW|  |WW|    |W|     |W| |W| \W\ |W|  |MMMMMMM,,    |WW\  \WWWWWWWWWW-  \WW\    |WW| /WW/
+	                 "WWW|  |W|   |W| |WW\__/WW| |WW\__/WW|    |W|     |W| |W|  \W\|W|  |WWWWWWWWWW\  |WWW\  \WWW\__)WWW|  \WW\   |WW|/WW/
+	         ,_______.WWW/  |W|   |W|  \WWWWWW/   \WWWWWW/     |W|     |W| |W|   \W'w|  |WWWMMMWWWWW\ |WWWW\  \WWWWWWWW/    \WW\  |WW/WW/
+	         |WWWWWWWWW-"   |W|   |W|   "MWWM"     "MWWM"      |W|     |W| |W|    \WW|  |WWW|   \WWW| |WW,WW\  \WWW\"WWWW,   \M"  |WWWW/
+																					    |WWW|   /WWW| |WW|\WW\  \WWW\ "WWWW,      |WWW/
+																						|WWWWWWWWWWW/ |WW|-WWW\  \WWW\  "W"       /WW/
+																						|WWWWWWWWWW/  |WWWWWWWW\  \WWW\          /WW/
+																						|WWWMMMM""    |WWW-" \WW\  \M"          /WW/
+																						|WWW|         |WW|    \M""             /WW/
+																						|WWW|         |WW|                    ""M/
+																						|WWW|         |M"
+																						|WWW|
+																						|WWW|         
+																						|WWW'
+																						|W"
 	*/
 
 	/*
 	 p
 	>W=
 	/"\
-	 
-	 
-	 
-	    |""\
-	    |_=/
-	--_ /7  ____,
-	|__\WWW/____|
-	   _WWW_
-	  //===\\  
-	 //     \\ 
-	//       \\
 
 
+	
 	*/
 
 
@@ -162,10 +152,34 @@ void titleScreen(){
 	mvprintw(23, 30, " //     \\\\");
 	mvprintw(24, 30, "//       \\\\");
 
-
 	attroff(A_BOLD);
-	mvprintw(LINES-10, COLS/2-12, "PrESS SPACE TO CONTINUE");
+
+	mvprintw(LINES-10, COLS/2-12, "PRESS SPACE TO CONTINUE");
 
 	while(getch()!=' '){/*wait*/};
 	clear();
+}
+
+
+
+
+void printResourceBar(WINDOW* w, int health, double armor, int money){
+	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
+	/* ncurses */::box(w, 0, 0);
+
+	mvwprintw(w, 2, 50, "HEALTH: <|");
+	wattrset(w, COLOR_PAIR(PAINT_HP));
+	for(int i=0; i<health; i++) wprintw(w, "M");
+	for(int i=health; i<100; i++) wprintw(w, "-");
+	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
+	wprintw(w, "|>");
+
+	mvwprintw(w, 3, 50, " ARMOR: <|");
+	wattrset(w, COLOR_PAIR(PAINT_ARMOR));
+	for(int i=0; i<armor*100 ; i++) wprintw(w, "M");
+	for(int i=armor*100; i<100; i++) wprintw(w, "-");
+	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
+	wprintw(w, "|>");
+
+	mvwprintw(w, 4, 50, " MONEY: <| %d $ |>", money);
 }

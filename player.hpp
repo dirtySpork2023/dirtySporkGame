@@ -9,14 +9,13 @@
 class level;
 
 #define MAX_HEALTH 100
-#define RB_HEIGHT 9 // resource bar height
 #define PISTOL 0
 #define SHOTGUN 1
 #define RIFLE 2
 
 class player: public shooter {
 protected:
-	float armor; // 0-1 moltiplica i danni subiti
+	double armor; // 0-1 moltiplica i danni subiti
 	double jumpSpeed;
 
 public:
@@ -26,6 +25,7 @@ public:
 	bool hurt(int value);
 	void shoot();
 	void setGun(int id);
+	double getArmor();
 };
 
 #endif //PLAYER_HPP

@@ -11,6 +11,18 @@
 #include "platform.hpp"
 #include "coin.hpp"
 
+/*idea magnifica di marco
+
+quando generi le piattaforme crei una lista di punti di cui ne scegli a random per metterci sopra gli entity
+
+un punto per ogni 3 caselle sopra la piattaforma
+
+
+
+ X  X  X  X
+|""""""""""|
+
+*/
 
 struct Pplatform {
     platform* plat;

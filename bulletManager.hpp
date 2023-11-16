@@ -11,7 +11,6 @@ struct node {
 	bool gravity; // true se il proiettile risente di gravità
 	int damage; // danno del proiettile
 	char texture; // grafica
-	point oldPos; // vecchia posizione
 	node* next;
 };
 

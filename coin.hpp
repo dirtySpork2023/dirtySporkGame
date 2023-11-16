@@ -12,7 +12,6 @@ public:
 	coin(int x, int y, int value);
 	int check(hitBox p);
 	void print(timeSpan deltaTime);
-	~coin();
 };
 
 #endif //POWERUP_HPP

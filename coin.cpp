@@ -1,4 +1,5 @@
 #include "coin.hpp"
+
 #include "ncurses.h"
 
 //		SpriteWeights
@@ -43,8 +44,4 @@ void coin::print(timeSpan deltaTime){
 	}
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));	
-}
-
-coin::~coin(){
-	posPrintW(box.a, "   ");
 }

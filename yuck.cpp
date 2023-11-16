@@ -1,12 +1,14 @@
-#include "ncurses.h"
 #include "yuck.hpp"
+
+#include "ncurses.h"
+
 #include "level.hpp"
 using namespace std;
 
 yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm):
-	shooter(x,y,lvl,bM,h,fr,dm,'='){
+	shooter(x,y,lvl,bM,h,fr,dm,'+'){
 	chargeTime = 3; // secondi
-	laserTime = 3; // secondi
+	laserTime = 1; // secondi
 	lastCharge = 0;
 
 	box.a.x -= 1;
@@ -16,9 +18,9 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm
 
 yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
 	yuck(x,y,lvl,bM,
-		/* HEALTH */ 200+50*lvl->number(),
-		/* FIRE_RATE */ 0.025,
-		/* DAMAGE */ 8 + 4*lvl->number()){
+		/* HEALTH */ 180+5*lvl->getDiff(),
+		/* FIRE_RATE */ 0.004,
+		/* DAMAGE */ 2 + 1*lvl->getDiff()){
 }
 
 void yuck::update(point target, timeSpan deltaTime){
@@ -39,22 +41,6 @@ void yuck::update(point target, timeSpan deltaTime){
 
 		if(lastCharge < chargeTime){
 			// caricamento
-			point pos;
-			pos.y = box.a.y+2;
-			if(facingRight) pos.x = box.b.x+1;
-			else pos.x = box.a.x-1;
-
-			switch ( (int)(lastCharge*6)%3 ){
-			case 0:					//^modifica la velocità dell'animazione
-				posPrintW(pos, "_");
-				break;
-			case 1:
-				posPrintW(pos, "\\");
-				break;
-			case 2:
-				posPrintW(pos, "/");
-				break;
-			}
 		}else if(lastCharge < chargeTime+laserTime){
 			// laser
 			if( lastShot > fireRate ){
@@ -91,12 +77,28 @@ void yuck::print(timeSpan deltaTime){
 		mvprintw(box.b.y,   box.a.x, "|___!");
 	}
 
-	attrset(COLOR_PAIR(1));
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
+
+	if(lastCharge < chargeTime && awake){
+		point pos;
+		pos.y = box.a.y+2;
+		if(facingRight) pos.x = box.b.x+1;
+		else pos.x = box.a.x-1;
+
+		switch ( (int)(lastCharge*4)%3 ){
+		case 0: posPrintW(pos, "_");
+			break;
+		case 1: posPrintW(pos, "\\");
+			break;
+		case 2: posPrintW(pos, "/");
+			break;
+		}
+	}
 }
 
 void yuck::shoot(){
 	vector speed;
-	speed.x = 400;
+	speed.x = 800;
 	speed.y = 0;
 	if( !facingRight ) speed.x *= -1;
 
@@ -110,10 +112,4 @@ void yuck::shoot(){
 
 void yuck::wakeUp(){
 	awake = true;
-}
-
-yuck::~yuck(){
-	entity::~entity();
-	mvprintw(box.a.y+2, box.b.x+1, " ");
-	mvprintw(box.a.y+2, box.a.x-1, " ");
 }

@@ -281,12 +281,12 @@ int level::getDiff () {
     return this->diff;
 }
 
-void level::update (player P, timeSpan deltaTime) {
+void level::update (player* P, timeSpan deltaTime) {
     // Update nemici
     if(this->kubas!=NULL) {
         lKuba tmpk = this->kubas;
         while (tmpk != NULL) {
-            tmpk->K->update(&P, deltaTime);
+            tmpk->K->update(P, deltaTime);
             tmpk = tmpk->next;
         }
         delete tmpk;
@@ -294,12 +294,12 @@ void level::update (player P, timeSpan deltaTime) {
     if (this->shooters != NULL) {
         lShooter tmps = this->shooters;
         while (tmps != NULL) {
-            tmps->S->update(P.getPos(), deltaTime);
+            tmps->S->update(P->getPos(), deltaTime);
             tmps = tmps->next;
         }
         delete tmps;
     }
-	if(this->Y!=NULL) this->Y->update(P.getPos(), deltaTime);
+	if(this->Y!=NULL) this->Y->update(P->getPos(), deltaTime);
 
 	// Eliminazione entità morte
 	this->kubas = dltKuba (this->kubas);

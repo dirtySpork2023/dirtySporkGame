@@ -46,14 +46,17 @@ void init(){
 	 	COLOR_PAIRS numero tot di coppie di colori
 	 */
 
-	init_color(COLOR_BLACK, 120, 120, 130); //TODO change white/blacl to forward background
-	init_color(COLOR_WHITE, 900, 900, 1000);
-	init_color(COLOR_RED, 1000, 500, 0);
-	init_color(COLOR_PLAYER, 900, 1000, 900); //500, 800, 600
+	init_color(COLOR_BLACK, 100, 100, 100);
+	init_color(COLOR_DARK, 170, 170, 170);
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
+	init_color(COLOR_RED, 1000, 0, 0);
+	//init_color(COLOR_GREEN, 0, 1000, 0);
+	init_color(COLOR_BLUE, 200, 200, 700);
+	init_color(COLOR_PLAYER, 850, 1000, 850); //500, 800, 600
 	init_color(COLOR_ENEMY, 300, 600, 700);
 	init_color(COLOR_COIN, 800, 800, 0);
 	init_color(COLOR_PLATFORM, 200, 200, 200);
-	init_color(COLOR_HP, 0, 1000, 0);
+	init_color(COLOR_HP, 200, 700, 200);
 
 	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
 	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
@@ -63,29 +66,31 @@ void init(){
 	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
 	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
 	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
+	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
-	
 }
-
 
 int main(){
 	srand(time(NULL));
 	
 	init(); //inizializza ncurses
+
+	// bottom window setup
+	WINDOW* bottomWin = newwin(WIN_HEIGHT, COLS, LINES-WIN_HEIGHT, 0);
 	
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 	
 	bulletManager B = bulletManager();
 	
 	char input;
-	int numL = 3; // Contatore dei livelli
+	int numL = 4; // Contatore dei livelli
 	bool quit = false;
 
-	int diff = 0;
+	int diff = numL;
 	level* pointL;
 	
-	titleScreen(); 
+	//titleScreen(); 
 	while( !quit ){
 		//level setup
 		pointL = new level (numL, diff, &B);
@@ -112,20 +117,33 @@ int main(){
 			if( input=='Q' ) quit = true;
 
 			// OUTPUT
-			
+
+			attrset(COLOR_PAIR(PAINT_BACKGROUND));
+			// background brick texture
+			for(int y=0; y<LINES-WIN_HEIGHT; y++){
+				for(int x=0; x<COLS-3; x+=4){
+					if(y%2==0)
+						mvprintw(y, x, "_|__");
+					else
+						mvprintw(y, x, "___|");
+				}
+			}
+			attrset(COLOR_PAIR(PAINT_DEFAULT));
 			attron(A_DIM);
-			mvprintw(0, 3, "fps: %.0f ", 1/deltaTime);
-			mvprintw(0, 14, "|deltaTime: %f ", deltaTime);
+			mvprintw(0, 3, "fps: %.0f | deltaTime: %f ", 1/deltaTime, deltaTime);
 			attroff(A_DIM);
-			mvprintw(1, 3, "MONEY: %d @", money);
-			//mvprintw(2, 3, "Numero piattaforme: %d", pointL->givenplat());
+
 
 			pointL->printAll(deltaTime);
 			B.print();
 			P.print(deltaTime);
-			
+
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money);
+
 			refresh();
+			wrefresh(bottomWin);
 		}
 	}
+	delwin(bottomWin);
 	endwin();
 }

@@ -1,8 +1,10 @@
+#include "shooter.hpp"
+
 #include <ncurses.h>
-#include <cmath>
+#include <time.h>
+#include <stdlib.h>
 
 #include "entity.hpp"
-#include "shooter.hpp"
 #include "level.hpp"
 
 shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fireRate, int damage, char bullet):
@@ -11,15 +13,15 @@ shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fire
 	this->fireRate = fireRate;
 	this->damage = damage;
 	this->texture = bullet;
-	this->lastShot = 0;
+	this->lastShot = -rand()%100/(double)100;
 }
 
 shooter::shooter(int x, int y, level* lvl, bulletManager* bM):
 	shooter(x, y, lvl, bM,
-		/* HEALTH */ 20+5*lvl->number(),
-		/* FIRE_RATE */ 1/(1 + 0.5*lvl->number()),
-		/* DAMAGE */ 20 + 10*lvl->number(),
-		'G'){
+		/* HEALTH */ 15+2*lvl->getDiff(),
+		/* FIRE_RATE */ 1/(0.5 + 0.1*lvl->getDiff()),
+		/* DAMAGE */ 20 + 5*lvl->getDiff(),
+		/* TEXTURE */ 'G'){
 }
 
 void shooter::update(point target, timeSpan deltaTime){
@@ -57,11 +59,6 @@ void shooter::shoot(point p){
 	muzzle.y = box.a.y-1;
 	if( facingRight ) muzzle.x = box.b.x+1;
 	else muzzle.x = box.a.x-1;
-
-	
-/*	speed.x = std::min(	(-speed.y*Dx + sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy,
-						(-speed.y*Dx - sqrt(Dx*Dx*speed.y*speed.y + 2*BULLET_G*Dy*Dx) )/2*Dy);*/
-
 
 	// tempo di volo costante
 	const timeSpan t = 1.2;

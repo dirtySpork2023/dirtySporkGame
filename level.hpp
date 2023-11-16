@@ -9,6 +9,7 @@
 #include "player.hpp"
 #include "kuba.hpp"
 #include "platform.hpp"
+#include "coin.hpp"
 
 
 struct Pplatform {
@@ -33,10 +34,18 @@ struct Pshooter {
 };
 typedef Pshooter* lShooter;
 
+struct Pcoin {
+    coin* C;
+    Pcoin* next;
+};
+typedef Pcoin* lCoin;
+
 lKuba dltKuba (lKuba lk);
 lShooter dltShooter (lShooter ls);
+lCoin dltCoin (lCoin lc, player* P, int* money);
 
 void print_platforms (lPlatform lsp);       // Funzione stampa lista di piattaforme
+hitBox hiboxPlatx (lPlatform lp, int x);   // Restituisce la hitBox della piattaforma x
 
 // Struct da restituire nella funzione check
 struct infoCrash {
@@ -52,6 +61,7 @@ protected:
     lKuba kubas;                // Lista di kuba
     lShooter shooters;          // Lista di shooters
     yuck* Y;                    // Yuck è al massimo 1
+    lCoin coins;
 
 public:
     level (int nl, int d, bulletManager* bM);
@@ -60,6 +70,7 @@ public:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
     int getDiff ();
     void update (player P, timeSpan deltaTime);
+    int updateCoin (player* P);
 };
 
 #endif //LEVEL_HPP

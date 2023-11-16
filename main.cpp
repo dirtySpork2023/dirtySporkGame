@@ -90,20 +90,7 @@ int main(){
 		//level setup
 		pointL = new level (numL, diff, &B);
 		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
-		kuba* K = new kuba(80, 10, pointL, &B);
-		shooter* S = new shooter(120, 10, pointL, &B);
-		yuck* Y = new yuck(150, 10, pointL, &B);
-
-		//creo una lista di monete posizionate in fila
 		int money = 0;
-		coins* H = new coins;
-		coins* tmp = H;
-		for(int i=0; i<COIN_SPACING*5; i+=COIN_SPACING){
-			tmp->C = new coin(100+i, LINES-12, 20);
-			tmp->next = new coins;
-			tmp = tmp->next;
-		}
-		tmp = NULL;
 
 		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
@@ -119,20 +106,7 @@ int main(){
 
 			B.update(deltaTime);
 			P.update(input, deltaTime);
-			tmp = H;
-			while( tmp->next!=NULL ){
-				int value = -1;
-				//se la moneta esiste ancora controllo se il player può prenderla
-				if( tmp->C!=NULL ) value = tmp->C->check(P.getHitBox());
-				if(value==-1){
-					tmp = tmp->next;
-				}else{
-					money += value;
-					delete tmp->C; //NON rimuovo nodi per pigrizia, li rendo solo vuoti
-					tmp->C = NULL;
-				}
-			}
-
+			money += pointL->updateCoin(&P);
 		    pointL->update(P, deltaTime);
 
 			if( input=='Q' ) quit = true;
@@ -147,11 +121,6 @@ int main(){
 			//mvprintw(2, 3, "Numero piattaforme: %d", pointL->givenplat());
 
 			pointL->printAll(deltaTime);
-			tmp = H;
-			while( tmp->next!=NULL ){
-				if( tmp->C!=NULL ) tmp->C->print(deltaTime);
-				tmp = tmp->next;
-			}
 			B.print();
 			P.print(deltaTime);
 			

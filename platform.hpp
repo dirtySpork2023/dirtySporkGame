@@ -8,8 +8,6 @@ protected:
     hitBox box;
 public:
     platform (int a, int b, int c, int d);
-    // void setNext(platform p);
-    // platform* getNext ();
     void printp();
     void printc(char c);
     hitBox getHitbox();

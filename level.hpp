@@ -33,13 +33,15 @@ struct Pshooter {
 };
 typedef Pshooter* lShooter;
 
-lKuba uptKuba (lKuba lk);
-lShooter uptShooter (lShooter ls);
+lKuba dltKuba (lKuba lk);
+lShooter dltShooter (lShooter ls);
+
+void print_platforms (lPlatform lsp);       // Funzione stampa lista di piattaforme
 
 // Struct da restituire nella funzione check
 struct infoCrash {
     char type;                // Tipo di oggetto con cui ci si scontra (p: platform || k: kuba || u: upgrades || n: nothing)
-    int i;                    // Indice in cui è posizionato l'oggetto all'interno della sua lista
+    void* obj;                // Puntatore void all'oggetto
 };
 
 class level {
@@ -53,13 +55,11 @@ protected:
 
 public:
     level (int nl, int d, bulletManager* bM);
-    int givenplat();
-    void print_platforms ();
+    void printAll (timeSpan deltaTime);
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
-    int givediff ();
+    int getDiff ();
     void update (player P, timeSpan deltaTime);
-    hitBox coordinate(int i);           // usless
 };
 
 #endif //LEVEL_HPP

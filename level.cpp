@@ -83,13 +83,13 @@ lCoin dltCoin (lCoin lc, player* P, int* count) {
 }
 
 void print_platforms (lPlatform lsp) {
-    lsp->plat->printc('"');                 // stampa della base
-    lsp = lsp->next;
-
     for (int i = 0; i < 4 && lsp != NULL; i++) {          // Stampa delle pareti
         lsp->plat->printc('|');
 	    lsp = lsp->next;
     }
+
+    lsp->plat->printc('"');                 // stampa della base
+    lsp = lsp->next;
 
     while (lsp != NULL) {                   // Stampa delle piattaforme sospese
         lsp->plat->printp();
@@ -123,22 +123,22 @@ level::level (int nl, int d, bulletManager* B) {
     int dens = 8 - numPlatinf;
     
     this->platforms = new Pplatform;
-    this->platforms->plat = new platform (-10, blevel, COLS+10, blevel + 1);           // Base del livello
+    this->platforms->plat = new platform (0, 0, 2, blevel - 4);// Parete sinistra
     this->platforms->next = new Pplatform;
     lPlatform bs = this->platforms->next;
-    bs->plat = new platform (0, 0, 2, blevel - 4);                      // Parete sinistra
-    bs->next = new Pplatform; 
-    bs = bs->next;
-    bs->plat = new platform (COLS-2, 0, COLS, blevel - 4);              // Parete destra
+    bs->plat = new platform (COLS-2, 0, COLS, blevel - 4);     // Parete destra
     bs->next = new Pplatform;
     bs = bs->next;
     bs->plat = new platform (-2, 0, -1, blevel);               // Porta sinistra
     bs->next = new Pplatform; 
     bs = bs->next;
     bs->plat = new platform (COLS, 0, COLS+1, blevel);         // Porta destra
+    bs->next = new Pplatform; 
+    bs = bs->next;
+    bs->plat = new platform (0, blevel, COLS+10, blevel + 1); // Base del livello
     
     bs->next = createnPlat (numPlatinf, p1, leninf, dens);
-
+    
     // generazione piattaforme superiori
     int numPlatsup = (rand()%3) + 2;
     int lensup = (COLS-10) / numPlatsup;
@@ -148,6 +148,7 @@ level::level (int nl, int d, bulletManager* B) {
     p1.b.x = lensup + 5;
     p1.b.y = heightsup;
     dens = 12 - numPlatsup;
+    this->numplat = 5 + numPlatsup + numPlatinf;
     
     lPlatform tmp = this->platforms;
     while (tmp->next != NULL) {
@@ -160,23 +161,25 @@ level::level (int nl, int d, bulletManager* B) {
     int weight = this->nlevel;
     // Yuck
     if (this->nlevel % 4 == 0) {    
-        this->Y = new yuck(140, heightEnemies, this, B);
+        this->Y = new yuck(COLS-6, blevel-1, this, B);
         weight -= 1;
     } else this->Y = NULL;
     // Shooters
     lShooter tmp1; this->shooters=NULL;
-    for (int i=0, firstS=110; weight>1 && i<2; firstS+=10, weight-=2, i++) {        
+    for (int i=0; weight>1 && i<2; weight-=2, i++) { 
+        hitBox ht = hiboxPlatx(this->platforms, this->numplat-1-i*2);
         tmp1 = new Pshooter;
-        tmp1->S = new shooter(firstS, heightEnemies, this, B);
+        tmp1->S = new shooter(ht.a.x+4, ht.a.y-2, this, B);
         tmp1->next = this->shooters;
         this->shooters = tmp1;
     }
     tmp1 = NULL;
     // Kubas
     lKuba tmp2; this->kubas=NULL;
-    for (int i=0, firstK=75; weight>0 && i<3; firstK+=10, weight--, i++) {      
+    for (int i=0, pt=4; weight>0 && i<3; i++, pt+=i, weight--) { 
+        hitBox ht = hiboxPlatx(this->platforms, pt);     
         tmp2 = new Pkuba;
-        tmp2->K = new kuba(firstK, heightEnemies, this, B);
+        tmp2->K = new kuba(ht.a.x+(ht.b.x-ht.a.x)/2, ht.a.y-2, this, B);
         tmp2->next = this->kubas;
         this->kubas = tmp2;
     }

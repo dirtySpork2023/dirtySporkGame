@@ -112,7 +112,7 @@ int main(){
 			B.update(deltaTime);
 			P.update(input, deltaTime);
 			money += pointL->updateCoin(&P);
-		    pointL->update(P, deltaTime);
+		    pointL->update(&P, deltaTime);
 
 			if( input=='Q' ) quit = true;
 

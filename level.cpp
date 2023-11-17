@@ -187,7 +187,7 @@ level::level (int nl, int d, bulletManager* B) {
         hitBox ht = hiboxPlatx(this->platforms, p);
         for(int j=0; j<3; j++) {
             tmp3 = new Pcoin;
-            tmp3->C = new coin(ht.a.x+2+j*5, ht.a.y-1, this->nlevel*2);
+            tmp3->C = new coin(ht.a.x+2+j*5, ht.a.y-2, this->nlevel*2);
             tmp3->next = this->coins;
             this->coins = tmp3;
         } 

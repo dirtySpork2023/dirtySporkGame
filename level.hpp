@@ -81,7 +81,7 @@ public:
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
     int getDiff ();
-    void update (player P, timeSpan deltaTime);
+    void update (player* P, timeSpan deltaTime);
     int updateCoin (player* P);
 };
 

@@ -69,9 +69,13 @@ void entity::move(char input){
 			isGrounded = false;
 		}
 	}
-	if( input=='w' ){
-		box.a.y -= 1;
-		box.b.y -= 1;
+	if( input=='w'){
+		if(i.type=='n' || i.type=='p'){
+			box.a.y -= 1;
+			box.b.y -= 1;
+		}else{
+			ySpeed=0;
+		}
 		isGrounded = false;
 	}
 }

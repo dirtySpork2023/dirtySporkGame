@@ -75,7 +75,7 @@ void shooter::shoot(point p){
 	speed.y = -0.5*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
 	*/	
 	
-	if( box.a.x-2<p.x && p.x<2+box.b.x && box.a.y<p.y ){
+	if( box.a.x-2<p.x && p.x<2+box.b.x ){
 		//se il player è sotto shooter sparare sarebbe un suicidio
 		lastShot=fireRate;
 	}else{

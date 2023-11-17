@@ -81,25 +81,29 @@ int main(){
 	
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 	
-	bulletManager B = bulletManager();
-	
 	char input;
-	int numL = 4; // Contatore dei livelli
 	bool quit = false;
-
+	bool changeLevel = false;
+	int numL = 1; // Contatore dei livelli
 	int diff = numL;
-	level* pointL;
-	
-	//titleScreen(); 
+	int money = 0;
+
+	bulletManager B = bulletManager();
+	level* pointL = new level (numL, diff, &B);
+	player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
+
+	//titleScreen();
 	while( !quit ){
 		//level setup
-		pointL = new level (numL, diff, &B);
-		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
-		int money = 0;
+		if(changeLevel){
+			// 
+			changeLevel=false;
+		}
+		//pointL = new level (numL, diff, &B);
 
 		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
-		while( !quit ){
+		while( !quit && !changeLevel){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
@@ -107,7 +111,7 @@ int main(){
 
 			input = getch();
 
-            // UPDATE
+			// UPDATE
 
 			B.update(deltaTime);
 			P.update(input, deltaTime);
@@ -116,16 +120,26 @@ int main(){
 
 			if( input=='Q' ) quit = true;
 
+			/*if( player.getPos()==COLS && pointL->completed() ){
+				changeLevel = true;
+				player.x = 0;
+			}
+			if( player.getPos()==1 && input=='a' && pointL->completed() ){
+				// apri menu
+			}
+			*/
+
+
 			// OUTPUT
 
 			attrset(COLOR_PAIR(PAINT_BACKGROUND));
 			// background brick texture
 			for(int y=0; y<LINES-WIN_HEIGHT; y++){
-				for(int x=0; x<COLS-3; x+=4){
-					if(y%2==0)
-						mvprintw(y, x, "_|__");
+				for(int x=0; x<COLS; x++){
+					if( y%2==0 && x%6==1 || y%2==1 && x%6==4)
+						mvprintw(y, x, "|");
 					else
-						mvprintw(y, x, "___|");
+						mvprintw(y, x, "_");
 				}
 			}
 			attrset(COLOR_PAIR(PAINT_DEFAULT));

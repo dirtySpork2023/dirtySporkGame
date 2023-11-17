@@ -36,5 +36,9 @@ platform.o: platform.cpp platform.hpp
 level.o: level.cpp level.hpp
 	g++ -c level.cpp
 
-clean:
+reset:
 	rm -f *.o game
+	make all
+
+clean:
+	rm -f *.o

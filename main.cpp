@@ -81,25 +81,29 @@ int main(){
 	
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
 	
-	bulletManager B = bulletManager();
-	
 	char input;
-	int numL = 20; // Contatore dei livelli
 	bool quit = false;
+	bool changeLevel = false;
+	int numL = 1; // Contatore dei livelli
+	int diff = numL;
 	int money = 0;
 
-	int diff = numL;
-	level* pointL;
-	
-	//titleScreen(); 
+	bulletManager B = bulletManager();
+	level* pointL = new level (numL, diff, &B);
+	player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
+
+	//titleScreen();
 	while( !quit ){
 		//level setup
-		pointL = new level (numL, diff, &B);
-		player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
+		if(changeLevel){
+			// 
+			changeLevel=false;
+		}
+		//pointL = new level (numL, diff, &B);
 
 		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
-		while( !quit ){
+		while( !quit && !changeLevel){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
@@ -115,6 +119,16 @@ int main(){
 		    pointL->update(&P, deltaTime);
 
 			if( input=='Q' ) quit = true;
+
+			/*if( player.getPos()==COLS && pointL->completed() ){
+				changeLevel = true;
+				player.x = 0;
+			}
+			if( player.getPos()==1 && input=='a' && pointL->completed() ){
+				// apri menu
+			}
+			*/
+
 
 			// OUTPUT
 

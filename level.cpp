@@ -126,16 +126,16 @@ level::level (int nl, int d, bulletManager* B) {
     this->platforms->plat = new platform (-10, blevel, COLS+10, blevel + 1);           // Base del livello
     this->platforms->next = new Pplatform;
     lPlatform bs = this->platforms->next;
-    bs->plat = new platform (0, 8, 2, blevel - 4);                      // Parete sinistra
+    bs->plat = new platform (0, 0, 2, blevel - 4);                      // Parete sinistra
     bs->next = new Pplatform; 
     bs = bs->next;
-    bs->plat = new platform (COLS-2, 8, COLS, blevel - 4);              // Parete destra
+    bs->plat = new platform (COLS-2, 0, COLS, blevel - 4);              // Parete destra
     bs->next = new Pplatform;
     bs = bs->next;
-    bs->plat = new platform (-1, LINES-8, 0, blevel);               // Porta sinistra
+    bs->plat = new platform (-2, 0, -1, blevel);               // Porta sinistra
     bs->next = new Pplatform; 
     bs = bs->next;
-    bs->plat = new platform (COLS, LINES-8, COLS+1, blevel);         // Porta destra
+    bs->plat = new platform (COLS, 0, COLS+1, blevel);         // Porta destra
     
     bs->next = createnPlat (numPlatinf, p1, leninf, dens);
 

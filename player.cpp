@@ -13,6 +13,7 @@ player::player(int x, int y, level* lvl, bulletManager* b, int weapon, float jum
 	lastShot = 0;
 
 	setGun(weapon);
+	this->gunID = weapon;
 
 	this->jumpSpeed = -sqrt(jumpHeight * ENTITY_G * 2.1);
 	this->armor = armor; // 0-1 moltiplica i danni subiti
@@ -43,6 +44,10 @@ void player::update(char input, timeSpan deltaTime){
 		lastShot = 0;
 	}else{
 		lastShot += deltaTime;
+	}
+	if( input=='g'){
+		gunID = (gunID+1)%3;
+		setGun(gunID);
 	}
 }
 

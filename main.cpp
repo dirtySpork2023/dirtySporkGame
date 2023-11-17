@@ -84,7 +84,7 @@ int main(){
 	char input;
 	bool quit = false;
 	bool changeLevel = false;
-	int numL = 1; // Contatore dei livelli
+	int numL = 4; // Contatore dei livelli
 	int diff = numL;
 	int money = 0;
 
@@ -120,15 +120,15 @@ int main(){
 
 			if( input=='Q' ) quit = true;
 
-			/*if( player.getPos()==COLS && pointL->completed() ){
+			/*if( player.getPos()==COLS-1 && input=='d' && pointL->completed() ){
+				// prossimo livello
 				changeLevel = true;
 				player.x = 0;
 			}
-			if( player.getPos()==1 && input=='a' && pointL->completed() ){
-				// apri menu
+			if( player.getPos()==1 && input=='a' && pointL->completed() || input=='m' && pointL->completed()){
+				// apri menu -> scelta livelli / mercato
 			}
 			*/
-
 
 			// OUTPUT
 

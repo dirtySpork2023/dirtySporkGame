@@ -113,7 +113,7 @@ level::level (int nl, int d, bulletManager* B) {
     this->diff = d;                         // Difficoltà
     int numPlatinf = (rand()%3) + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
     int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
-    int blevel = LINES - 10;
+    int blevel = LINES-WIN_HEIGHT-1;
     int heightinf = blevel - 7;             // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
     hitBox p1;                              // Hitbox della prima piattaforma
     p1.a.x = 8;                             // valore arbitrario di distanza da tenere dal lato sinistro
@@ -183,11 +183,11 @@ level::level (int nl, int d, bulletManager* B) {
     tmp2 = NULL;
     // Generazione monete
     lCoin tmp3; this->coins=NULL;
-    for (int p=5, i=0; i<this->nlevel/3&&i<3; i++, p+=i) {
-        hitBox ht = hiboxPlatx(this->platforms, p);
+    for (int p=5, i=0; i<=this->nlevel/3&&i<3; i++, p+=i) {
+        hitBox ht = hiboxPlatx(this->platforms, p);             // HitBox della piattaforma su cui stamapare i coin
         for(int j=0; j<3; j++) {
             tmp3 = new Pcoin;
-            tmp3->C = new coin(ht.a.x+2+j*5, ht.a.y-2, this->nlevel*2);
+            tmp3->C = new coin(ht.a.x+3+j*5, ht.a.y-2, this->nlevel*2); // Monete stampate sopra le piattaforme
             tmp3->next = this->coins;
             this->coins = tmp3;
         } 

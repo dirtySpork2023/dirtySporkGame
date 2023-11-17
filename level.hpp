@@ -9,6 +9,7 @@
 #include "player.hpp"
 #include "kuba.hpp"
 #include "platform.hpp"
+#include "coin.hpp"
 
 /*idea magnifica di marco
 
@@ -48,10 +49,18 @@ struct Pshooter
 };
 typedef Pshooter *lShooter;
 
-lKuba dltKuba(lKuba lk);
-lShooter dltShooter(lShooter ls);
+struct Pcoin {
+    coin* C;
+    Pcoin* next;
+};
+typedef Pcoin* lCoin;
 
-void print_platforms(lPlatform lsp); // Funzione stampa lista di piattaforme
+lKuba dltKuba (lKuba lk);
+lShooter dltShooter (lShooter ls);
+lCoin dltCoin (lCoin lc, player* P, int* money);
+
+void print_platforms (lPlatform lsp);       // Funzione stampa lista di piattaforme
+hitBox hiboxPlatx (lPlatform lp, int x);   // Restituisce la hitBox della piattaforma x
 
 // Struct da restituire nella funzione check
 struct infoCrash
@@ -63,20 +72,22 @@ struct infoCrash
 class level
 {
 protected:
-    int nlevel;          // Numero del livello
-    int diff;            // Difficoltà
-    lPlatform platforms; // Lista delle piattaforme del livello
-    lKuba kubas;         // Lista di kuba
-    lShooter shooters;   // Lista di shooters
-    yuck *Y;             // Yuck è al massimo 1
+    int nlevel;                 // Numero del livello
+    int diff;                   // Difficoltà
+    lPlatform platforms;        // Lista delle piattaforme del livello
+    lKuba kubas;                // Lista di kuba
+    lShooter shooters;          // Lista di shooters
+    yuck* Y;                    // Yuck è al massimo 1
+    lCoin coins;
 
 public:
-    level(int nl, int d, bulletManager *bM);
-    void printAll(timeSpan deltaTime);
-    infoCrash check(hitBox ht, char d); // d è la direzione in cui si sposta il giocatore:
-    int number();                       // a: sinistra || w: sopra || d: destra || s: sotto
-    int getDiff();
-    void update(player *P, timeSpan deltaTime);
+    level (int nl, int d, bulletManager* bM);
+    void printAll (timeSpan deltaTime);
+    infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
+    int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
+    int getDiff ();
+    void update (player* P, timeSpan deltaTime);
+    int updateCoin (player* P);
 };
 
 #endif // LEVEL_HPP

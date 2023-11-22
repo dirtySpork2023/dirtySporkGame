@@ -76,7 +76,7 @@ void shooter::shoot(point p){
 	*/	
 	
 	if( box.a.x-2<p.x && p.x<2+box.b.x ){
-		//se il player è sotto shooter sparare sarebbe un suicidio
+		//evito traiettoie che possono colpire lo shooter stesso
 		lastShot=fireRate;
 	}else{
 		bM->add(muzzle,speed,true,damage,'G');

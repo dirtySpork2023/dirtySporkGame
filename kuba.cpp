@@ -29,19 +29,37 @@ void kuba::update(player* target, timeSpan deltaTime){
 
 	
 	if( lastMove>=xSpeed ){
-		if(isTouching(this->getHitBox(), target->getHitBox(), 'a')){
+		//controllo se è possibile muoversi ancora a destra
+		hitBox step = this->box;
+		if(movingRight){
+			step.b.x++;
+			step.a = step.b;
+		}else{
+			step.b.x-=3;
+			step.a = step.b;
+		}
+		infoCrash fallInfo = lvl->check(step, 's');
+		if(fallInfo.type==' ' && movingRight) movingRight = false;
+		else if(fallInfo.type==' ' && !movingRight) movingRight = true;
+
+		if(isTouching(this->getHitBox(), target->getHitBox(), 'w')){
+			target->hurt(damage);
+			if(movingRight) entity::move('d');
+			else entity::move('a');
+			lastMove = -xSpeed*3;
+		}else if(isTouching(this->getHitBox(), target->getHitBox(), 'a') && !movingRight){
 			target->hurt(damage);
 			entity::move('d');
 			lastMove = -xSpeed*2;
-		}else if(isTouching(this->getHitBox(), target->getHitBox(), 'd')){
+		}else if(isTouching(this->getHitBox(), target->getHitBox(), 'd') && movingRight){
 			target->hurt(damage);
 			entity::move('a');
 			lastMove = -xSpeed*2;
-		}else if(this->getPos().x > target->getPos().x+3){
-			entity::move('a');
+		}else if(movingRight){
+			entity::move('d');
 			lastMove = 0;
-		}else if(this->getPos().x < target->getPos().x-3){
-			entity::move('d');
+		}else{
+			entity::move('a');
 			lastMove = 0;
 		}
 	}
@@ -52,7 +70,7 @@ void kuba::update(player* target, timeSpan deltaTime){
 void kuba::print(timeSpan deltaTime){
 	entity::setPrintColor(PAINT_ENEMY);
 
-	mvprintw(box.a.y, box.a.x, "<O>");
+	mvprintw(box.a.y, box.a.x, "<A>");
 	mvprintw(box.b.y, box.a.x, "/\"\\");
 
 	attrset(COLOR_PAIR(1));

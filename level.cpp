@@ -219,6 +219,17 @@ void level::printAll (timeSpan deltaTime) {
     if (this->Y != NULL) this->Y->print(deltaTime);
 }
 
+/*
+    ' ' : void
+    p   : player 
+    k   : kuba
+    s   : shooter
+    y   : yuck
+    #   : platform
+    //
+    
+*/
+
 infoCrash level::check (hitBox pl, char d) {
     infoCrash info;      // Variabile da restituire                             
     bool here = false;   // True se trovo qualcosa
@@ -227,7 +238,7 @@ infoCrash level::check (hitBox pl, char d) {
     while (tmp1 != NULL && !here) {
         if (isTouching (pl, tmp1->plat->getHitbox(), d)) {
             here = true;
-            info.type = 'p';
+            info.type = '#';
             info.obj = tmp1->plat;
         }
         tmp1 = tmp1->next;
@@ -266,7 +277,7 @@ infoCrash level::check (hitBox pl, char d) {
     }
 
     if (!here) {
-        info.type = 'n';
+        info.type = ' ';
         info.obj = NULL;
     }
 

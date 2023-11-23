@@ -96,11 +96,11 @@ int main(){
 	while( !quit ){
 		//level setup
 		if(changeLevel){
-			// 
+			//pointL = new level (++numL, diff, &B);
+			//
 			changeLevel=false;
 		}
-		//pointL = new level (numL, diff, &B);
-
+		
 		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit && !changeLevel){

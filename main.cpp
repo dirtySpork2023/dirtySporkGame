@@ -20,10 +20,13 @@ using namespace std;
 
 
 #define COIN_SPACING 7
-struct coins{
-	coin* C;
-	coins* next;
+
+struct Plevel {
+	level* thisLvl;
+	Plevel* prev;
 };
+typedef Plevel* lLevel;
+
 
 void init(){
 	initscr();
@@ -84,22 +87,30 @@ int main(){
 	char input;
 	bool quit = false;
 	bool changeLevel = false;
-	int numL = 4; // Contatore dei livelli
+	int numL = 1; // Contatore dei livelli
 	int diff = numL;
 	int money = 0;
 	
 	bulletManager B = bulletManager();
-	level* pointL = new level (numL, diff, &B);
-	player P = player(1, LINES-WIN_HEIGHT-2, pointL, &B, RIFLE, 12, 0.5);
+	// Lista di livelli
+	lLevel lvlList = new Plevel;
+	lvlList->thisLvl = new level (numL, diff, &B);
+	lvlList->prev = NULL;
+	// Puntatore al livello corrente
+	level* currentLvl = lvlList->thisLvl;
+	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, RIFLE, 12, 0.5);
 
 	//titleScreen();
 	while( !quit ){
 		//level setup
-		if(changeLevel){
-			// 
+		if(changeLevel) {
+			lLevel tmp = new Plevel;
+			tmp->prev = lvlList;
+			tmp->thisLvl = new level (numL, diff, &B);
+			lvlList = tmp;
+			currentLvl = lvlList->thisLvl;
 			changeLevel=false;
 		}
-		//pointL = new level (numL, diff, &B);
 
 		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
@@ -115,21 +126,22 @@ int main(){
 
 			B.update(deltaTime);
 			P.update(input, deltaTime);
-			money += pointL->updateCoin(&P);
-		    pointL->update(&P, deltaTime);
+			money += currentLvl->updateCoin(&P);
+		    currentLvl->update(&P, deltaTime);
 
 			if( input=='Q' ) quit = true;
 
-			/*if( player.getPos()==COLS-1 && input=='d' && pointL->completed() ){
+			if(P.getPos().x ==COLS-2 && input=='d' && currentLvl->completed()){
 				// prossimo livello
 				changeLevel = true;
-				player.x = 0;
+				//Player.x = 0;
+				numL++;
 			}
-			if( player.getPos()==1 && input=='a' && pointL->completed() || input=='m' && pointL->completed()){
+			/*
+			if( P.getPos()==1 && input=='a' && currentLvl->completed() || input=='m' && currentLvl->completed()){
 				// apri menu -> scelta livelli / mercato
 			}
 			*/
-
 			// OUTPUT
 
 			attrset(COLOR_PAIR(PAINT_BACKGROUND));
@@ -148,7 +160,7 @@ int main(){
 			attroff(A_DIM);
 
 
-			pointL->printAll(deltaTime);
+			currentLvl->printAll(deltaTime);
 			B.print();
 			P.print(deltaTime);
 

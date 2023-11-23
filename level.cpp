@@ -135,7 +135,7 @@ level::level (int nl, int d, bulletManager* B) {
     bs->plat = new platform (COLS, 0, COLS+1, blevel);         // Porta destra
     bs->next = new Pplatform; 
     bs = bs->next;
-    bs->plat = new platform (0, blevel, COLS+10, blevel + 1); // Base del livello
+    bs->plat = new platform (0, blevel, COLS-1, blevel); // Base del livello
     
     bs->next = createnPlat (numPlatinf, p1, leninf, dens);
     
@@ -262,12 +262,20 @@ infoCrash level::check (hitBox pl, char d) {
     tmp3 = NULL;
     delete tmp3;
 
-    if (this->Y != NULL && isTouching (pl, this->Y->getHitBox(), d)) {
+    if (this->Y != NULL && isTouching (pl, this->Y->getHitBox(), d) && !here) {
         here = true;
         info.type = 'y';
         info.obj = this->Y;
     }
 
+    /* USLESS
+    if (isTouching(pl, *PLAYER HITBOX*) && !here) {
+        here = true;
+        info.type = 'p';
+        info.obj = ?
+    }
+    */
+    
     if (!here) {
         info.type = 'n';
         info.obj = NULL;
@@ -321,4 +329,9 @@ int level::updateCoin (player* P) {
     int count=0;
     this->coins = dltCoin (this->coins, P, &count);
     return count;
+}
+
+bool level::completed() {
+    if(this->kubas==NULL && this->shooters==NULL && this->Y==NULL) return true;
+    else return false;
 }

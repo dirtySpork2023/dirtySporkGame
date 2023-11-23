@@ -74,6 +74,7 @@ class level
 protected:
     int nlevel;                 // Numero del livello
     int diff;                   // Difficoltà
+    int numplat;
     lPlatform platforms;        // Lista delle piattaforme del livello
     lKuba kubas;                // Lista di kuba
     lShooter shooters;          // Lista di shooters

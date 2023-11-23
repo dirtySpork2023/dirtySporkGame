@@ -90,7 +90,7 @@ int main(){
 
 	bulletManager B = bulletManager();
 	level* pointL = new level (numL, diff, &B);
-	player P = player(10, 10, pointL, &B, RIFLE, 12, 0.5);
+	player P = player(1, LINES-WIN_HEIGHT-2, pointL, &B, RIFLE, 12, 0.5);
 
 	//titleScreen();
 	while( !quit ){

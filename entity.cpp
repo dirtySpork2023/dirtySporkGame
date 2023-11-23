@@ -12,7 +12,7 @@ entity::entity(int x, int y, level* lvl, bulletManager* bM, int hp){
 	this->isGrounded = false;
 
 	this->health = hp;
-	this->lastDamage = 0;
+	this->lastDamage = DAMAGE_TIMESPAN+1;
 
 	this->bM = bM;
 	this->lvl = lvl;
@@ -70,7 +70,7 @@ void entity::move(char input){
 		}
 	}
 	if( input=='w'){
-		if(i.type=='n' || i.type=='p'){
+		if( i.type=='n' || i.type=='p' /*&& box.a.x>1 && box.b.x<COLS-2*/ ){
 			box.a.y -= 1;
 			box.b.y -= 1;
 		}else{

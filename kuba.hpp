@@ -12,6 +12,7 @@ class level;
 class kuba: public entity {
 protected:
 	double xSpeed; // tempo in secondi dopo il quale si muove. più piccolo = più veloce
+	bool movingRight;
 	int damage;
 	timeSpan lastMove;
 public:

@@ -17,6 +17,7 @@ class player: public shooter {
 protected:
 	double armor; // 0-1 moltiplica i danni subiti
 	double jumpSpeed;
+	int gunID;
 
 public:
 	player(int x, int y, level* lvl, bulletManager* b, int weapon, float jumpHeight, float armor);

@@ -84,7 +84,7 @@ int main(){
 	char input;
 	bool quit = false;
 	bool changeLevel = false;
-	int numL = 3; // Contatore dei livelli
+	int numL = 7; // Contatore dei livelli
 	int diff = numL;
 	int money = 0;
 

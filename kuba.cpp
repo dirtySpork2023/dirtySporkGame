@@ -38,23 +38,28 @@ void kuba::update(player* target, timeSpan deltaTime){
 			step.b.x-=3;
 			step.a = step.b;
 		}
-		infoCrash fallInfo = lvl->check(step, 's');
-		if(fallInfo.type==' ' && movingRight) movingRight = false;
-		else if(fallInfo.type==' ' && !movingRight) movingRight = true;
+		infoCrash i = lvl->check(step, 's');
+		if(i.type==' ' && movingRight) movingRight = false;
+		else if(i.type==' ' && !movingRight) movingRight = true;
 
-		if(isTouching(this->getHitBox(), target->getHitBox(), 'w')){
+		if(movingRight) i = lvl->check(box, 'd');
+		else i = lvl->check(box, 'a');
+
+		if(isTouching(box, target->getHitBox(), 'w')){
 			target->hurt(damage);
 			if(movingRight) entity::move('d');
 			else entity::move('a');
 			lastMove = -xSpeed*3;
-		}else if(isTouching(this->getHitBox(), target->getHitBox(), 'a') && !movingRight){
+		}else if(isTouching(box, target->getHitBox(), 'a') && !movingRight){
 			target->hurt(damage);
 			entity::move('d');
 			lastMove = -xSpeed*2;
-		}else if(isTouching(this->getHitBox(), target->getHitBox(), 'd') && movingRight){
+		}else if(isTouching(box, target->getHitBox(), 'd') && movingRight){
 			target->hurt(damage);
 			entity::move('a');
 			lastMove = -xSpeed*2;
+		}else if(i.type=='k' || i.type=='s' || i.type=='y'){
+			movingRight = !movingRight;
 		}else if(movingRight){
 			entity::move('d');
 			lastMove = 0;

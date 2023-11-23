@@ -8,6 +8,7 @@ using namespace std;
 kuba::kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed, int damage):
 	entity(x,y,lvl,bM,h){
 	this->xSpeed = moveSpeed;
+	this->movingRight = false;
 	this->lastMove = 0;
 
 	this->damage = damage;
@@ -26,8 +27,7 @@ kuba::kuba(int x, int y, level* lvl, bulletManager* bM):
 void kuba::update(player* target, timeSpan deltaTime){
 	entity::update(deltaTime);
 
-	// TODO use level check and take a point as input instead of player*
-
+	
 	if( lastMove>=xSpeed ){
 		if(isTouching(this->getHitBox(), target->getHitBox(), 'a')){
 			target->hurt(damage);

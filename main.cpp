@@ -106,7 +106,7 @@ int main(){
 		if(changeLevel) {
 			lLevel tmp = new Plevel;
 			tmp->prev = lvlList;
-			tmp->thisLvl = new level (numL, diff, &B);
+			tmp->thisLvl = new level (++numL, diff, &B);
 			lvlList = tmp;
 			currentLvl = lvlList->thisLvl;
 			changeLevel=false;
@@ -134,8 +134,6 @@ int main(){
 			if(P.getPos().x ==COLS-2 && input=='d' && currentLvl->completed()){
 				// prossimo livello
 				changeLevel = true;
-				//Player.x = 0;
-				numL++;
 			}
 			/*
 			if( P.getPos()==1 && input=='a' && currentLvl->completed() || input=='m' && currentLvl->completed()){

@@ -163,7 +163,7 @@ void titleScreen(){
 
 
 
-void printResourceBar(WINDOW* w, int health, double armor, int money){
+void printResourceBar(WINDOW* w, int health, double armor, int money, int level){
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	/* ncurses */::box(w, 0, 0);
 
@@ -182,4 +182,5 @@ void printResourceBar(WINDOW* w, int health, double armor, int money){
 	wprintw(w, "|>");
 
 	mvwprintw(w, 4, 50, " MONEY: <| %d $ |>", money);
+	mvwprintw(w, 5, 50, " LEVEL: <| %d |>", level);
 }

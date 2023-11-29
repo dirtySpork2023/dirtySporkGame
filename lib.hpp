@@ -63,6 +63,6 @@ bool upperCase(char c);
 
 void titleScreen();
 
-void printResourceBar(WINDOW* w, int health, double armor, int money);
+void printResourceBar(WINDOW* w, int health, double armor, int money, int level);
 
 #endif //LIB_HPP

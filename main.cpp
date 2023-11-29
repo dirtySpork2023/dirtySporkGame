@@ -86,8 +86,8 @@ int main(){
 	
 	char input;
 	bool quit = false;
-	bool changeLevel = false;
-	int numL = 1; // Contatore dei livelli
+	bool openMenu = false;
+	int numL = 1; // numero del livello corrente;
 	int diff = numL;
 	int money = 0;
 	
@@ -100,22 +100,42 @@ int main(){
 	level* currentLvl = lvlList->thisLvl;
 	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, RIFLE, 12, 0.5);
 
+	
 	//titleScreen();
 	while( !quit ){
+
+		//menu
+		while(openMenu){
+			//stampa
+			input = getch();
+			if(input == 'm'){
+				openMenu = false;
+			}
+			//menu.update(input);
+			//menu.print;
+
+
+			//dal menu si può cambiare anche il livello
+			//settando numL al livello desiderato
+		}
+
 		//level setup
-		if(changeLevel) {
+		if(currentLvl->number() != numL){
+
+			//nuovo livello in testa
 			lLevel tmp = new Plevel;
 			tmp->prev = lvlList;
-			tmp->thisLvl = new level (++numL, diff, &B);
+			tmp->thisLvl = new level (numL, diff, &B);
 			lvlList = tmp;
 			currentLvl = lvlList->thisLvl;
 			P.changeLevel(currentLvl);
-			changeLevel=false;
+
+			//cambia a livello esistente
 		}
 
 		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
-		while( !quit && !changeLevel){
+		while( !quit && !openMenu && currentLvl->number()==numL){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
@@ -134,13 +154,13 @@ int main(){
 
 			if(P.getPos().x==COLS-1 && currentLvl->completed()){
 				// prossimo livello
-				changeLevel = true;
+				numL++;
 			}
-			/*
-			if( P.getPos()==1 && input=='a' && currentLvl->completed() || input=='m' && currentLvl->completed()){
-				// apri menu -> scelta livelli / mercato
+			if( (P.getPos().x==0 || input=='m') && currentLvl->completed() ){
+				// apri menu
+				openMenu = true;
 			}
-			*/
+
 			// OUTPUT
 
 			attrset(COLOR_PAIR(PAINT_BACKGROUND));
@@ -163,7 +183,7 @@ int main(){
 			B.print();
 			P.print(deltaTime);
 
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money);
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number());
 
 			refresh();
 			wrefresh(bottomWin);

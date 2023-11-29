@@ -26,11 +26,7 @@ public:
 	bool hurt(int value);
 	void shoot();
 	void setGun(int id);
-	// change level(lvl* newLevel)
-	/*
-		player.x=0;
-		change level pointer
-	*/
+	void changeLevel(level* newLvl);
 	double getArmor();
 };
 

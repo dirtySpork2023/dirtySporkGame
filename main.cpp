@@ -152,11 +152,11 @@ int main(){
 
 			if( input=='Q' ) quit = true;
 
-			if(P.getPos().x==COLS-1 && currentLvl->completed()){
-				// prossimo livello
+			if(P.getPos().x==COLS-1 && input=='d' && currentLvl->completed()){
+				// passa al livello successivo, che esista già o nuovo
 				numL++;
 			}
-			if( (P.getPos().x==0 || input=='m') && currentLvl->completed() ){
+			if( (P.getPos().x==1 || input=='m') && input=='a' && currentLvl->completed() ){
 				// apri menu
 				openMenu = true;
 			}

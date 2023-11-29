@@ -186,9 +186,9 @@ level::level (int nl, int d, bulletManager* B) {
     tmp2 = NULL;
     // Generazione monete
     lCoin tmp3; this->coins=NULL;
-    for (int p=5, i=0; i<this->nlevel/3&&i<3; i++, p+=i) {
+    for (int p=5, i=0; i<=this->nlevel/3&&i<3; i++, p+=i) {
         hitBox ht = hiboxPlatx(this->platforms, p);
-        for(int j=0; j<(ht.b.x-ht.a.x)/7; j++) {
+        for(int j=0; j<3; j++) {
             tmp3 = new Pcoin;
             tmp3->C = new coin(ht.a.x+(ht.b.x-ht.a.x)/2-5+j*5, ht.a.y-2, this->nlevel); // Monete stampate sopra le piattaforme
             tmp3->next = this->coins;

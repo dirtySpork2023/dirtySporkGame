@@ -129,10 +129,10 @@ level::level (int nl, int d, bulletManager* B) {
     bs->plat = new platform (COLS-2, 0, COLS-1, blevel - 4);     // Parete destra
     bs->next = new Pplatform;
     bs = bs->next;
-    bs->plat = new platform (-2, 0, -1, blevel);               // Porta sinistra
+    bs->plat = new platform (-2, 0, -2, blevel);               // Porta sinistra
     bs->next = new Pplatform; 
     bs = bs->next;
-    bs->plat = new platform (COLS, 0, COLS+1, blevel);         // Porta destra
+    bs->plat = new platform (COLS+1, 0, COLS+1, blevel);         // Porta destra
     bs->next = new Pplatform; 
     bs = bs->next;
     bs->plat = new platform (0, blevel, COLS-1, blevel); // Base del livello
@@ -186,9 +186,9 @@ level::level (int nl, int d, bulletManager* B) {
     tmp2 = NULL;
     // Generazione monete
     lCoin tmp3; this->coins=NULL;
-    for (int p=5, i=0; i<this->nlevel/3&&i<3; i++, p+=i) {
+    for (int p=5, i=0; i<=this->nlevel/3&&i<3; i++, p+=i) {
         hitBox ht = hiboxPlatx(this->platforms, p);
-        for(int j=0; j<(ht.b.x-ht.a.x)/7; j++) {
+        for(int j=0; j<3; j++) {
             tmp3 = new Pcoin;
             tmp3->C = new coin(ht.a.x+(ht.b.x-ht.a.x)/2-5+j*5, ht.a.y-2, this->nlevel); // Monete stampate sopra le piattaforme
             tmp3->next = this->coins;

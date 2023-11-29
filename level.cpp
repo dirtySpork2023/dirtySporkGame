@@ -156,8 +156,7 @@ level::level (int nl, int d, bulletManager* B) {
 	}  
     tmp->next = createnPlat (numPlatsup, p1, lensup, dens);
 
-    // Generazione nemici 
-    int heightEnemies = 10;
+    // Generazione nemici
     int weight = this->nlevel;
     // Yuck
     if (this->nlevel % 4 == 0) {    
@@ -169,7 +168,7 @@ level::level (int nl, int d, bulletManager* B) {
     for (int i=0; weight>1 && i<2; weight-=2, i++) { 
         hitBox ht = hiboxPlatx(this->platforms, this->numplat-1-i*2);
         tmp1 = new Pshooter;
-        tmp1->S = new shooter(ht.a.x+4, ht.a.y-2, this, B);
+        tmp1->S = new shooter(ht.a.x+4, ht.a.y-1, this, B);
         tmp1->next = this->shooters;
         this->shooters = tmp1;
     }
@@ -179,7 +178,7 @@ level::level (int nl, int d, bulletManager* B) {
     for (int i=0, pt=4; weight>0 && i<3; i++, pt+=i, weight--) { 
         hitBox ht = hiboxPlatx(this->platforms, pt);     
         tmp2 = new Pkuba;
-        tmp2->K = new kuba(ht.a.x+(ht.b.x-ht.a.x)/2, ht.a.y-2, this, B);
+        tmp2->K = new kuba(ht.a.x+(ht.b.x-ht.a.x)/2, ht.a.y-1, this, B);
         tmp2->next = this->kubas;
         this->kubas = tmp2;
     }

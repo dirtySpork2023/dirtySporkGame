@@ -89,6 +89,7 @@ public:
     int getDiff ();
     void update (player* P, timeSpan deltaTime);
     int updateCoin (player* P);
+    bool completed();
 };
 
 #endif // LEVEL_HPP

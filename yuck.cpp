@@ -11,6 +11,7 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm
 	laserTime = 1; // secondi
 	lastCharge = 0;
 	lastShot = 0;
+	awake = false;
 
 	box.a.x -= 1;
 	box.b.x += 1;

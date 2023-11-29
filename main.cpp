@@ -109,7 +109,7 @@ int main(){
 
 
 			input = getch();
-			if( input=='Q' ) quit = true;
+			if( input=='Q' || input=='q' ) quit = true;
 			if( input=='m' ) openMenu = false;
 			//menu.update(input);
 			//menu.print;
@@ -156,7 +156,7 @@ int main(){
 			// UPDATE
 			
 			input = getch();
-			if( input=='Q' || input=='q' ) quit = true;
+			if( input=='Q' ) quit = true;
 
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				// passa al livello successivo, che esista già o nuovo

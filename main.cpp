@@ -106,7 +106,8 @@ int main(){
 
 		//menu
 		while(openMenu){
-			//stampa
+
+
 			input = getch();
 			if(input == 'm'){
 				openMenu = false;
@@ -114,6 +115,9 @@ int main(){
 			//menu.update(input);
 			//menu.print;
 
+			// OUTPUT
+
+			mvprintw(20, 20, "#####  MENU APERTO | premi m per chiudere  #####");
 
 			//dal menu si può cambiare anche il livello
 			//settando numL al livello desiderato
@@ -145,14 +149,9 @@ int main(){
 
 			// UPDATE
 
-			B.update(deltaTime);
-			P.update(input, deltaTime);
-			money += currentLvl->updateCoin(&P);
-		    currentLvl->update(&P, deltaTime);
-
 			if( input=='Q' ) quit = true;
 
-			if(P.getPos().x==COLS-1 && input=='d' && currentLvl->completed()){
+			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				// passa al livello successivo, che esista già o nuovo
 				numL++;
 			}
@@ -160,6 +159,11 @@ int main(){
 				// apri menu
 				openMenu = true;
 			}
+
+			B.update(deltaTime);
+			P.update(input, deltaTime);
+			money += currentLvl->updateCoin(&P);
+		    currentLvl->update(&P, deltaTime);
 
 			// OUTPUT
 

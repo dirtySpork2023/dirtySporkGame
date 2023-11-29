@@ -132,7 +132,7 @@ int main(){
 
 			if( input=='Q' ) quit = true;
 
-			if(P.getPos().x==COLS-1 && input=='d' && currentLvl->completed()){
+			if(P.getPos().x==COLS-1 && currentLvl->completed()){
 				// prossimo livello
 				changeLevel = true;
 			}

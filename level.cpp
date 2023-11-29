@@ -129,10 +129,10 @@ level::level (int nl, int d, bulletManager* B) {
     bs->plat = new platform (COLS-2, 0, COLS-1, blevel - 4);     // Parete destra
     bs->next = new Pplatform;
     bs = bs->next;
-    bs->plat = new platform (-2, 0, -1, blevel);               // Porta sinistra
+    bs->plat = new platform (-2, 0, -2, blevel);               // Porta sinistra
     bs->next = new Pplatform; 
     bs = bs->next;
-    bs->plat = new platform (COLS, 0, COLS+1, blevel);         // Porta destra
+    bs->plat = new platform (COLS+1, 0, COLS+1, blevel);         // Porta destra
     bs->next = new Pplatform; 
     bs = bs->next;
     bs->plat = new platform (0, blevel, COLS-1, blevel); // Base del livello

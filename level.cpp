@@ -126,7 +126,7 @@ level::level (int nl, int d, bulletManager* B) {
     this->platforms->plat = new platform (0, 0, 1, blevel - 4);// Parete sinistra
     this->platforms->next = new Pplatform;
     lPlatform bs = this->platforms->next;
-    bs->plat = new platform (COLS-1, 0, COLS, blevel - 4);     // Parete destra
+    bs->plat = new platform (COLS-2, 0, COLS-1, blevel - 4);     // Parete destra
     bs->next = new Pplatform;
     bs = bs->next;
     bs->plat = new platform (-2, 0, -1, blevel);               // Porta sinistra
@@ -190,7 +190,7 @@ level::level (int nl, int d, bulletManager* B) {
         hitBox ht = hiboxPlatx(this->platforms, p);
         for(int j=0; j<(ht.b.x-ht.a.x)/7; j++) {
             tmp3 = new Pcoin;
-            tmp3->C = new coin(ht.a.x+4+j*7, ht.a.y-2, this->nlevel*2);
+            tmp3->C = new coin(ht.a.x+(ht.b.x-ht.a.x)/2-5+j*5, ht.a.y-2, this->nlevel); // Monete stampate sopra le piattaforme
             tmp3->next = this->coins;
             this->coins = tmp3;
         } 

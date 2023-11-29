@@ -108,3 +108,9 @@ void player::setGun(int id){
 double player::getArmor(){
 	return armor;
 }
+
+void player::changeLevel(level* newLvl){
+	this->lvl = newLvl;
+	this->box.a.x = 0;
+	this->box.b.x = 2;
+}

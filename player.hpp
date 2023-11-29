@@ -26,6 +26,7 @@ public:
 	bool hurt(int value);
 	void shoot();
 	void setGun(int id);
+	void changeLevel(level* newLvl);
 	double getArmor();
 };
 

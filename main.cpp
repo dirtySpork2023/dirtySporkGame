@@ -109,6 +109,7 @@ int main(){
 			tmp->thisLvl = new level (++numL, diff, &B);
 			lvlList = tmp;
 			currentLvl = lvlList->thisLvl;
+			P.changeLevel(currentLvl);
 			changeLevel=false;
 		}
 

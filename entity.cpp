@@ -32,6 +32,12 @@ void entity::update(timeSpan deltaTime){
 
 // muove entity in base alla forza di gravità e il tempo passato
 void entity::applyGravity(timeSpan deltaTime){
+	if( lvl->check(box, 's').type!=' ' && ySpeed>=0 ){
+		isGrounded = true;
+	}else{
+		isGrounded = false;
+	}
+
 	if( isGrounded ){
 		ySpeed = 0;
 		yMod = 0;
@@ -51,26 +57,17 @@ void entity::applyGravity(timeSpan deltaTime){
 // muove entity di una posizione verso una direzione WASD
 void entity::move(char input){
 	infoCrash i = lvl->check(box, input);
-	if( i.type=='n' ){
-		if( input=='a' ){
-			box.a.x -= 1;
-			box.b.x -= 1;
-		}else if( input=='d' ){
-			box.a.x += 1;
-			box.b.x += 1;
-		}else if( input=='s' ){
-			box.a.y += 1;
-			box.b.y += 1;
-		}
-		// controllo se il player è a terra nella nuova posizione
-		if( lvl->check(box, 's').type!='n' && ySpeed>=0 ){
-			isGrounded = true;
-		}else{
-			isGrounded = false;
-		}
-	}
-	if( input=='w'){
-		if( i.type=='n' || i.type=='p' /*&& box.a.x>1 && box.b.x<COLS-2*/ ){
+	if( input=='a' && i.type==' ' ){
+		box.a.x -= 1;
+		box.b.x -= 1;
+	}else if( input=='d' && i.type==' ' ){
+		box.a.x += 1;
+		box.b.x += 1;
+	}else if( input=='s' && i.type==' ' ){
+		box.a.y += 1;
+		box.b.y += 1;
+	}else if( input=='w'){
+		if( i.type==' ' || i.type=='#' /*&& box.a.x>1 && box.b.x<COLS-2*/ ){
 			box.a.y -= 1;
 			box.b.y -= 1;
 		}else{

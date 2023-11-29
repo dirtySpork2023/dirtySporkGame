@@ -53,7 +53,7 @@ bool isTouching (hitBox v1, hitBox v2, char d) {
 	else if(d=='s') return(!(v2.b.x < v1.a.x) && !(v2.a.x > v1.b.x) && v1.b.y == v2.a.y-1);
 	else if(d=='w') return(!(v2.b.x < v1.a.x) && !(v2.a.x > v1.b.x) && v1.a.y == v2.b.y+1);
 	else return false;
-} 
+}
 
 point snap(vector v){
 	point result;

@@ -105,15 +105,23 @@ int main(){
 	while( !quit ){
 
 		//menu
-		while(openMenu){
+		while(!quit && openMenu){
 
 
 			input = getch();
-			if(input == 'm'){
-				openMenu = false;
-			}
+			if( input=='Q' ) quit = true;
+			if( input=='m' ) openMenu = false;
 			//menu.update(input);
 			//menu.print;
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number());
+
+			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
+			// RIPRENDI
+			// MERCATO
+			// - ARMA <SHOTGUN> per 2$
+			// - AGGIUNGI HP per 2$
+			// - AUMENTA ARMATURA a <70%> per 5$
+			// LIVELLO <N>
 
 			// OUTPUT
 
@@ -145,17 +153,16 @@ int main(){
 			lastTimePoint = thisTimePoint;
 			deltaTime = std::chrono::duration<double>(elapsed).count();
 
-			input = getch();
-
 			// UPDATE
-
-			if( input=='Q' ) quit = true;
+			
+			input = getch();
+			if( input=='Q' || input=='q' ) quit = true;
 
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				// passa al livello successivo, che esista già o nuovo
 				numL++;
 			}
-			if( (P.getPos().x==1 || input=='m') && input=='a' && currentLvl->completed() ){
+			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu
 				openMenu = true;
 			}

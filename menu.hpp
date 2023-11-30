@@ -23,8 +23,8 @@ bool addLife (player* P);
 class menu {
 protected:
     WINDOW* win;
-    buyable armors[N_ARMOR]; // value da 0 a 100
-    buyable guns[N_GUNS]; // values PISTOL, SHOTGUN, 
+    buyable armor[N_ARMOR]; // value da 0 a 100
+    buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, 
 public:
     menu();
     void print();

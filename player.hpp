@@ -15,7 +15,7 @@ class level;
 
 class player: public shooter {
 protected:
-	double armor; // 0-1 moltiplica i danni subiti
+	double armor; // 0-1 riduce i danni subiti
 	double jumpSpeed;
 	int gunID;
 

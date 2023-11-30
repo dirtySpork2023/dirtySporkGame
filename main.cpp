@@ -50,6 +50,7 @@ void init(){
 
 	init_color(COLOR_BLACK, 100, 100, 100);
 	init_color(COLOR_DARK, 170, 170, 170);
+	init_color(COLOR_TITLE, 300, 300, 300);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
 	//init_color(COLOR_GREEN, 0, 1000, 0);
@@ -69,6 +70,7 @@ void init(){
 	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
 	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
 	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
+	init_pair(PAINT_TITLE, COLOR_TITLE, COLOR_BLACK);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
@@ -109,7 +111,6 @@ int main(){
 			input = getch();
 			if( input=='Q' ) quit = true;
 			if( input=='m' || input=='q' ) openMenu = false;
-			//menu.update(input);
 
 			// RIPRENDI
 			// MERCATO
@@ -194,6 +195,9 @@ int main(){
 					else
 						mvprintw(y, x, "_");
 				}
+			}
+			if(currentLvl->number()==1){
+				titleScreen();
 			}
 			attrset(COLOR_PAIR(PAINT_DEFAULT));
 			attron(A_DIM);

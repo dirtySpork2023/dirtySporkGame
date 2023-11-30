@@ -10,6 +10,7 @@
 #define COLOR_PLATFORM 11
 #define COLOR_HP 12
 #define COLOR_DARK 13
+#define COLOR_TITLE 14
 
 // palette da 1 a 255
 #define PAINT_DEFAULT 1
@@ -21,9 +22,12 @@
 #define PAINT_HP 7
 #define PAINT_ARMOR 8
 #define PAINT_BACKGROUND 9
+#define PAINT_TITLE 10
 
 #define WIN_HEIGHT 9
 #define WIN_OFFSET COLS/2-50
+#define X_OFFSET COLS/2-64
+#define Y_OFFSET 4
 
 typedef double timeSpan;
 

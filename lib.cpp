@@ -83,85 +83,44 @@ bool upperCase(char c){
 	return ('A'<=c && c<= 'Z');
 }
 
-
 void titleScreen(){
 	/*
-	              ________, ,_,   ,_,     __         __    ,_________, ,_, ,__,    ,_, ,_,                                        ,__,     ____
-	           /WWWWWWWWWW| |w|   |W|   -WWWW-     -WWWW-  |WWWWWWWWW| |W| |WW\    |W| |M|                         ,___________,  |WW|    /WW/
-	          |WWW"         |W|   |W|  /WWWWWW\   /WWWWWW\     |W|     |W| |W,W\   |W| |W'                         |WWWWWWWWWWW|  |WW|   /WW/
-	          \WWW.___      |W|___|W| |WW/  \WW| |WW/  \WW|    |W|     |W| |W|\W\  |W|                      __________   \WW\     |WW|  /WW/
-	           "-WWWWWwW\   |WWWWWWW| |WW|  |WW| |WW|  |WW|    |W|     |W| |W| \W\ |W|  |MMMMMMM,,    |WW\  \WWWWWWWWWW-  \WW\    |WW| /WW/
-	                 "WWW|  |W|   |W| |WW\__/WW| |WW\__/WW|    |W|     |W| |W|  \W\|W|  |WWWWWWWWWW\  |WWW\  \WWW\__)WWW|  \WW\   |WW|/WW/
-	         ,_______.WWW/  |W|   |W|  \WWWWWW/   \WWWWWW/     |W|     |W| |W|   \W'w|  |WWWMMMWWWWW\ |WWWW\  \WWWWWWWW/    \WW\  |WW/WW/
-	         |WWWWWWWWW-"   |W|   |W|   "MWWM"     "MWWM"      |W|     |W| |W|    \WW|  |WWW|   \WWW| |WW,WW\  \WWW\"WWWW,   \M"  |WWWW/
-																					    |WWW|   /WWW| |WW|\WW\  \WWW\ "WWWW,      |WWW/
-																						|WWWWWWWWWWW/ |WW|-WWW\  \WWW\  "W"       /WW/
-																						|WWWWWWWWWW/  |WWWWWWWW\  \WWW\          /WW/
-																						|WWWMMMM""    |WWW-" \WW\  \M"          /WW/
-																						|WWW|         |WW|    \M""             /WW/
-																						|WWW|         |WW|                    ""M/
-																						|WWW|         |M"
-																						|WWW|
-																						|WWW|         
-																						|WWW'
-																						|W"
-	*/
-
-	/*
-	 p
-	>W=
-	/"\
-
-
-	
-	*/
-
-
-
-
-
++------------------------------------------------------------------------------------------------------------------------------+
+| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |
+| |WWWWWWW| |WW\  |W| |WWWWW\   |W|     |WWWWWWW| /WWWWWWW| /WWWWWWW|         /WWWWW\  |W|   |W| |WWWWWWW| /WWWWWWW| |WWWWWWW| |
+| |W|_____  |W*W\ |W| |W|  \WW  |W|     |W|_____  |W|____   |W|____          |W/   \W| |W|   |W| |W|_____  |W|____      |W|    |
+| |WWWWWWW| |W|\W\|W| |W|   |W| |W|     |WWWWWWW| \WWWWWWW\ \WWWWWWW\        |W|  _|W| |W|   |W| |WWWWWWW| \WWWWWWW\    |W|    |
+| |W|_____  |W| \W,W| |W|__/WW  |W|___, |W|_____   _____|W|  _____|W|        |W\__\W\' |W\___/W| |W|_____   _____|W|    |W|    |
+| |WWWWWWW| |W|  \WW| |WWWWW/   |WWWWW| |WWWWWWW| |WWWWWWW/ |WWWWWWW/         \WWW,\W\  \WWWWW/  |WWWWWWW| |WWWWWWW/    |W|    |
++------------------------------------------------------------------------------------------------------------------------------+
+                       |                           _______________________________________,  |
+                       |   =====-----....__  __,-""  [____] _.----------,_________________|  |
+                       |  |                ""   \___________(||||||||||||)_)                 |
+                       |  |                   ,-"(( ]        `----------'                    |
+                       |  |    ___....--,_  ,'    ""                                         |
+                       |   """"           /`                                                 |
+                       +---------------------------------------------------------------------+
+                ______                           
+ ______________//_____) _______________/|        
+#######################H###############H#======HH
+########Y"""""/H#((_)##`""""""""""""""~ '        
+###Y"`       /H#/    ((                          
+            (H#{      "                          
+*/
+	attrset(COLOR_PAIR(PAINT_TITLE));
 	attron(A_BOLD);
 
-	mvprintw(3, 20, "     _________, ,_,   ,_,     __         __    ,_________, ,_, ,__,    ,_, ,_,                                        ,__,     ____");
-	mvprintw(4, 20, "   /\"  _______| | |   | |   -\"  \"-     -\"  \"-  |___, ,___| | | |  \\    | | | |                         ,___________,  |  |    /  /");
-	mvprintw(5, 20, "  |  /\"         | |   | |  /  __  \\   /  __  \\     | |     | | |   \\   | | |_/                         |_____   ___|  |  |   /  /");
-	mvprintw(6, 20, "  \\  \".____     | |___| | |  /  \\  | |  /  \\  |    | |     | | | |\\ \\  | |                      __________   \\  \\     |  |  /  /");
-	mvprintw(7, 20, "   \"-.___  \"\\   | ,___, | |  |  |  | |  |  |  |    | |     | | | | \\ \\ | |  +-------,,    |\"\"\\  \\    ___  \"-  \\  \\    |  | /  /");
-	mvprintw(8, 20, "         \"\\  |  | |   | | |  \\__/  | |  \\__/  |    | |     | | | |  \\ \\| |  |         \"\\  |   \\  \\   \\__)   |  \\  \\   |  |/  /");
-	mvprintw(9, 20, " ,_______.\"  /  | |   | |  \\      /   \\      /     | |     | | | |   \\   |  |   +--_    \\ |    \\  \\        /    \\  \\  |  /  /");
-	mvprintw(10, 20, " |________.-\"   |_|   |_|   \"-__-\"     \"-__-\"      |_|     |_| |_|    \\__|  |   |   \\   | |     \\  \\   \\\",  \",   \\-\"  |    /");
-	mvprintw(11, 20, "                                                                            |   |   /   | |  |\\  \\  \\   \\ \",  \",      |   /");
-	mvprintw(12, 20, "                                                                            |   +--\"    / |  |-\"  \\  \\   \\  \",\"       /  /");
-	mvprintw(13, 20, "                                                                            |         ,/  |     _  \\  \\   \\          /  /");
-	mvprintw(14, 20, "                                                                            |   +---\"\"    |  ,-\" \\  \\  \\-\"          /  /");
-	mvprintw(15, 20, "                                                                            |   |         |  |    \\-\"\"             /  /");
-	mvprintw(16, 20, "                                                                            |   |         |  |                    \"\"-/");
-	mvprintw(17, 20, "                                                                            |   |         |-\"");
-	mvprintw(18, 20, "                                                                            |   |");
-	mvprintw(19, 20, "                                                                            |   |");
-	mvprintw(20, 20, "                                                                            |   |");
-	mvprintw(21, 20, "                                                                            |  _'");
-	mvprintw(22, 20, "                                                                            |-\"");
-
-	mvprintw(17, 30, "    |\"\"\\");
-	mvprintw(18, 30, "    |_=/");
-	mvprintw(19, 30, "--_ /7  ____,");
-	mvprintw(20, 30, "|__\\WWW/____|");
-	mvprintw(21, 30, "   _WWW_");
-	mvprintw(22, 30, "  //===\\\\");
-	mvprintw(23, 30, " //     \\\\");
-	mvprintw(24, 30, "//       \\\\");
+	mvprintw(Y_OFFSET+0, X_OFFSET,  "+------------------------------------------------------------------------------------------------------------------------------+");
+	mvprintw(Y_OFFSET+1, X_OFFSET,  "| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |");
+	mvprintw(Y_OFFSET+2, X_OFFSET,  "| |WWWWWWW| |WW\\  |W| |WWWWW\\   |W|     |WWWWWWW| /WWWWWWW| /WWWWWWW|         /WWWWW\\  |W|   |W| |WWWWWWW| /WWWWWWW| |WWWWWWW| |");
+	mvprintw(Y_OFFSET+3, X_OFFSET,  "| |W|_____  |W*W\\ |W| |W|  \\WW  |W|     |W|_____  |W|____   |W|____          |W/   \\W| |W|   |W| |W|_____  |W|____      |W|    |");
+	mvprintw(Y_OFFSET+4, X_OFFSET,  "| |WWWWWWW| |W|\\W\\|W| |W|   |W| |W|     |WWWWWWW| \\WWWWWWW\\ \\WWWWWWW\\        |W|  _|W| |W|   |W| |WWWWWWW| \\WWWWWWW\\    |W|    |");
+	mvprintw(Y_OFFSET+5, X_OFFSET,  "| |W|_____  |W| \\W,W| |W|__/WW  |W|___, |W|_____   _____|W|  _____|W|        |W\\__\\W\\' |W\\___/W| |W|_____   _____|W|    |W|    |");
+	mvprintw(Y_OFFSET+6, X_OFFSET,  "| |WWWWWWW| |W|  \\WW| |WWWWW/   |WWWWW| |WWWWWWW| |WWWWWWW/ |WWWWWWW/         \\WWW,\\W\\  \\WWWWW/  |WWWWWWW| |WWWWWWW/    |W|    |");
+	mvprintw(Y_OFFSET+7, X_OFFSET,  "+------------------------------------------------------------------------------------------------------------------------------+");
 
 	attroff(A_BOLD);
-
-	mvprintw(LINES-10, COLS/2-12, "PRESS SPACE TO CONTINUE");
-
-	while(getch()!=' '){/*wait*/};
-	clear();
 }
-
-
-
 
 void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty){
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));

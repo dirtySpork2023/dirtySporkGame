@@ -13,14 +13,31 @@ bool addLife (player* P) {
 menu::menu(){
     this->win = newwin(HEIGHT, WIDTH, 10, COLS/2-WIDTH);
 
-    for(int i=1; i<N_ARMOR+1; i++){
-        armors[i].value = i*225;
-        armors[i].cost = i*20;
+    /*
+    armor
+    %   $
+    0   0
+    20  50
+    60  100 
+    80  200
+    90  400
+    95  800
+    
+    guns    $
+    PISTOL  0
+    SHOTGUN 50
+    RIFLE   100
+    */
+    for(int i=0; i<N_ARMOR; i++){
+        armor[i].cost = i*50;
     }
 
+    armor[0].value = 0;
+    armor[1].value = 20;
+
     for(int i=0; i<N_GUNS; i++){
-        guns[i].value = i;
-        guns[i].cost = i*20;
+        gun[i].value = i;
+        gun[i].cost = i*50;
     }
 }
  

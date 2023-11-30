@@ -24,6 +24,7 @@ using namespace std;
 struct Plevel {
 	level* thisLvl;
 	Plevel* prev;
+	Plevel* next;
 };
 typedef Plevel* lLevel;
 
@@ -96,6 +97,7 @@ int main(){
 	lLevel lvlList = new Plevel;
 	lvlList->thisLvl = new level (numL, diff, &B);
 	lvlList->prev = NULL;
+	lvlList->next = NULL;
 	// Puntatore al livello corrente
 	level* currentLvl = lvlList->thisLvl;
 	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
@@ -129,17 +131,26 @@ int main(){
 		}
 
 		//level setup
-		if(currentLvl->number() != numL){
-
-			//nuovo livello in testa
-			lLevel tmp = new Plevel;
-			tmp->prev = lvlList;
-			tmp->thisLvl = new level (numL, diff, &B);
-			lvlList = tmp;
+		if(currentLvl->number() < numL){
+			while (lvlList->next != NULL && lvlList->thisLvl->number() < numL) {
+				lvlList = lvlList->next;
+			}
+			if (lvlList->thisLvl->number() < numL) {
+				//nuovo livello in testa
+				lvlList->next = new Plevel;
+				lvlList->next->prev = lvlList;
+				lvlList = lvlList->next;
+				lvlList->thisLvl = new level (numL, diff, &B);
+				lvlList->next = NULL;
+			}
 			currentLvl = lvlList->thisLvl;
 			P.changeLevel(currentLvl);
-
-			//cambia a livello esistente
+		} else if (currentLvl->number() > numL) {
+			while (lvlList->prev != NULL && lvlList->thisLvl->number() > numL) {
+				lvlList = lvlList->prev;
+			}
+			currentLvl = lvlList->thisLvl;
+			P.changeLevel(currentLvl);
 		}
 
 		//ciclo principale del gioco
@@ -162,7 +173,8 @@ int main(){
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu
-				openMenu = true;
+				//openMenu = true;
+				numL--; // provvisorio
 			}
 
 			B.update(deltaTime);

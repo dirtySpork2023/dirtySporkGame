@@ -163,7 +163,7 @@ void titleScreen(){
 
 
 
-void printResourceBar(WINDOW* w, int health, double armor, int money, int level){
+void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty){
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	box(w, 0, 0);
 
@@ -181,6 +181,7 @@ void printResourceBar(WINDOW* w, int health, double armor, int money, int level)
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
 
-	mvwprintw(w, 4, 50, " MONEY: <| %d $ |>", money);
-	mvwprintw(w, 5, 50, " LEVEL: <| %d |>", level);
+	mvwprintw(w, 4, 51, "MONEY: <| %d $ |>", money);
+	mvwprintw(w, 5, 51, "LEVEL: <| %d |>", level);
+	mvwprintw(w, 6, 46, "DIFFICULTY: <| %d |>", difficulty);
 }

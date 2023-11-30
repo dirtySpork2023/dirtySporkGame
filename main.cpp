@@ -98,9 +98,9 @@ int main(){
 	lvlList->prev = NULL;
 	// Puntatore al livello corrente
 	level* currentLvl = lvlList->thisLvl;
-	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, RIFLE, 12, 0.5);
+	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
 	menu M = menu();
-
+	
 	
 	//titleScreen();
 	while( !quit ){
@@ -110,11 +110,11 @@ int main(){
 
 
 			input = getch();
-			if( input=='Q' || input=='q' ) quit = true;
-			if( input=='m' ) openMenu = false;
+			if( input=='Q' ) quit = true;
+			if( input=='m' || input=='q' ) openMenu = false;
 			//menu.update(input);
 			M.print();
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number());
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), currentLvl->getDiff());
 
 			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 			// RIPRENDI
@@ -123,10 +123,6 @@ int main(){
 			// - AGGIUNGI HP per 2$
 			// - AUMENTA ARMATURA a <70%> per 5$
 			// LIVELLO <N>
-
-			// OUTPUT
-
-			mvprintw(20, 20, "#####  MENU APERTO | premi m per chiudere  #####");
 
 			//dal menu si può cambiare anche il livello
 			//settando numL al livello desiderato
@@ -162,6 +158,7 @@ int main(){
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				// passa al livello successivo, che esista già o nuovo
 				numL++;
+				diff++; // solo se il prossimo livello è nuovo
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu
@@ -195,7 +192,7 @@ int main(){
 			B.print();
 			P.print(deltaTime);
 
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number());
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), currentLvl->getDiff());
 
 			refresh();
 			wrefresh(bottomWin);

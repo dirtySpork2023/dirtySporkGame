@@ -165,7 +165,7 @@ void titleScreen(){
 
 void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty){
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	/* ncurses */::box(w, 0, 0);
+	box(w, 0, 0);
 
 	mvwprintw(w, 2, WIN_OFFSET, "HEALTH: <|");
 	wattrset(w, COLOR_PAIR(PAINT_HP));

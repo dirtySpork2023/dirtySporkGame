@@ -158,7 +158,7 @@ level::level (int nl, int d, bulletManager* B) {
 
     // Generazione nemici
     int weight = this->nlevel;
-    // Yuck
+    // Yuck 
     if (this->nlevel % 4 == 0) {    
         this->Y = new yuck(COLS-6, blevel-1, this, B);
         weight -= 1;

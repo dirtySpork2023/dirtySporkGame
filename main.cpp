@@ -1,6 +1,5 @@
 #include <ncurses.h>
 #include <iostream>
-#include <fstream>
 #include <chrono>
 #include <time.h>
 #include <stdlib.h>
@@ -15,6 +14,7 @@
 #include "kuba.hpp"
 #include "platform.hpp"
 #include "level.hpp"
+#include "menu.hpp"
 
 using namespace std;
 
@@ -24,6 +24,7 @@ using namespace std;
 struct Plevel {
 	level* thisLvl;
 	Plevel* prev;
+	Plevel* next;
 };
 typedef Plevel* lLevel;
 
@@ -96,10 +97,12 @@ int main(){
 	lLevel lvlList = new Plevel;
 	lvlList->thisLvl = new level (numL, diff, &B);
 	lvlList->prev = NULL;
+	lvlList->next = NULL;
 	// Puntatore al livello corrente
 	level* currentLvl = lvlList->thisLvl;
 	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
-
+	menu M = menu();
+	
 	
 	//titleScreen();
 	while( !quit ){
@@ -112,7 +115,7 @@ int main(){
 			if( input=='Q' ) quit = true;
 			if( input=='m' || input=='q' ) openMenu = false;
 			//menu.update(input);
-			//menu.print;
+			M.print();
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), currentLvl->getDiff());
 
 			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
@@ -128,17 +131,26 @@ int main(){
 		}
 
 		//level setup
-		if(currentLvl->number() != numL){
-
-			//nuovo livello in testa
-			lLevel tmp = new Plevel;
-			tmp->prev = lvlList;
-			tmp->thisLvl = new level (numL, diff, &B);
-			lvlList = tmp;
+		if(currentLvl->number() < numL){
+			while (lvlList->next != NULL && lvlList->thisLvl->number() < numL) {
+				lvlList = lvlList->next;
+			}
+			if (lvlList->thisLvl->number() < numL) {
+				//nuovo livello in testa
+				lvlList->next = new Plevel;
+				lvlList->next->prev = lvlList;
+				lvlList = lvlList->next;
+				lvlList->thisLvl = new level (numL, diff, &B);
+				lvlList->next = NULL;
+			}
 			currentLvl = lvlList->thisLvl;
 			P.changeLevel(currentLvl);
-
-			//cambia a livello esistente
+		} else if (currentLvl->number() > numL) {
+			while (lvlList->prev != NULL && lvlList->thisLvl->number() > numL) {
+				lvlList = lvlList->prev;
+			}
+			currentLvl = lvlList->thisLvl;
+			P.changeLevel(currentLvl);
 		}
 
 		//ciclo principale del gioco
@@ -161,7 +173,8 @@ int main(){
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu
-				openMenu = true;
+				//openMenu = true;
+				numL--; // provvisorio
 			}
 
 			B.update(deltaTime);

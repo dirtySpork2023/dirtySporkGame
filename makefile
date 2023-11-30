@@ -1,7 +1,7 @@
 all: game
 
-game: main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o
-	g++ -o game main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o -lncurses
+game: main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o menu.o
+	g++ -o game main.o lib.o bulletManager.o coin.o entity.o shooter.o player.o kuba.o yuck.o platform.o level.o menu.o -lncurses
 
 main.o: main.cpp
 	g++ -c main.cpp
@@ -35,6 +35,9 @@ platform.o: platform.cpp platform.hpp
 
 level.o: level.cpp level.hpp
 	g++ -c level.cpp
+
+menu.o: menu.cpp menu.hpp
+	g++ -c menu.cpp
 
 reset:
 	rm -f *.o game

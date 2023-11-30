@@ -1,6 +1,5 @@
 #include <ncurses.h>
 #include <iostream>
-#include <fstream>
 #include <chrono>
 #include <time.h>
 #include <stdlib.h>
@@ -15,6 +14,7 @@
 #include "kuba.hpp"
 #include "platform.hpp"
 #include "level.hpp"
+#include "menu.hpp"
 
 using namespace std;
 
@@ -99,6 +99,7 @@ int main(){
 	// Puntatore al livello corrente
 	level* currentLvl = lvlList->thisLvl;
 	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, RIFLE, 12, 0.5);
+	menu M = menu();
 
 	
 	//titleScreen();
@@ -112,7 +113,7 @@ int main(){
 			if( input=='Q' || input=='q' ) quit = true;
 			if( input=='m' ) openMenu = false;
 			//menu.update(input);
-			//menu.print;
+			M.print();
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number());
 
 			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG

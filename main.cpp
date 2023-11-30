@@ -18,15 +18,13 @@
 
 using namespace std;
 
-
 #define COIN_SPACING 7
 
-struct Plevel {
-	level* thisLvl;
-	Plevel* prev;
-	Plevel* next;
+struct lvlNode {
+	level* lvl;
+	lvlNode* next;
 };
-typedef Plevel* lLevel;
+typedef lvlNode* lvlList;
 
 
 void init(){
@@ -94,13 +92,12 @@ int main(){
 	
 	bulletManager B = bulletManager();
 	// Lista di livelli
-	lLevel lvlList = new Plevel;
-	lvlList->thisLvl = new level (numL, diff, &B);
-	lvlList->prev = NULL;
-	lvlList->next = NULL;
+	lvlList head = new lvlNode;
+	head->lvl = new level (numL, diff, &B);
+	head->next = NULL;
 	// Puntatore al livello corrente
-	level* currentLvl = lvlList->thisLvl;
-	player P = player(1, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
+	level* currentLvl = head->lvl;
+	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
 	menu M = menu();
 	
 	
@@ -109,47 +106,45 @@ int main(){
 
 		//menu
 		while(!quit && openMenu){
-
-
 			input = getch();
 			if( input=='Q' ) quit = true;
 			if( input=='m' || input=='q' ) openMenu = false;
 			//menu.update(input);
-			M.print();
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), currentLvl->getDiff());
 
-			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 			// RIPRENDI
 			// MERCATO
 			// - ARMA <SHOTGUN> per 2$
 			// - AGGIUNGI HP per 2$
 			// - AUMENTA ARMATURA a <70%> per 5$
-			// LIVELLO <N>
+			// LIVELLO <numL>
 
-			//dal menu si può cambiare anche il livello
-			//settando numL al livello desiderato
+			M.print();
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
+
+			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 		}
 
 		//level setup
-		if(currentLvl->number() < numL){
-			while (lvlList->next != NULL && lvlList->thisLvl->number() < numL) {
-				lvlList = lvlList->next;
+		if(currentLvl->number() != numL){
+			if( head->lvl->number() < numL ){
+				// livello nuovo aggiunto in testa
+				lvlNode* tmp = new lvlNode;
+				tmp->lvl = new level (head->lvl->number()+1, ++diff, &B);
+				tmp->next = head;
+				head = tmp;
 			}
-			if (lvlList->thisLvl->number() < numL) {
-				//nuovo livello in testa
-				lvlList->next = new Plevel;
-				lvlList->next->prev = lvlList;
-				lvlList = lvlList->next;
-				lvlList->thisLvl = new level (numL, diff, &B);
-				lvlList->next = NULL;
+
+			// cambia livello
+			lvlNode* tmp = head;
+			bool found = false;
+			while( tmp != NULL && !found){
+				if(tmp->lvl->number() == numL){
+					currentLvl = tmp->lvl;
+					found = true;
+				}
+				tmp = tmp->next;
 			}
-			currentLvl = lvlList->thisLvl;
-			P.changeLevel(currentLvl);
-		} else if (currentLvl->number() > numL) {
-			while (lvlList->prev != NULL && lvlList->thisLvl->number() > numL) {
-				lvlList = lvlList->prev;
-			}
-			currentLvl = lvlList->thisLvl;
+			if(!found) currentLvl = head->lvl;
 			P.changeLevel(currentLvl);
 		}
 
@@ -169,13 +164,19 @@ int main(){
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				// passa al livello successivo, che esista già o nuovo
 				numL++;
-				diff++; // solo se il prossimo livello è nuovo
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu
-				//openMenu = true;
-				numL--; // provvisorio
+				openMenu = true;
 			}
+
+			// provvisorio
+			if( input=='1' ){ numL=1; }
+			else if(input=='2'){ numL=2; }
+			else if(input=='3'){ numL=3; }
+			else if(input=='4'){ numL=4; }
+			else if(input=='5'){ numL=5; }
+			else if(input=='6'){ numL=6; }
 
 			B.update(deltaTime);
 			P.update(input, deltaTime);
@@ -204,7 +205,7 @@ int main(){
 			B.print();
 			P.print(deltaTime);
 
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), currentLvl->getDiff());
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 
 			refresh();
 			wrefresh(bottomWin);

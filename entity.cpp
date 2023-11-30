@@ -120,7 +120,7 @@ bool entity::hurt(int value){
 }
 
 void entity::heal(int value){
-	health+=value;
+	health += value;
 }
 
 entity::~entity(){

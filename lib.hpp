@@ -23,6 +23,7 @@
 #define PAINT_BACKGROUND 9
 
 #define WIN_HEIGHT 9
+#define WIN_OFFSET 40
 
 typedef double timeSpan;
 

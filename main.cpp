@@ -21,7 +21,7 @@ using namespace std;
 #define COIN_SPACING 7
 
 struct lvlNode {
-	level* thisLvl;
+	level* lvl;
 	lvlNode* next;
 };
 typedef lvlNode* lvlList;
@@ -93,10 +93,10 @@ int main(){
 	bulletManager B = bulletManager();
 	// Lista di livelli
 	lvlList head = new lvlNode;
-	head->thisLvl = new level (numL, diff, &B);
+	head->lvl = new level (numL, diff, &B);
 	head->next = NULL;
 	// Puntatore al livello corrente
-	level* currentLvl = head->thisLvl;
+	level* currentLvl = head->lvl;
 	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
 	menu M = menu();
 	
@@ -110,24 +110,26 @@ int main(){
 			if( input=='Q' ) quit = true;
 			if( input=='m' || input=='q' ) openMenu = false;
 			//menu.update(input);
-			M.print();
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 
-			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 			// RIPRENDI
 			// MERCATO
 			// - ARMA <SHOTGUN> per 2$
 			// - AGGIUNGI HP per 2$
 			// - AUMENTA ARMATURA a <70%> per 5$
 			// LIVELLO <numL>
+
+			M.print();
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
+
+			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 		}
 
 		//level setup
 		if(currentLvl->number() != numL){
-			if( head->thisLvl->number() < numL ){
+			if( head->lvl->number() < numL ){
 				// livello nuovo aggiunto in testa
 				lvlNode* tmp = new lvlNode;
-				tmp->thisLvl = new level (head->thisLvl->number()+1, ++diff, &B);
+				tmp->lvl = new level (head->lvl->number()+1, ++diff, &B);
 				tmp->next = head;
 				head = tmp;
 			}
@@ -136,37 +138,15 @@ int main(){
 			lvlNode* tmp = head;
 			bool found = false;
 			while( tmp != NULL && !found){
-				if(tmp->thisLvl->number() == numL){
-					currentLvl = tmp->thisLvl;
+				if(tmp->lvl->number() == numL){
+					currentLvl = tmp->lvl;
 					found = true;
 				}
 				tmp = tmp->next;
 			}
-			if(!found) currentLvl = head->thisLvl;
+			if(!found) currentLvl = head->lvl;
 			P.changeLevel(currentLvl);
 		}
-		/*
-		if(currentLvl->number() < numL){
-			while (head->next != NULL && head->thisLvl->number() < numL) {
-				head = head->next;
-			}
-			if (head->thisLvl->number() < numL) {
-				//nuovo livello in testa
-				head->next = new lvlNode;
-				head->next->prev = head;
-				head = head->next;
-				head->thisLvl = new level (numL, diff, &B);
-				head->next = NULL;
-			}
-			currentLvl = head->thisLvl;
-			P.changeLevel(currentLvl);
-		} else if (currentLvl->number() > numL) {
-			while (head->prev != NULL && head->thisLvl->number() > numL) {
-				head = head->prev;
-			}
-			currentLvl = head->thisLvl;
-			P.changeLevel(currentLvl);
-		}*/
 
 		//ciclo principale del gioco
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();

@@ -167,21 +167,21 @@ void printResourceBar(WINDOW* w, int health, double armor, int money, int level,
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	box(w, 0, 0);
 
-	mvwprintw(w, 2, WIN_OFFSET, "HEALTH: <|");
+	mvwprintw(w, 2, WIN_OFFSET-7, "HEALTH: <|");
 	wattrset(w, COLOR_PAIR(PAINT_HP));
 	for(int i=0; i<health; i++) wprintw(w, "M");
 	for(int i=health; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
 
-	mvwprintw(w, 3, WIN_OFFSET, " ARMOR: <|");
+	mvwprintw(w, 3, WIN_OFFSET-6, "ARMOR: <|");
 	wattrset(w, COLOR_PAIR(PAINT_ARMOR));
 	for(int i=0; i<armor*100 ; i++) wprintw(w, "M");
 	for(int i=armor*100; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
 
-	mvwprintw(w, 4, WIN_OFFSET, " MONEY: <| %d $ |>", money);
-	mvwprintw(w, 5, WIN_OFFSET, " LEVEL: <| %d |>", level);
-	mvwprintw(w, 6, WIN_OFFSET-4, "DIFFICULTY: <| %d |>", difficulty);
+	mvwprintw(w, 4, WIN_OFFSET-6, "MONEY: <| %d $ |>", money);
+	mvwprintw(w, 5, WIN_OFFSET-6, "LEVEL: <| %d |>", level);
+	mvwprintw(w, 6, WIN_OFFSET-11, "DIFFICULTY: <| %d |>", difficulty);
 }

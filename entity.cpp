@@ -67,7 +67,7 @@ void entity::move(char input){
 		box.a.y += 1;
 		box.b.y += 1;
 	}else if( input=='w'){
-		if( i.type==' ' || i.type=='#' /*&& box.a.x>1 && box.b.x<COLS-2*/ ){
+		if( i.type==' ' || i.type=='#' && box.a.x>1 && box.b.x<COLS-2 ){
 			box.a.y -= 1;
 			box.b.y -= 1;
 		}else{

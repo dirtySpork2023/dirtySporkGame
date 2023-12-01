@@ -40,7 +40,7 @@ void bulletManager::update(double deltaTime){
 	}
 }
 
-// rimuove ricorsivamente tutti i proiettili che colpiscono 'target'
+// rimuove tutti i proiettili che colpiscono 'target'
 // scrive anche in 'damage' la somma di tutti i danni
 node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	if( p==NULL ) return NULL;
@@ -52,17 +52,14 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	}
 	if( outOfBounds(p->pos) ){
 		doRemove = true;
-		
 	}
 
 	if( doRemove ){
 		num--;
-
 		// se la testa della lista in esame è anche la testa della lista totale, devo aggiornarla
 		if( p==head ){
 			head = head->next;
 		}
-
 		// elimino la testa e proseguo perchè potrebbero esserci altri proiettili che collidono
 		node* tmp = p->next;
 		delete p;
@@ -85,7 +82,17 @@ int bulletManager::check(hitBox target){
 	return result;
 }
 
-// stampa tutti i proiettili nella lista
+// rimuove tutti i proiettili
+void bulletManager::clear(){
+	node* tmp;
+	while(head!=NULL){
+		tmp = head;
+		head = head->next;
+		delete tmp;
+	}
+}
+
+// stampa tutti i proiettili
 void bulletManager::print(){
 	node* tmp = head;
 	while( tmp!=NULL ){

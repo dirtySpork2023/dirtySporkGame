@@ -5,6 +5,7 @@
 #include <cmath>
 #include "lib.hpp"
 #include "bulletManager.hpp"
+#include "level.hpp"
 using namespace std;
 
 player::player(int x, int y, level* lvl, bulletManager* b, int weapon, float jumpHeight, float armor):
@@ -110,7 +111,14 @@ double player::getArmor(){
 }
 
 void player::changeLevel(level* newLvl){
+	if( newLvl->number() > lvl->number() ){
+		box.a.x = 0;
+		box.b.x = 2;
+	}else{
+		box.a.x = COLS-3;
+		box.b.x = COLS-1;
+	}
+	box.a.y = LINES-WIN_HEIGHT-4;
+	box.b.y = LINES-WIN_HEIGHT-2;
 	this->lvl = newLvl;
-	this->box.a.x = 0;
-	this->box.b.x = 2;
 }

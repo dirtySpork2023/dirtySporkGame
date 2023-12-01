@@ -123,10 +123,10 @@ level::level (int nl, int d, bulletManager* B) {
     int dens = 8 - numPlatinf;
     
     this->platforms = new Pplatform;
-    this->platforms->plat = new platform (0, 0, 1, blevel - 4);// Parete sinistra
+    this->platforms->plat = new platform (0, 0, 1, blevel - 5);// Parete sinistra
     this->platforms->next = new Pplatform;
     lPlatform bs = this->platforms->next;
-    bs->plat = new platform (COLS-2, 0, COLS-1, blevel - 4);     // Parete destra
+    bs->plat = new platform (COLS-2, 0, COLS-1, blevel - 5);     // Parete destra
     bs->next = new Pplatform;
     bs = bs->next;
     bs->plat = new platform (-1, 0, -1, blevel);               // Porta sinistra
@@ -223,15 +223,11 @@ void level::printAll (timeSpan deltaTime) {
 
 /*
     ' ' : void
-    p   : player 
     k   : kuba
     s   : shooter
     y   : yuck
     #   : platform
-    //
-    
 */
-
 infoCrash level::check (hitBox pl, char d) {
     infoCrash info;      // Variabile da restituire                             
     bool here = false;   // True se trovo qualcosa
@@ -278,14 +274,6 @@ infoCrash level::check (hitBox pl, char d) {
         info.obj = this->Y;
     }
 
-    /* USLESS
-    if (isTouching(pl, *PLAYER HITBOX*) && !here) {
-        here = true;
-        info.type = 'p';
-        info.obj = ?
-    }
-    */
-    
     if (!here) {
         info.type = ' ';
         info.obj = NULL;

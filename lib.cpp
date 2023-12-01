@@ -5,6 +5,53 @@
 #include <stdlib.h>
 using namespace std;
 
+void init(){
+	initscr();
+	start_color();
+	noecho();
+	cbreak();
+	nodelay(stdscr, TRUE);
+	curs_set(0);
+
+	/*	COLOR_BLACK
+		COLOR_RED
+		COLOR_GREEN
+		COLOR_YELLOW
+		COLOR_BLUE
+		COLOR_MAGENTA
+		COLOR_CYAN
+		COLOR_WHITE
+
+	 	COLORS numero tot di colori
+	 	COLOR_PAIRS numero tot di coppie di colori
+	 */
+
+	init_color(COLOR_BLACK, 100, 100, 100);
+	init_color(COLOR_DARK, 170, 170, 170);
+	init_color(COLOR_TITLE, 300, 300, 300);
+	init_color(COLOR_WHITE, 1000, 1000, 1000);
+	init_color(COLOR_RED, 1000, 0, 0);
+	init_color(COLOR_BLUE, 200, 200, 700);
+	init_color(COLOR_PLAYER, 850, 1000, 850);
+	init_color(COLOR_ENEMY, 300, 600, 700);
+	init_color(COLOR_COIN, 800, 800, 0);
+	init_color(COLOR_PLATFORM, 200, 200, 200);
+	init_color(COLOR_HP, 200, 700, 200);
+
+	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
+	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
+	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
+	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
+	init_pair(PAINT_COIN, COLOR_COIN, COLOR_BLACK);
+	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
+	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
+	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
+	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
+	init_pair(PAINT_TITLE, COLOR_TITLE, COLOR_BLACK);
+
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
+}
+
 bool collisionHH(hitBox B, hitBox T){
 	// per ogni punto della hitbox T(iny), controllo se collide con la hitbox B(ig)
 	bool found = false;

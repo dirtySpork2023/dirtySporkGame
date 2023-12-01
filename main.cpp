@@ -26,59 +26,11 @@ struct lvlNode {
 };
 typedef lvlNode* lvlList;
 
-
-void init(){
-	initscr();
-	start_color();
-	noecho();
-	cbreak();
-	nodelay(stdscr, TRUE);
-	curs_set(0);
-
-	/*	COLOR_BLACK
-		COLOR_RED
-		COLOR_GREEN
-		COLOR_YELLOW
-		COLOR_BLUE
-		COLOR_MAGENTA
-		COLOR_CYAN
-		COLOR_WHITE
-
-	 	COLORS numero tot di colori
-	 	COLOR_PAIRS numero tot di coppie di colori
-	 */
-
-	init_color(COLOR_BLACK, 100, 100, 100);
-	init_color(COLOR_DARK, 170, 170, 170);
-	init_color(COLOR_TITLE, 300, 300, 300);
-	init_color(COLOR_WHITE, 1000, 1000, 1000);
-	init_color(COLOR_RED, 1000, 0, 0);
-	//init_color(COLOR_GREEN, 0, 1000, 0);
-	init_color(COLOR_BLUE, 200, 200, 700);
-	init_color(COLOR_PLAYER, 850, 1000, 850); //500, 800, 600
-	init_color(COLOR_ENEMY, 300, 600, 700);
-	init_color(COLOR_COIN, 800, 800, 0);
-	init_color(COLOR_PLATFORM, 200, 200, 200);
-	init_color(COLOR_HP, 200, 700, 200);
-
-	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
-	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
-	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
-	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
-	init_pair(PAINT_COIN, COLOR_COIN, COLOR_BLACK);
-	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
-	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
-	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
-	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
-	init_pair(PAINT_TITLE, COLOR_TITLE, COLOR_BLACK);
-
-	attrset(COLOR_PAIR(PAINT_DEFAULT));
-}
-
 int main(){
 	srand(time(NULL));
 	
-	init(); //inizializza ncurses
+	//inizializza ncurses
+	init();
 
 	// bottom window setup
 	WINDOW* bottomWin = newwin(WIN_HEIGHT, COLS, LINES-WIN_HEIGHT, 0);
@@ -102,30 +54,28 @@ int main(){
 	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
 	menu M = menu();
 	
-	
-	//titleScreen();
 	while( !quit ){
 
-		//menu
+		// MENU
 		while(!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
 			if( input=='m' || input=='q' ) openMenu = false;
-
-			// RIPRENDI
-			// MERCATO
-			// - ARMA <SHOTGUN> per 2$
-			// - AGGIUNGI HP per 2$
-			// - AUMENTA ARMATURA a <70%> per 5$
-			// LIVELLO <numL>
-
+			// provvisorio
+			if(input=='1'){ numL=1; }
+			if(input=='2'){ numL=2; }
+			if(input=='3'){ numL=3; }
+			if(input=='4'){ numL=4; }
+			if(input=='5'){ numL=5; }
+			if(input=='6'){ numL=6; }
+			if(input=='7'){ numL=7; }
+			if(input=='8'){ numL=8; }
+			if(input=='9'){ numL=9; }
 			M.print();
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
-
-			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 		}
 
-		//level setup
+		// LEVEL SETUP
 		if(currentLvl->number() != numL){
 			if( head->lvl->number() < numL ){
 				// livello nuovo aggiunto in testa
@@ -145,11 +95,11 @@ int main(){
 				}
 				tmp = tmp->next;
 			}
-			if(!found) currentLvl = head->lvl;
+			B.clear();
 			P.changeLevel(currentLvl);
 		}
 
-		//ciclo principale del gioco
+		// CICLO PRINCIPALE
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit && !openMenu && currentLvl->number()==numL){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
@@ -161,23 +111,12 @@ int main(){
 			
 			input = getch();
 			if( input=='Q' ) quit = true;
+			if( input=='m' ) openMenu = true;
 
-			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
-				// passa al livello successivo, che esista già o nuovo
+			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
 				numL++;
-			}
-			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
-				// apri menu
-				openMenu = true;
-			}
-
-			// provvisorio
-			if( input=='1' ){ numL=1; }
-			else if(input=='2'){ numL=2; }
-			else if(input=='3'){ numL=3; }
-			else if(input=='4'){ numL=4; }
-			else if(input=='5'){ numL=5; }
-			else if(input=='6'){ numL=6; }
+			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->number()>1 )
+				numL--;
 
 			B.update(deltaTime);
 			P.update(input, deltaTime);

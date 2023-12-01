@@ -31,6 +31,8 @@
 
 typedef double timeSpan;
 
+void init();
+
 struct point {
 	int x;
 	int y;

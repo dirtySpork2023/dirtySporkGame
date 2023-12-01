@@ -27,7 +27,16 @@ menu::menu(){
         gun[i].cost = i*50;
     }
 }
- 
+
+// RIPRENDI
+// MERCATO
+// - ARMA <SHOTGUN> per 2$
+// - AGGIUNGI HP per 2$
+// - AUMENTA ARMATURA a <70%> per 5$
+// LIVELLO <numL>
+
+// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
+
 void menu::print(){
     box(win, 0, 0);
     wrefresh(win);

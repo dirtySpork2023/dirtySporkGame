@@ -31,7 +31,6 @@ public:
 	hitBox getHitBox();
 	int getHealth();
 	bool hurt(int value);
-	void heal(int value);
 	~entity();
 };
 

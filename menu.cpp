@@ -5,7 +5,7 @@
 bool addLife (player* P) {
     if (P->getHealth() >= 100) return false;
     else {
-        //P->heal(int);
+        //P->hurt(-int);
         return true;
     }
 }

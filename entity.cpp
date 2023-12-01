@@ -106,10 +106,8 @@ int entity::getHealth(){
 
 // danneggia entity e ritorna 'se è morto'
 bool entity::hurt(int value){
-	if( value!=0 ){
-		lastDamage = 0;
-		health -= value;
-	}
+	if( value>0 ) lastDamage = 0;
+	health -= value;
 
 	if(health <= 0){
 		health = 0;
@@ -119,15 +117,9 @@ bool entity::hurt(int value){
 	}
 }
 
-void entity::heal(int value){
-	health += value;
-}
-
 entity::~entity(){
 	// esplosione
-	point pos = this->getPos();
-
 	for(int i=0; i<10; i++){
-		bM->add(pos, randVector(), true, 0, ':');
+		bM->add(this->getPos(), randVector(), true, 0, ':');
 	}
 }

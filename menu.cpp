@@ -9,7 +9,7 @@ bool addLife (player* P) {
         return true;
     }
 }
-
+ 
 menu::menu(){
     this->win = newwin(HEIGHT, WIDTH, 10, COLS/2-WIDTH);
 

@@ -1,15 +1,17 @@
 #include "shooter.hpp"
 #include "level.hpp"
 
+// costruttore
 shooter::shooter(int x, int y, level* lvl, int h, double fireRate, int damage, char bullet):
 	entity(x,y,lvl,h){
 	this->facingRight = true;
 	this->fireRate = fireRate;
 	this->damage = damage;
 	this->texture = bullet;
-	this->lastShot = -rand()%100/(double)100;
+	this->lastShot = fireRate - rand()%100/(double)100;
 }
 
+// costruttore secondario
 shooter::shooter(int x, int y, level* lvl):
 	shooter(x, y, lvl,
 		/* HEALTH */ 15+2*lvl->getDiff(),

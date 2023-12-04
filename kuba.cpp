@@ -12,13 +12,14 @@ kuba::kuba(int x, int y, level* lvl, int h, int damage):
 	this->box.a.y = y-1;
 }
 
-// costruttore 
+// costruttore secondario
 kuba::kuba(int x, int y, level* lvl):
 	kuba(x, y, lvl,
 		/* HEALTH */ 30+10*lvl->getDiff(),
 		/* DAMAGE */ 15+5*lvl->getDiff()){
 }
 
+// direzione in cui si muove kuba in formato WASD
 char kuba::direction(){
 	if( movingRight )
 		return 'd';
@@ -62,8 +63,8 @@ void kuba::update(player* target, timeSpan deltaTime){
 			// fa un passo indietro
 			movingRight = !movingRight;
 			move();
-			movingRight = !movingRight;
 			lastMove = -SPEED*7;
+			movingRight = !movingRight;
 		}else{
 			move();
 			lastMove = 0;

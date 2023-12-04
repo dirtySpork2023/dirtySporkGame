@@ -1,19 +1,16 @@
 #ifndef YUCK_HPP
 #define YUCK_HPP
 
+#include <ncurses.h>
 #include "bulletManager.hpp"
-
 #include "shooter.hpp"
-
 class level;
 
-//TODO?
-// invece di sparare dalla bocca genera droni che sparano laser all'altezza del player
+#define CHARGE_TIME 3
 
 class yuck: public shooter{
 protected:
 	bool awake;
-	timeSpan chargeTime; //const?
 	timeSpan laserTime;
 	timeSpan lastCharge;
 public:

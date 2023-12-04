@@ -66,8 +66,6 @@ vector randVector();
 void posPrintW(point, const char*);
 void posPrintW(point, char);
 
-bool upperCase(char c);
-
 void titleScreen();
 
 void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty);

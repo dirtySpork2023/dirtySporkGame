@@ -36,7 +36,7 @@ void player::update(char input, timeSpan deltaTime){
 		facingRight = true;
 		entity::move('d');
 	}
-	if( isGrounded && (upperCase(input) || input=='w' || input=='e' || input=='q')){
+	if( isGrounded && (input=='F' || input=='w' || input=='e' || input=='q')){
 		ySpeed = jumpSpeed;
 		isGrounded = false;
 	}

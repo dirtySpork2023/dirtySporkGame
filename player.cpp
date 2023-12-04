@@ -1,12 +1,5 @@
 #include "player.hpp"
-
-#include <ncurses.h>
-
-#include <cmath>
-#include "lib.hpp"
-#include "bulletManager.hpp"
 #include "level.hpp"
-using namespace std;
 
 player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float armor):
 	shooter(x,y,lvl,MAX_HEALTH,1,1,'?'){ //fireRate, damage e texture sono temporanei qui
@@ -36,9 +29,8 @@ void player::update(char input, timeSpan deltaTime){
 		facingRight = true;
 		entity::move('d');
 	}
-	if( isGrounded && (input=='F' || input=='w' || input=='e' || input=='q')){
+	if( isGrounded() && (input=='F' || input=='w' || input=='e' || input=='q')){
 		ySpeed = jumpSpeed;
-		isGrounded = false;
 	}
 	if( (input=='f'||input=='F') && lastShot > fireRate ){
 		shoot();

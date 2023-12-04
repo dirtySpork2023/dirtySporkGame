@@ -1,9 +1,10 @@
 #ifndef BULLET_HPP
 #define BULLET_HPP
 
+#include <ncurses.h>
 #include "lib.hpp"
 
-#define BULLET_G 100 // gravità dei proiettili
+#define BULLET_G 90 // gravità dei proiettili
 
 struct node {
 	vector pos; // posizione
@@ -17,7 +18,6 @@ struct node {
 class bulletManager {
 private:
 	node* head; // lista in cui ogni nodo è un proiettile
-	int num; //numero di proiettili in lista
 	node* removeNode(hitBox target, node* p, int &damage);
 	bool outOfBounds(vector pos);
 public:
@@ -25,7 +25,6 @@ public:
 	void add(point p, vector speed, bool gravity, int damage, char texture);
 	void update(double deltaTime);
 	int check(hitBox box);
-	void clear();
 	void print();
 };
 

@@ -10,7 +10,7 @@ protected:
 	timeSpan t; // tempo dell'animazione
 public:
 	coin(int x, int y, int value);
-	int check(hitBox p);
+	int check(hitBox player);
 	void print(timeSpan deltaTime);
 };
 

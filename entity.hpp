@@ -1,9 +1,9 @@
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
 
+#include <ncurses.h>
 #include "lib.hpp"
 #include "bulletManager.hpp"
-
 class level;
 
 #define ENTITY_G 175
@@ -17,8 +17,8 @@ protected:
 	level* lvl; // reference al gestore del livello
 	double ySpeed; // velocità verticale
 	double yMod; // parte decimale della posizione in verticale
-	bool isGrounded; // 'se il player ha i piedi per terra'
 
+	bool isGrounded();
 	void applyGravity(timeSpan deltaTime);
 	void move(char input);
 	void setPrintColor(int paint);

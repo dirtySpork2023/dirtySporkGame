@@ -1,14 +1,12 @@
 #include "coin.hpp"
 
-#include "ncurses.h"
+//		Sprites
+#define S1 0.3 //	($)
+#define S2 0.1 //	 @
+#define S3 0.2 //	 |
+#define ANIMATION_TIME S1+S2+S3+S2
 
-//		SpriteWeights
-#define SW1 0.3 //	($)
-#define SW2 0.1	//	 @
-#define SW3 0.2 //	 |
-//		SpriteTotalTime
-#define STT SW1 + SW2 + SW3 + SW2
-
+// costruttore
 coin::coin(int x, int y, int value){
 	box.a.x = x-1;
 	box.a.y = y;
@@ -19,8 +17,8 @@ coin::coin(int x, int y, int value){
 }
 
 // ritorna il valore della moneta se è presa, altrimenti ritorna -1
-int coin::check(hitBox p){
-	if( collisionHP(p, box.a) || collisionHP(p, box.b) )
+int coin::check(hitBox player){
+	if( collisionHP(player, box.a) || collisionHP(player, box.b) )
 		return value;
 	else
 		return -1;
@@ -29,15 +27,15 @@ int coin::check(hitBox p){
 // stampa la moneta animando l'animazione
 void coin::print(timeSpan deltaTime){
 	t += deltaTime;
-	if( t>STT ) t -= STT;
+	if( t>ANIMATION_TIME ) t -= ANIMATION_TIME;
 
 	attrset(COLOR_PAIR(PAINT_COIN));	
 
-	if(t<SW1){
+	if(t<S1){
 		posPrintW(box.a, "($)");
-	}else if(t<SW1+SW2){
+	}else if(t<S1+S2){
 		posPrintW(box.a, " @ ");
-	}else if(t<(STT-SW2)){
+	}else if(t<(ANIMATION_TIME-S2)){
 		posPrintW(box.a, " | ");
 	}else{
 		posPrintW(box.a, " @ ");

@@ -1,11 +1,11 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include <ncurses.h>
+#include <cmath>
 #include "lib.hpp"
 #include "bulletManager.hpp"
-
 #include "shooter.hpp"
-
 class level;
 
 #define MAX_HEALTH 100

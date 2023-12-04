@@ -1,12 +1,8 @@
-#include <ncurses.h>
-
-#include "lib.hpp"
 #include "bulletManager.hpp"
-using namespace std;
 
+// costruttore
 bulletManager::bulletManager(){
 	head = NULL;
-	num = 0;
 }
 
 // aggiunta in testa alla lista
@@ -24,20 +20,6 @@ void bulletManager::add(point p, vector speed, bool gravity, int damage, char te
 	tmp->gravity = gravity;
 	tmp->damage = damage;
 	tmp->texture = texture;
-	num++;
-}
-
-// applica gravità e aggiorna la posizione di tutti i proiettili
-void bulletManager::update(double deltaTime){
-	node* tmp = head;
-	while( tmp!=NULL ) {
-		if( tmp->gravity ){
-			tmp->speed.y += BULLET_G * deltaTime;
-		}
-		tmp->pos.x += tmp->speed.x * deltaTime;
-		tmp->pos.y += tmp->speed.y * deltaTime;
-		tmp = tmp->next;
-	}
 }
 
 // rimuove tutti i proiettili che colpiscono 'target'
@@ -55,7 +37,6 @@ node* bulletManager::removeNode(hitBox target, node* p, int &damage ){
 	}
 
 	if( doRemove ){
-		num--;
 		// se la testa della lista in esame è anche la testa della lista totale, devo aggiornarla
 		if( p==head ){
 			head = head->next;
@@ -75,21 +56,24 @@ bool bulletManager::outOfBounds(vector pos){
 	return ( pos.x < 0 || COLS < pos.x || pos.y < -20 || LINES-9 < pos.y );
 }
 
+// applica gravità e aggiorna la posizione di tutti i proiettili
+void bulletManager::update(double deltaTime){
+	node* tmp = head;
+	while( tmp!=NULL ) {
+		if( tmp->gravity ){
+			tmp->speed.y += BULLET_G * deltaTime;
+		}
+		tmp->pos.x += tmp->speed.x * deltaTime;
+		tmp->pos.y += tmp->speed.y * deltaTime;
+		tmp = tmp->next;
+	}
+}
+
 // elimina i proiettili che collidono con 'box' e ritorna il danno complessivo
 int bulletManager::check(hitBox target){
 	int result = 0;
 	head = removeNode(target, head, result);
 	return result;
-}
-
-// rimuove tutti i proiettili
-void bulletManager::clear(){
-	node* tmp;
-	while(head!=NULL){
-		tmp = head;
-		head = head->next;
-		delete tmp;
-	}
 }
 
 // stampa tutti i proiettili

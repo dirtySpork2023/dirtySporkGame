@@ -1,10 +1,4 @@
 #include "shooter.hpp"
-
-#include <ncurses.h>
-#include <time.h>
-#include <stdlib.h>
-
-#include "entity.hpp"
 #include "level.hpp"
 
 shooter::shooter(int x, int y, level* lvl, int h, double fireRate, int damage, char bullet):

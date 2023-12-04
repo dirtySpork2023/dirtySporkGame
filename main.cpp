@@ -44,14 +44,13 @@ int main(){
 	int diff = numL;
 	int money = 0;
 	
-	bulletManager B = bulletManager();
 	// Lista di livelli
 	lvlList head = new lvlNode;
-	head->lvl = new level (numL, diff, &B);
+	head->lvl = new level (numL, diff);
 	head->next = NULL;
 	// Puntatore al livello corrente
 	level* currentLvl = head->lvl;
-	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
+	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
 	while( !quit ){
@@ -80,7 +79,7 @@ int main(){
 			if( head->lvl->number() < numL ){
 				// livello nuovo aggiunto in testa
 				lvlNode* tmp = new lvlNode;
-				tmp->lvl = new level (head->lvl->number()+1, ++diff, &B);
+				tmp->lvl = new level (head->lvl->number()+1, ++diff);
 				tmp->next = head;
 				head = tmp;
 			}
@@ -95,7 +94,6 @@ int main(){
 				}
 				tmp = tmp->next;
 			}
-			B.clear();
 			P.changeLevel(currentLvl);
 		}
 
@@ -118,10 +116,9 @@ int main(){
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->number()>1 )
 				numL--;
 
-			B.update(deltaTime);
+		    currentLvl->update(&P, deltaTime);
 			P.update(input, deltaTime);
 			money += currentLvl->updateCoin(&P);
-		    currentLvl->update(&P, deltaTime);
 
 			// OUTPUT
 
@@ -145,7 +142,6 @@ int main(){
 
 
 			currentLvl->printAll(deltaTime);
-			B.print();
 			P.print(deltaTime);
 
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);

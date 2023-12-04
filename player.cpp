@@ -8,8 +8,8 @@
 #include "level.hpp"
 using namespace std;
 
-player::player(int x, int y, level* lvl, bulletManager* b, int weapon, float jumpHeight, float armor):
-	shooter(x,y,lvl,b,MAX_HEALTH,1,1,'?'){ //fireRate, damage e texture sono temporanei qui
+player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float armor):
+	shooter(x,y,lvl,MAX_HEALTH,1,1,'?'){ //fireRate, damage e texture sono temporanei qui
 
 	lastShot = 0;
 
@@ -25,7 +25,7 @@ void player::update(char input, timeSpan deltaTime){
 
 	// faccio un bM->check prima per usare l'override della funzione hurt
 	// quindi ci sarà un bM->check ridondante all'interno di entity
-	hurt(bM->check(box));
+	hurt(lvl->getBM()->check(box));
 	entity::update(deltaTime);
 
 	if( input=='a' || input=='A' || input=='q' ){
@@ -82,7 +82,7 @@ void player::shoot(){
 	if( facingRight ) muzzle.x = box.b.x+1;
 	else muzzle.x = box.a.x-1;
 
-	bM->add(muzzle, speed, false, damage, texture);
+	lvl->getBM()->add(muzzle, speed, false, damage, texture);
 }
 
 void player::setGun(int id){

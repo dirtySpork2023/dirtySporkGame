@@ -16,8 +16,8 @@ protected:
 	int damage;
 	timeSpan lastMove;
 public:
-	kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed, int damage);
-	kuba(int x, int y, level* lvl, bulletManager* bM);
+	kuba(int x, int y, level* lvl, int h, double moveSpeed, int damage);
+	kuba(int x, int y, level* lvl);
 	void update(player* target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 };

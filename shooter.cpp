@@ -7,8 +7,8 @@
 #include "entity.hpp"
 #include "level.hpp"
 
-shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fireRate, int damage, char bullet):
-	entity(x,y,lvl,bM,h){
+shooter::shooter(int x, int y, level* lvl, int h, double fireRate, int damage, char bullet):
+	entity(x,y,lvl,h){
 	this->facingRight = true;
 	this->fireRate = fireRate;
 	this->damage = damage;
@@ -16,8 +16,8 @@ shooter::shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fire
 	this->lastShot = -rand()%100/(double)100;
 }
 
-shooter::shooter(int x, int y, level* lvl, bulletManager* bM):
-	shooter(x, y, lvl, bM,
+shooter::shooter(int x, int y, level* lvl):
+	shooter(x, y, lvl,
 		/* HEALTH */ 15+2*lvl->getDiff(),
 		/* FIRE_RATE */ 1/(0.5 + 0.1*lvl->getDiff()),
 		/* DAMAGE */ 20 + 5*lvl->getDiff(),
@@ -79,6 +79,6 @@ void shooter::shoot(point p){
 		//evito traiettoie che possono colpire lo shooter stesso
 		lastShot=fireRate;
 	}else{
-		bM->add(muzzle,speed,true,damage,'G');
+		lvl->getBM()->add(muzzle,speed,true,damage,'G');
 	}
 }

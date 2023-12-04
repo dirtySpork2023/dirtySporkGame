@@ -5,8 +5,8 @@
 #include "level.hpp"
 using namespace std;
 
-yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm):
-	shooter(x,y,lvl,bM,h,fr,dm,'+'){
+yuck::yuck(int x, int y, level* lvl, int h, double fr, int dm):
+	shooter(x,y,lvl,h,fr,dm,'+'){
 	chargeTime = 3; // secondi
 	laserTime = 1; // secondi
 	lastCharge = 0;
@@ -18,8 +18,8 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm
 	box.a.y -= 1;
 }
 
-yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
-	yuck(x,y,lvl,bM,
+yuck::yuck(int x, int y, level* lvl):
+	yuck(x,y,lvl,
 		/* HEALTH */ 180+5*lvl->getDiff(),
 		/* FIRE_RATE */ 0.004,
 		/* DAMAGE */ 2 + 1*lvl->getDiff()){
@@ -27,7 +27,7 @@ yuck::yuck(int x, int y, level* lvl, bulletManager* bM):
 
 void yuck::update(point target, timeSpan deltaTime){
 	if(!awake){
-		bM->check(box);		// non applico danni ma elimino comunque i proiettili che collidono
+		lvl->getBM()->check(box);		// non applico danni ma elimino comunque i proiettili che collidono
 		entity::update(deltaTime);
 	}else{
 		entity::update(deltaTime);
@@ -109,7 +109,7 @@ void yuck::shoot(){
 	if( facingRight ) muzzle.x = box.b.x+1;
 	else muzzle.x = box.a.x-1;
 
-	bM->add(muzzle, speed, false, damage, texture);
+	lvl->getBM()->add(muzzle, speed, false, damage, texture);
 }
 
 void yuck::wakeUp(){

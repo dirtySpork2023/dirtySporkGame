@@ -107,10 +107,11 @@ hitBox hiboxPlatx (lPlatform lp, int x) {
     return lp->plat->getHitbox();
 }
 
-level::level (int nl, int d, bulletManager* B) {
+level::level (int nl, int d) {
     //generazione piattaforme inferiori
     this->nlevel = nl;                      // Assegno il numero del livello 
     this->diff = d;                         // Difficoltà
+    this->B = new bulletManager();
     int numPlatinf = (rand()%3) + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
     int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
     int blevel = LINES-WIN_HEIGHT-1;
@@ -160,7 +161,7 @@ level::level (int nl, int d, bulletManager* B) {
     int weight = this->nlevel;
     // Yuck 
     if (this->nlevel % 4 == 0) {    
-        this->Y = new yuck(COLS-6, blevel-1, this, B);
+        this->Y = new yuck(COLS-6, blevel-1, this);
         weight -= 1;
     } else this->Y = NULL;
     // Shooters
@@ -168,7 +169,7 @@ level::level (int nl, int d, bulletManager* B) {
     for (int i=0; weight>1 && i<2; weight-=2, i++) { 
         hitBox ht = hiboxPlatx(this->platforms, this->numplat-1-i*2);
         tmp1 = new Pshooter;
-        tmp1->S = new shooter(ht.a.x+4, ht.a.y-1, this, B);
+        tmp1->S = new shooter(ht.a.x+4, ht.a.y-1, this);
         tmp1->next = this->shooters;
         this->shooters = tmp1;
     }
@@ -178,7 +179,7 @@ level::level (int nl, int d, bulletManager* B) {
     for (int i=0, pt=4; weight>0 && i<3; i++, pt+=i, weight--) { 
         hitBox ht = hiboxPlatx(this->platforms, pt);     
         tmp2 = new Pkuba;
-        tmp2->K = new kuba(ht.a.x+(ht.b.x-ht.a.x)/2, ht.a.y-1, this, B);
+        tmp2->K = new kuba(ht.a.x+(ht.b.x-ht.a.x)/2, ht.a.y-1, this);
         tmp2->next = this->kubas;
         this->kubas = tmp2;
     }
@@ -219,6 +220,7 @@ void level::printAll (timeSpan deltaTime) {
     }
     delete tmps;
     if (this->Y != NULL) this->Y->print(deltaTime);
+    B->print();
 }
 
 /*
@@ -291,6 +293,7 @@ int level::getDiff () {
 }
 
 void level::update (player* P, timeSpan deltaTime) {
+    B->update(deltaTime);
     // Update nemici
     if(this->kubas!=NULL) {
         lKuba tmpk = this->kubas;
@@ -332,4 +335,8 @@ int level::updateCoin (player* P) {
 bool level::completed() {
     if(this->kubas==NULL && this->shooters==NULL && this->Y==NULL) return true;
     else return false;
+}
+
+bulletManager* level::getBM(){
+    return B;
 }

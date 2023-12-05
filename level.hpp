@@ -13,6 +13,12 @@
 #include "platform.hpp"
 #include "coin.hpp"
 
+struct node{
+    void* obj;
+    char type;
+    node* next;
+};
+
 struct Pplatform
 {
     platform *plat;
@@ -24,28 +30,6 @@ hitBox newRandomPlat(hitBox where, int de);
 
 lPlatform createnPlat(int np, hitBox ht, int len, int d);
 
-struct Pkuba
-{
-    kuba *K;
-    Pkuba *next;
-};
-typedef Pkuba *lKuba;
-
-struct Pshooter
-{
-    shooter *S;
-    Pshooter *next;
-};
-typedef Pshooter *lShooter;
-
-struct Pcoin {
-    coin* C;
-    Pcoin* next;
-};
-typedef Pcoin* lCoin;
-
-lKuba dltKuba (lKuba lk);
-lShooter dltShooter (lShooter ls);
 lCoin dltCoin (lCoin lc, player* P, int* money);
 
 void print_platforms (lPlatform lsp);       // Funzione stampa lista di piattaforme
@@ -65,11 +49,15 @@ protected:
     int diff;                   // Difficoltà
     int numplat;
     bulletManager* B;
+    node* head;
+    node* coins;
+    node* kubas;
+    node* shooters;
+    node* yucks;
     lPlatform platforms;        // Lista delle piattaforme del livello
-    lKuba kubas;                // Lista di kuba
-    lShooter shooters;          // Lista di shooters
-    yuck* Y;                    // Yuck è al massimo 1
-    lCoin coins;
+
+    node* dltNode(node* h);
+    node* add(void* obj, char type);
 
 public:
     level (int nl, int d);

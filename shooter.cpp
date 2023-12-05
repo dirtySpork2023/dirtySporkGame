@@ -8,7 +8,7 @@ shooter::shooter(int x, int y, level* lvl, int h, double fireRate, int damage, c
 	this->fireRate = fireRate;
 	this->damage = damage;
 	this->texture = bullet;
-	this->lastShot = fireRate - rand()%100/(double)100;
+	this->lastShot = fireRate - random(0,100)/(double)100;
 }
 
 // costruttore secondario
@@ -47,7 +47,7 @@ void shooter::print(timeSpan deltaTime){
 		mvprintw(box.b.y,   box.a.x, "O=O");
 	}
 
-	attrset(COLOR_PAIR(1));
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
 void shooter::shoot(point p){

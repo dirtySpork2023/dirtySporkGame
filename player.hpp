@@ -2,7 +2,7 @@
 #define PLAYER_HPP
 
 #include <ncurses.h>
-#include <cmath>
+#include <cmath> // sqrt
 #include "lib.hpp"
 #include "bulletManager.hpp"
 #include "shooter.hpp"
@@ -15,7 +15,7 @@ class level;
 
 class player: public shooter {
 protected:
-	double armor; // 0-1 riduce i danni subiti
+	double armor; // 0-1 percentuale di riduzione dei danni subiti
 	double jumpSpeed;
 	int gunID;
 
@@ -26,8 +26,10 @@ public:
 	bool hurt(int value);
 	void shoot();
 	void setGun(int id);
-	void changeLevel(level* newLvl);
+	int getGun();
+	void setArmor(int percentage);
 	double getArmor();
+	void changeLevel(level* newLvl);
 };
 
 #endif //PLAYER_HPP

@@ -17,7 +17,6 @@ player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float arm
 void player::update(char input, timeSpan deltaTime){
 
 	// faccio un bM->check prima per usare l'override della funzione hurt
-	// quindi ci sarà un bM->check ridondante all'interno di entity
 	hurt(lvl->getBM()->check(box));
 	entity::update(deltaTime);
 
@@ -32,15 +31,11 @@ void player::update(char input, timeSpan deltaTime){
 	if( isGrounded() && (input=='F' || input=='w' || input=='e' || input=='q')){
 		ySpeed = jumpSpeed;
 	}
+
+	lastShot += deltaTime;
 	if( (input=='f'||input=='F') && lastShot > fireRate ){
 		shoot();
 		lastShot = 0;
-	}else{
-		lastShot += deltaTime;
-	}
-	if( input=='g'){
-		gunID = (gunID+1)%3;
-		setGun(gunID);
 	}
 }
 
@@ -96,6 +91,14 @@ void player::setGun(int id){
 		damage = 10;
 		texture = 'o';
 	}
+}
+
+int player::getGun(){
+	return gunID;
+}
+
+void player::setArmor(int percentage){
+	armor = (double)percentage/100;
 }
 
 double player::getArmor(){

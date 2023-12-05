@@ -1,9 +1,11 @@
 #ifndef LEVEL_HPP
 #define LEVEL_HPP
 
+#include <ncurses.h>
+#include <time.h>
+#include <stdlib.h>
 #include "lib.hpp"
 #include "bulletManager.hpp"
-#include "entity.hpp"
 #include "shooter.hpp"
 #include "yuck.hpp"
 #include "player.hpp"

@@ -1,11 +1,4 @@
-#include <ncurses.h>
-#include <iostream>
-#include <chrono>
-#include <time.h>
-#include <stdlib.h>
-
 #include "level.hpp"
-using namespace std;
 
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
 hitBox newRandomPlat (hitBox w, int de) {

@@ -2,6 +2,8 @@
 #define LIB_HPP
 
 #include <ncurses.h>
+#include <time.h>
+#include <stdlib.h>
 
 // colori da 8 a 255 (i colori 0-7 sono predefiniti ma modificabili)
 #define COLOR_PLAYER 8
@@ -24,8 +26,9 @@
 #define PAINT_BACKGROUND 9
 #define PAINT_TITLE 10
 
+// altezza resource bar
 #define WIN_HEIGHT 9
-#define WIN_OFFSET COLS/2-50
+// posizione del titolo
 #define X_OFFSET COLS/2-64
 #define Y_OFFSET 4
 
@@ -61,12 +64,13 @@ bool collisionPP(point, point);
 bool isTouching (hitBox v1, hitBox v2, char d);
 
 point snap(vector);
+int random(int min, int max);
 vector randVector();
 
 void posPrintW(point, const char*);
 void posPrintW(point, char);
 
-void titleScreen();
+void printBackground(int lvl);
 
 void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty);
 

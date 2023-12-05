@@ -2,8 +2,6 @@
 #define SHOOTER_HPP
 
 #include <ncurses.h>
-#include <time.h>
-#include <stdlib.h>
 #include "lib.hpp"
 #include "bulletManager.hpp"
 #include "entity.hpp"

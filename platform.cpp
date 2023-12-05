@@ -1,10 +1,6 @@
 #include <ncurses.h>
 #include "lib.hpp"
 #include "platform.hpp"
-#include <stdlib.h>
-#include <time.h>
-#include <iostream>
-using namespace std;
 
 platform::platform(int x1, int y1, int x2, int y2) {
     this->box.a.x = x1;
@@ -39,7 +35,6 @@ void platform::printc (char c) {
     }
     attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
-
 
 hitBox platform::getHitbox() {
     return this->box;

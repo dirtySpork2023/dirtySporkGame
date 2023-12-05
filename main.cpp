@@ -1,8 +1,5 @@
 #include <ncurses.h>
-#include <iostream>
 #include <chrono>
-#include <time.h>
-#include <stdlib.h>
 
 #include "lib.hpp"
 #include "bulletManager.hpp"
@@ -15,10 +12,7 @@
 #include "platform.hpp"
 #include "level.hpp"
 #include "menu.hpp"
-
-using namespace std;
-
-#define COIN_SPACING 7
+using namespace std::chrono;
 
 struct lvlNode {
 	level* lvl;
@@ -98,12 +92,12 @@ int main(){
 		}
 
 		// CICLO PRINCIPALE
-		auto lastTimePoint = std::chrono::high_resolution_clock::now();
+		auto lastTimePoint = high_resolution_clock::now();
 		while( !quit && !openMenu && currentLvl->number()==numL){
-			auto thisTimePoint = std::chrono::high_resolution_clock::now();
+			auto thisTimePoint = high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
-			deltaTime = std::chrono::duration<double>(elapsed).count();
+			deltaTime = duration<double>(elapsed).count();
 
 			// UPDATE
 			
@@ -113,7 +107,7 @@ int main(){
 
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
 				numL++;
-			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->number()>1 )
+			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 
 		    currentLvl->update(&P, deltaTime);
@@ -122,24 +116,8 @@ int main(){
 
 			// OUTPUT
 
-			attrset(COLOR_PAIR(PAINT_BACKGROUND));
-			// background brick texture
-			for(int y=0; y<LINES-WIN_HEIGHT; y++){
-				for(int x=0; x<COLS; x++){
-					if( y%2==0 && x%6==1 || y%2==1 && x%6==4)
-						mvprintw(y, x, "|");
-					else
-						mvprintw(y, x, "_");
-				}
-			}
-			if(currentLvl->number()==1){
-				titleScreen();
-			}
-			attrset(COLOR_PAIR(PAINT_DEFAULT));
-			attron(A_DIM);
-			mvprintw(0, 3, "fps: %.0f | deltaTime: %f ", 1/deltaTime, deltaTime);
-			attroff(A_DIM);
-
+			printBackground(currentLvl->number());
+			mvprintw(0, 3, "[[fps: %.0f ]]", 1/deltaTime);
 
 			currentLvl->printAll(deltaTime);
 			P.print(deltaTime);

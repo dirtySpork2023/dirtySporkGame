@@ -13,12 +13,6 @@
 #include "platform.hpp"
 #include "coin.hpp"
 
-struct node{
-    void* obj;
-    char type;
-    node* next;
-};
-
 struct Pplatform
 {
     platform *plat;
@@ -30,10 +24,22 @@ hitBox newRandomPlat(hitBox where, int de);
 
 lPlatform createnPlat(int np, hitBox ht, int len, int d);
 
-lCoin dltCoin (lCoin lc, player* P, int* money);
-
 void print_platforms (lPlatform lsp);       // Funzione stampa lista di piattaforme
 hitBox hiboxPlatx (lPlatform lp, int x);   // Restituisce la hitBox della piattaforma x
+
+/*
+    ' ' : void
+    k   : kuba
+    s   : shooter
+    y   : yuck
+    #   : platform
+    c   : coin
+*/
+struct node{
+    void* obj;
+    char type;
+    node* next;
+};
 
 // Struct da restituire nella funzione check
 struct infoCrash
@@ -45,18 +51,17 @@ struct infoCrash
 class level
 {
 protected:
-    int nlevel;                 // Numero del livello
-    int diff;                   // Difficoltà
+    int nlevel; // Numero del livello
+    int diff; // Difficoltà
     int numplat;
     bulletManager* B;
     node* head;
     node* coins;
-    node* kubas;
-    node* shooters;
+    node* enemies;
     node* yucks;
     lPlatform platforms;        // Lista delle piattaforme del livello
 
-    node* dltNode(node* h);
+    node* dltNode(node* h, player* P, int* count);
     node* add(void* obj, char type);
 
 public:
@@ -65,8 +70,7 @@ public:
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
     int getDiff ();
-    void update (player* P, timeSpan deltaTime);
-    int updateCoin (player* P);
+    int update (player* P, timeSpan deltaTime);
     bool completed();
     bulletManager* getBM ();
 };

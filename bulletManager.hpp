@@ -6,19 +6,19 @@
 
 #define BULLET_G 90 // gravità dei proiettili
 
-struct node {
+struct bullet {
 	vector pos; // posizione
 	vector speed; // velocità
 	bool gravity; // true se il proiettile risente di gravità
 	int damage; // danno del proiettile
 	char texture; // grafica
-	node* next;
+	bullet* next;
 };
 
 class bulletManager {
 private:
-	node* head; // lista in cui ogni nodo è un proiettile
-	node* removeNode(hitBox target, node* p, int &damage);
+	bullet* head; // lista in cui ogni nodo è un proiettile
+	bullet* removeBullet(hitBox target, bullet* p, int &damage);
 	bool outOfBounds(vector pos);
 public:
 	bulletManager();

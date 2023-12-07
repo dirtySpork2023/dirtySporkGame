@@ -23,33 +23,32 @@ typedef lvlNode* lvlList;
 
 int main(){
 	srand(time(NULL));
-	printf("fuck");
-	//inizializza ncurses
+
+	// ncurses setup
 	init();
-	mvprintw(1,1,"hello0");
+	
 	// bottom window setup
 	WINDOW* bottomWin = newwin(WIN_HEIGHT, COLS, LINES-WIN_HEIGHT, 0);
 	
 	timeSpan deltaTime = 0; // durata in secondi di ogni ciclo del gioco
-	mvprintw(1,1,"hello1");
-	char input = 'd';
+	
+	char input;
 	bool quit = false;
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente;
 	int diff = numL;
 	int money = 0;
 	
-	mvprintw(1,1,"hello2");
 	// Lista di livelli
 	lvlList head = new lvlNode;
 	head->lvl = new level (numL, diff);
 	head->next = NULL;
-	mvprintw(1,1,"hello3");
+	
 	// Puntatore al livello corrente
 	level* currentLvl = head->lvl;
 	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
-	mvprintw(1,1,"hello4");
+	
 	while( !quit ){
 
 		// MENU
@@ -103,7 +102,7 @@ int main(){
 			deltaTime = duration<double>(elapsed).count();
 			
 			// UPDATE
-			//input = getch();
+			input = getch();
 			if( input=='Q' ) quit = true;
 			if( input=='m' ) openMenu = true;
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
@@ -111,7 +110,7 @@ int main(){
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 			
-		    money += currentLvl->update(&P, deltaTime);
+		    currentLvl->update(&P, &money, deltaTime);
 			P.update(input, deltaTime);
 			// OUTPUT
 

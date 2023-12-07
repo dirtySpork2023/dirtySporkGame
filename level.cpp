@@ -148,6 +148,7 @@ level::level (int nl, int d) {
     if (this->nlevel % 4 == 0) {    
         tmp = new yuck(COLS-10, blevel-1, this);
         head = add(tmp, 'y');
+        weight--;
     }
     yucks = head;
     // Shooters
@@ -176,7 +177,7 @@ level::level (int nl, int d) {
     // coins --> kubas --> shooters --> yucks --> NULL
 }
 
-int level::update (player* P, timeSpan deltaTime) {
+void level::update (player* P, int* money, timeSpan deltaTime) {
     B->update(deltaTime);
     
     // Update nemici
@@ -188,18 +189,16 @@ int level::update (player* P, timeSpan deltaTime) {
             ((shooter*)tmp->obj)->update(P->getPos(), deltaTime);
         if( tmp->type=='y' )
             ((yuck*)tmp->obj)->update(P->getPos(), deltaTime);
+        
         tmp = tmp->next;
     }
 
 	// pulizia lista
-    int newMoney=0;
-	head = dltNode(head, P, &newMoney);
+	head = dltNode(head, P, money);
 
     if(enemies==NULL && yucks!=NULL){
         ((yuck*)yucks->obj)->wakeUp();
 	}
-
-    return newMoney;
 }
 
 infoCrash level::check (hitBox pl, char d) {
@@ -227,6 +226,7 @@ infoCrash level::check (hitBox pl, char d) {
                 info.obj = tmp->obj;
             }
         }
+        tmp = tmp->next;
     }
 
     if (!here) {
@@ -250,6 +250,8 @@ void level::printAll (timeSpan deltaTime) {
             ((shooter*)tmp->obj)->print(deltaTime);
         if( tmp->type=='y' )
             ((yuck*)tmp->obj)->print(deltaTime);
+        
+        tmp = tmp->next;
     }
 
     B->print();

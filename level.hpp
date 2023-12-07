@@ -55,11 +55,11 @@ protected:
     int diff; // Difficoltà
     int numplat;
     bulletManager* B;
-    node* head;
+    node* head; // lista di oggetti del livello
     node* coins;
     node* enemies;
     node* yucks;
-    lPlatform platforms;        // Lista delle piattaforme del livello
+    lPlatform platforms; // Lista delle piattaforme del livello
 
     node* dltNode(node* h, player* P, int* count);
     node* add(void* obj, char type);
@@ -70,7 +70,7 @@ public:
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
     int getDiff ();
-    int update (player* P, timeSpan deltaTime);
+    void update (player* P, int* money, timeSpan deltaTime);
     bool completed();
     bulletManager* getBM ();
 };

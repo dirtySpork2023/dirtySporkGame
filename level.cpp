@@ -3,11 +3,10 @@
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
 hitBox level::newRandomPlat (hitBox w, int de) {
     hitBox nw;
-    nw.a.x = w.a.x + (rand()%5);
-    nw.a.y = w.a.y + (rand()%4);
-    nw.b.x = nw.a.x + (15 + rand()%(35 - 12));    //(nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));  8 + rand()%(w.b.x - nw.a.x - 8)
+    nw.a.x = w.a.x + random(0,5);
+    nw.a.y = w.a.y + random(0,3);
+    nw.b.x = nw.a.x + random(15,37);    //(nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));  8 + rand()%(w.b.x - nw.a.x - 8)
     nw.b.y = nw.a.y + 1;
-
     return nw; 
 }
 

@@ -47,8 +47,7 @@ protected:
     node* platforms; // Lista delle piattaforme del livello
 
     hitBox newRandomPlat(hitBox where, int de);
-    hitBox hiboxPlatx (node* lp, int x);   // Restituisce la hitBox della piattaforma x
-    point newSpawn();
+    hitBox hitBoxPlatX (int x); // Restituisce la hitBox della piattaforma x
     void createNPlat(int np, hitBox ht, int len, int d);
     node* dltNode(node* h, player* P, int* count);
     node* add(void* obj, char type);

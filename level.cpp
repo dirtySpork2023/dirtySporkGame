@@ -11,17 +11,14 @@ hitBox level::newRandomPlat (hitBox w, int de) {
     return nw; 
 }
 
-hitBox level::hiboxPlatx (node* lp, int x) {
-    while (x!=0 && lp!=NULL) {
+// x dev'essere minore di numplat, altrimenti segmentation fault
+hitBox level::hitBoxPlatX (int x) {
+    node* lp = platforms;
+    while (x>0) {
         lp=lp->next;
         x--;
     }
-    if(lp==NULL) return ((platform*)platforms->obj)->getHitBox();
-    else return ((platform*)lp->obj)->getHitBox();
-}
-
-point level::newSpawn(){
-
+    return ((platform*)lp->obj)->getHitBox();
 }
 
 // Funzione che genera una lista di n piattaforme
@@ -139,22 +136,22 @@ level::level (int nl, int d) {
     }
     // Shooters
     for (int i=0; weight>1 && i<2; i++) {
-        hitBox ht = hiboxPlatx(platforms, 1+i*2);
+        hitBox ht = hitBoxPlatX(1+i*2);
         newObj = new shooter(ht.b.x-4, ht.a.y-1, this);
         head = add(newObj, 's');
         weight -= 2;
     }
     // Kubas
-    for (int i=0, pt=5; weight>0 && i<4; i++, pt+=i) { 
-        hitBox ht = hiboxPlatx(platforms, numplat-pt);
+    for (int i=0, pt=5; weight>0 && i<3; i++, pt+=i) { 
+        hitBox ht = hitBoxPlatX(numplat-pt);
         newObj = new kuba(ht.a.x+(ht.b.x-ht.a.x)/2, ht.a.y-1, this);
         head = add(newObj, 'k');
         weight--;
     }
     enemies = head;
     // Generazione monete
-    for (int p=5, i=0; i<=nlevel/3 && i<3; i++, p+=i) {
-        hitBox ht = hiboxPlatx(platforms, numplat-p);
+    for (int p=6, i=0; i<=nlevel/3 && i<3; i++, p+=i) {
+        hitBox ht = hitBoxPlatX(numplat-p);
         for(int j=0; j<3; j++) {
             newObj = new coin(ht.a.x+(ht.b.x-ht.a.x)/2-5+j*5, ht.a.y-2, nlevel); // Monete stampate sopra le piattaforme
             head = add(newObj, 'c');

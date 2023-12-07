@@ -2,11 +2,18 @@
 #include "lib.hpp"
 #include "platform.hpp"
 
-platform::platform(int x1, int y1, int x2, int y2) {
+platform::platform(int x1, int y1, int x2, int y2, char text) {
     this->box.a.x = x1;
     this->box.a.y = y1;
     this->box.b.x = x2;
     this->box.b.y = y2;
+    this->texture = text;
+}
+
+void platform::print(){
+    if(texture=='p')
+        printp();
+    else printc(texture);
 }
 
 // Stampa della piattaforma
@@ -36,6 +43,6 @@ void platform::printc (char c) {
     attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
-hitBox platform::getHitbox() {
+hitBox platform::getHitBox() {
     return this->box;
 }

@@ -6,11 +6,13 @@
 class platform {
 protected:
     hitBox box;
+    char texture;
 public:
-    platform (int a, int b, int c, int d);
+    platform (int a, int b, int c, int d, char text);
+    void print();
     void printp();
     void printc(char c);
-    hitBox getHitbox();
+    hitBox getHitBox();
 };
 
 #endif //PLATFORM_HPP

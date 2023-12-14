@@ -112,6 +112,7 @@ int main(){
 			
 		    currentLvl->update(&P, &money, deltaTime);
 			P.update(input, deltaTime);
+			
 			// OUTPUT
 
 			printBackground(currentLvl->number());

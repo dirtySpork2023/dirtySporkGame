@@ -10,7 +10,7 @@ struct bullet {
 	vector pos; // posizione
 	vector speed; // velocità
 	bool gravity; // true se il proiettile risente di gravità
-	int damage; // danno del proiettile
+	int damage; // danno del proiettile<<
 	char texture; // grafica
 	bullet* next;
 };

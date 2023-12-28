@@ -57,11 +57,9 @@ int main(){
 	while( !quit ){
 
 		// MENU
-		while(!quit && openMenu){
+		if(!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
-			if( input=='m' || input=='q' ) openMenu = false;
-			//menu.update(input);
 
 			// RIPRENDI
 			// MERCATO
@@ -114,19 +112,14 @@ int main(){
 			if( input=='Q' ) quit = true;
 			if( input=='m' ) openMenu = true;
 
-			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
+			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				numL++;
-<<<<<<< HEAD
 				if (totLvl < numL) totLvl ++;
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu
 				openMenu = true;
 			}
-=======
-			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->number()>1 )
-				numL--;
->>>>>>> 4c65c449aebc0368dffbd85b218ce46608c0e2b7
 
 		    currentLvl->update(&P, deltaTime);
 			P.update(input, deltaTime);

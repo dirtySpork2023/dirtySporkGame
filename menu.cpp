@@ -48,20 +48,15 @@ void market () {
 menu::menu(){
 
     for(int i=0; i<N_ARMOR; i++){
-        armor[i].cost = i*50;
+        armor[i].cost = i*35;
+        armor[i].value = i*20-5;
     }
-    armor[0].value = 0;
-    armor[1].value = 25;
-    armor[2].value = 60;
-    armor[3].value = 80;
-    armor[4].value = 90;
-    armor[5].value = 95;
     for(int i=0; i<N_GUNS; i++){
         gun[i].value = i;
         gun[i].cost = i*50;
     }
 }
- 
+
 void menu::open(int totLvl, int* currentLvl){
     win = newwin(HEIGHT, WIDTH, 6, COLS/2-WIDTH/2);
 
@@ -74,8 +69,9 @@ void menu::open(int totLvl, int* currentLvl){
     string choices[3] = {"Riprendi", "Cambia livello", "Mercato"};
     int choice, highlight = 0;
 
+    // Menu principale
     while (!close) {
-        while (choice != 10) {
+        while (choice != 10) {      // choice =! 'invio'
             for(int i=0; i<3; i++) {
                 if (i == highlight) {
                     wattron(win, A_REVERSE);

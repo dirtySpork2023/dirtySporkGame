@@ -5,8 +5,8 @@
 #include "player.hpp"
 
 
-#define HEIGHT 7
-#define WIDTH 10
+#define HEIGHT (LINES-18)
+#define WIDTH (COLS-75)
 
 #define N_ARMOR 3
 #define N_GUNS 3
@@ -19,6 +19,8 @@ struct buyable{
 };
 
 bool addLife (player* P);
+int changeLevel(int totLvl, WINDOW* win);
+void market ();
 
 class menu {
 protected:
@@ -27,7 +29,7 @@ protected:
     buyable guns[N_GUNS]; // values PISTOL, SHOTGUN, 
 public:
     menu();
-    void print();
+    void open(int totLvl, int* currentLvl);
     ~menu();
 };
 

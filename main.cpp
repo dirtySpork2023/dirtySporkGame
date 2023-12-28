@@ -87,6 +87,7 @@ int main(){
 	bool quit = false;
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente;
+	int totLvl = 1;
 	int diff = numL;
 	int money = 0;
 	
@@ -118,9 +119,10 @@ int main(){
 			// - AUMENTA ARMATURA a <70%> per 5$
 			// LIVELLO <numL>
 
-			M.print();
+			M.open(totLvl, &numL);
+			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
-
+			
 			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 		}
 
@@ -164,6 +166,7 @@ int main(){
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				// passa al livello successivo, che esista già o nuovo
 				numL++;
+				if (totLvl < numL) totLvl ++;
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu

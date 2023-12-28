@@ -15,12 +15,12 @@ class level;
 
 class player: public shooter {
 protected:
-	double armor; // 0-1 moltiplica i danni subiti
+	double armor; // 0-1 riduce i danni subiti
 	double jumpSpeed;
 	int gunID;
 
 public:
-	player(int x, int y, level* lvl, bulletManager* b, int weapon, float jumpHeight, float armor);
+	player(int x, int y, level* lvl, int weapon, float jumpHeight, float armor);
 	void update(char input, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	bool hurt(int value);

@@ -17,8 +17,8 @@ protected:
 	timeSpan lastShot;
 
 public:
-	shooter(int x, int y, level* lvl, bulletManager* bM, int h, double fireRate, int damage, char bullet);
-	shooter(int x, int y, level* lvl, bulletManager* bM);
+	shooter(int x, int y, level* lvl, int h, double fireRate, int damage, char bullet);
+	shooter(int x, int y, level* lvl);
 	void update(point target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	void shoot(point p);

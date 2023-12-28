@@ -14,7 +14,6 @@ protected:
 	hitBox box;
 	int health; // punti vita
 	timeSpan lastDamage; // tempo passato dall'ultima volta che è stato colpito entity
-	bulletManager* bM; // reference al gestore dei proiettili
 	level* lvl; // reference al gestore del livello
 	double ySpeed; // velocità verticale
 	double yMod; // parte decimale della posizione in verticale
@@ -22,10 +21,10 @@ protected:
 
 	void applyGravity(timeSpan deltaTime);
 	void move(char input);
-	void setPrintColor(int paint = PAINT_DEFAULT);
+	void setPrintColor(int paint);
 
 public:
-	entity(int x, int y, level* lM, bulletManager* bM, int hp);
+	entity(int x, int y, level* lM, int hp);
 	void update(timeSpan deltaTime);
 	point getPos();
 	hitBox getHitBox();

@@ -8,7 +8,7 @@
 #define HEIGHT (LINES-18)
 #define WIDTH (COLS-75)
 
-#define N_ARMOR 3
+#define N_ARMOR 6
 #define N_GUNS 3
 
 //value dipende dall'oggetto
@@ -25,8 +25,8 @@ void market ();
 class menu {
 protected:
     WINDOW* win;
-    buyable armors[N_ARMOR]; // value da 0 a 100
-    buyable guns[N_GUNS]; // values PISTOL, SHOTGUN, 
+    buyable armor[N_ARMOR]; // value da 0 a 100
+    buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, RIFLE
 public:
     menu();
     void open(int totLvl, int* currentLvl);

@@ -6,7 +6,7 @@
 #include "level.hpp"
 using namespace std;
 
-entity::entity(int x, int y, level* lvl, bulletManager* bM, int hp){
+entity::entity(int x, int y, level* lvl, int hp){
 	this->yMod = 0;
 	this->ySpeed = 0;
 	this->isGrounded = false;
@@ -14,7 +14,6 @@ entity::entity(int x, int y, level* lvl, bulletManager* bM, int hp){
 	this->health = hp;
 	this->lastDamage = DAMAGE_TIMESPAN+1;
 
-	this->bM = bM;
 	this->lvl = lvl;
 
 	//default hitbox. da sovrascrivere se necessario
@@ -25,7 +24,7 @@ entity::entity(int x, int y, level* lvl, bulletManager* bM, int hp){
 }
 
 void entity::update(timeSpan deltaTime){
-	hurt(bM->check(box));
+	hurt(lvl->getBM()->check(box));
 	lastDamage += deltaTime;
 	applyGravity(deltaTime);
 }
@@ -67,7 +66,7 @@ void entity::move(char input){
 		box.a.y += 1;
 		box.b.y += 1;
 	}else if( input=='w'){
-		if( i.type==' ' || i.type=='#' /*&& box.a.x>1 && box.b.x<COLS-2*/ ){
+		if( i.type==' ' || i.type=='#' && box.a.x>1 && box.b.x<COLS-2 ){
 			box.a.y -= 1;
 			box.b.y -= 1;
 		}else{
@@ -106,10 +105,8 @@ int entity::getHealth(){
 
 // danneggia entity e ritorna 'se è morto'
 bool entity::hurt(int value){
-	if( value!=0 ){
-		lastDamage = 0;
-		health -= value;
-	}
+	if( value>0 ) lastDamage = 0;
+	health -= value;
 
 	if(health <= 0){
 		health = 0;
@@ -121,9 +118,7 @@ bool entity::hurt(int value){
 
 entity::~entity(){
 	// esplosione
-	point pos = this->getPos();
-
 	for(int i=0; i<10; i++){
-		bM->add(pos, randVector(), true, 0, ':');
+		lvl->getBM()->add(this->getPos(), randVector(), true, 0, ':');
 	}
 }

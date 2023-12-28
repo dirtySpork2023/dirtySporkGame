@@ -5,8 +5,8 @@
 #include "level.hpp"
 using namespace std;
 
-kuba::kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed, int damage):
-	entity(x,y,lvl,bM,h){
+kuba::kuba(int x, int y, level* lvl, int h, double moveSpeed, int damage):
+	entity(x,y,lvl,h){
 	this->xSpeed = moveSpeed;
 	this->movingRight = false;
 	this->lastMove = 0;
@@ -17,8 +17,8 @@ kuba::kuba(int x, int y, level* lvl, bulletManager* bM, int h, double moveSpeed,
 	this->box.a.y = y-1;
 }
 
-kuba::kuba(int x, int y, level* lvl, bulletManager* bM):
-	kuba(x, y, lvl, bM,
+kuba::kuba(int x, int y, level* lvl):
+	kuba(x, y, lvl,
 		/* HEALTH */ 30+10*lvl->getDiff(),
 		/* SPEED */ 0.07,
 		/* DAMAGE */ 15+5*lvl->getDiff()){

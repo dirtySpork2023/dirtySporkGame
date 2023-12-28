@@ -26,57 +26,11 @@ struct lvlNode {
 };
 typedef lvlNode* lvlList;
 
-
-void init(){
-	initscr();
-	start_color();
-	noecho();
-	cbreak();
-	nodelay(stdscr, TRUE);
-	curs_set(0);
-
-	/*	COLOR_BLACK
-		COLOR_RED
-		COLOR_GREEN
-		COLOR_YELLOW
-		COLOR_BLUE
-		COLOR_MAGENTA
-		COLOR_CYAN
-		COLOR_WHITE
-
-	 	COLORS numero tot di colori
-	 	COLOR_PAIRS numero tot di coppie di colori
-	 */
-
-	init_color(COLOR_BLACK, 100, 100, 100);
-	init_color(COLOR_DARK, 170, 170, 170);
-	init_color(COLOR_WHITE, 1000, 1000, 1000);
-	init_color(COLOR_RED, 1000, 0, 0);
-	//init_color(COLOR_GREEN, 0, 1000, 0);
-	init_color(COLOR_BLUE, 200, 200, 700);
-	init_color(COLOR_PLAYER, 850, 1000, 850); //500, 800, 600
-	init_color(COLOR_ENEMY, 300, 600, 700);
-	init_color(COLOR_COIN, 800, 800, 0);
-	init_color(COLOR_PLATFORM, 200, 200, 200);
-	init_color(COLOR_HP, 200, 700, 200);
-
-	init_pair(PAINT_DEFAULT, COLOR_WHITE, COLOR_BLACK);
-	init_pair(PAINT_DAMAGE, COLOR_RED, COLOR_BLACK);
-	init_pair(PAINT_PLAYER, COLOR_PLAYER, COLOR_BLACK);
-	init_pair(PAINT_ENEMY, COLOR_ENEMY, COLOR_BLACK);
-	init_pair(PAINT_COIN, COLOR_COIN, COLOR_BLACK);
-	init_pair(PAINT_PLATFORM, COLOR_WHITE, COLOR_PLATFORM);
-	init_pair(PAINT_HP, COLOR_HP, COLOR_BLACK);
-	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
-	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
-
-	attrset(COLOR_PAIR(PAINT_DEFAULT));
-}
-
 int main(){
 	srand(time(NULL));
 	
-	init(); //inizializza ncurses
+	//inizializza ncurses
+	init();
 
 	// bottom window setup
 	WINDOW* bottomWin = newwin(WIN_HEIGHT, COLS, LINES-WIN_HEIGHT, 0);
@@ -91,21 +45,18 @@ int main(){
 	int diff = numL;
 	int money = 0;
 	
-	bulletManager B = bulletManager();
 	// Lista di livelli
 	lvlList head = new lvlNode;
-	head->lvl = new level (numL, diff, &B);
+	head->lvl = new level (numL, diff);
 	head->next = NULL;
 	// Puntatore al livello corrente
 	level* currentLvl = head->lvl;
-	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, &B, PISTOL, 12, 0);
+	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
-	
-	//titleScreen();
 	while( !quit ){
 
-		//menu
+		// MENU
 		while(!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
@@ -126,12 +77,12 @@ int main(){
 			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 		}
 
-		//level setup
+		// LEVEL SETUP
 		if(currentLvl->number() != numL){
 			if( head->lvl->number() < numL ){
 				// livello nuovo aggiunto in testa
 				lvlNode* tmp = new lvlNode;
-				tmp->lvl = new level (head->lvl->number()+1, ++diff, &B);
+				tmp->lvl = new level (head->lvl->number()+1, ++diff);
 				tmp->next = head;
 				head = tmp;
 			}
@@ -146,11 +97,10 @@ int main(){
 				}
 				tmp = tmp->next;
 			}
-			if(!found) currentLvl = head->lvl;
 			P.changeLevel(currentLvl);
 		}
 
-		//ciclo principale del gioco
+		// CICLO PRINCIPALE
 		auto lastTimePoint = std::chrono::high_resolution_clock::now();
 		while( !quit && !openMenu && currentLvl->number()==numL){
 			auto thisTimePoint = std::chrono::high_resolution_clock::now();
@@ -162,29 +112,25 @@ int main(){
 			
 			input = getch();
 			if( input=='Q' ) quit = true;
+			if( input=='m' ) openMenu = true;
 
-			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
-				// passa al livello successivo, che esista già o nuovo
+			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
 				numL++;
+<<<<<<< HEAD
 				if (totLvl < numL) totLvl ++;
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu
 				openMenu = true;
 			}
+=======
+			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->number()>1 )
+				numL--;
+>>>>>>> 4c65c449aebc0368dffbd85b218ce46608c0e2b7
 
-			// provvisorio
-			if( input=='1' ){ numL=1; }
-			else if(input=='2'){ numL=2; }
-			else if(input=='3'){ numL=3; }
-			else if(input=='4'){ numL=4; }
-			else if(input=='5'){ numL=5; }
-			else if(input=='6'){ numL=6; }
-
-			B.update(deltaTime);
+		    currentLvl->update(&P, deltaTime);
 			P.update(input, deltaTime);
 			money += currentLvl->updateCoin(&P);
-		    currentLvl->update(&P, deltaTime);
 
 			// OUTPUT
 
@@ -198,6 +144,9 @@ int main(){
 						mvprintw(y, x, "_");
 				}
 			}
+			if(currentLvl->number()==1){
+				titleScreen();
+			}
 			attrset(COLOR_PAIR(PAINT_DEFAULT));
 			attron(A_DIM);
 			mvprintw(0, 3, "fps: %.0f | deltaTime: %f ", 1/deltaTime, deltaTime);
@@ -205,7 +154,6 @@ int main(){
 
 
 			currentLvl->printAll(deltaTime);
-			B.print();
 			P.print(deltaTime);
 
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);

@@ -25,6 +25,7 @@ public:
 	void add(point p, vector speed, bool gravity, int damage, char texture);
 	void update(double deltaTime);
 	int check(hitBox box);
+	void clear();
 	void print();
 };
 

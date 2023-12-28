@@ -17,8 +17,8 @@ protected:
 	timeSpan laserTime;
 	timeSpan lastCharge;
 public:
-	yuck(int x, int y, level* lvl, bulletManager* bM, int h, double fr, int dm);
-	yuck(int x, int y, level* lvl, bulletManager* bM);
+	yuck(int x, int y, level* lvl, int h, double fr, int dm);
+	yuck(int x, int y, level* lvl);
 	void update(point target, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	void shoot();

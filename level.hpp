@@ -11,19 +11,6 @@
 #include "platform.hpp"
 #include "coin.hpp"
 
-/*idea magnifica di marco
-
-quando generi le piattaforme crei una lista di punti di cui ne scegli a random per metterci sopra gli entity
-
-un punto per ogni 3 caselle sopra la piattaforma
-
-
-
- X  X  X  X
-|""""""""""|
-
-*/
-
 struct Pplatform
 {
     platform *plat;
@@ -65,7 +52,7 @@ hitBox hiboxPlatx (lPlatform lp, int x);   // Restituisce la hitBox della piatta
 // Struct da restituire nella funzione check
 struct infoCrash
 {
-    char type; // Tipo di oggetto con cui ci si scontra (p: platform || k: kuba || u: upgrades || n: nothing)
+    char type; // Tipo di oggetto con cui ci si scontra
     void *obj; // Puntatore void all'oggetto
 };
 
@@ -75,6 +62,7 @@ protected:
     int nlevel;                 // Numero del livello
     int diff;                   // Difficoltà
     int numplat;
+    bulletManager* B;
     lPlatform platforms;        // Lista delle piattaforme del livello
     lKuba kubas;                // Lista di kuba
     lShooter shooters;          // Lista di shooters
@@ -82,7 +70,7 @@ protected:
     lCoin coins;
 
 public:
-    level (int nl, int d, bulletManager* bM);
+    level (int nl, int d);
     void printAll (timeSpan deltaTime);
     infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
     int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
@@ -90,6 +78,7 @@ public:
     void update (player* P, timeSpan deltaTime);
     int updateCoin (player* P);
     bool completed();
+    bulletManager* getBM ();
 };
 
 #endif // LEVEL_HPP

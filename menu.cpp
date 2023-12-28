@@ -8,7 +8,7 @@ using namespace std;
 bool addLife (player* P) {
     if (P->getHealth() >= 100) return false;
     else {
-        // aumenta vita
+        //P->hurt(-int);
         return true;
     }
 }
@@ -47,14 +47,18 @@ void market () {
 
 menu::menu(){
 
-    for(int i=1; i<N_ARMOR+1; i++){
-        armors[i].value = i*225;
-        armors[i].cost = i*20;
+    for(int i=0; i<N_ARMOR; i++){
+        armor[i].cost = i*50;
     }
-
+    armor[0].value = 0;
+    armor[1].value = 25;
+    armor[2].value = 60;
+    armor[3].value = 80;
+    armor[4].value = 90;
+    armor[5].value = 95;
     for(int i=0; i<N_GUNS; i++){
-        guns[i].value = i;
-        guns[i].cost = i*20;
+        gun[i].value = i;
+        gun[i].cost = i*50;
     }
 }
  
@@ -101,8 +105,6 @@ void menu::open(int totLvl, int* currentLvl){
     delwin(win);
 
 }
-
-
 
 menu::~menu(){
     delwin(win);

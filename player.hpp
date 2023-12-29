@@ -28,6 +28,7 @@ public:
 	void setGun(int id);
 	void changeLevel(level* newLvl);
 	double getArmor();
+	void setArmor(double ar);
 };
 
 #endif //PLAYER_HPP

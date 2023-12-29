@@ -3,6 +3,7 @@
 
 #include <ncurses.h>
 #include "player.hpp"
+#include "lib.hpp"
 
 
 #define HEIGHT (LINES-18)
@@ -18,18 +19,20 @@ struct buyable{
     int cost;
 };
 
-bool addLife (player* P);
-int changeLevel(int totLvl, WINDOW* win);
-void market ();
+bool addLife (player* P, int hp);
+int changeGun (WINDOW* win);
 
 class menu {
 protected:
     WINDOW* win;
     buyable armor[N_ARMOR]; // value da 0 a 100
     buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, RIFLE
+    int armorIndex;
 public:
     menu();
-    void open(int totLvl, int* currentLvl);
+    int open();
+    int changeLevel(int totLvl);
+    void market(player* P, int* money, WINDOW* bottomWin);
     ~menu();
 };
 

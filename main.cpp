@@ -41,9 +41,9 @@ int main(){
 	bool quit = false;
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente;
-	int totLvl = 1;
+	int totLvl = 1; // Numero livelli totali
 	int diff = numL;
-	int money = 0;
+	int money = 300;
 	
 	// Lista di livelli
 	lvlList head = new lvlNode;
@@ -54,10 +54,9 @@ int main(){
 	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
-	while( !quit ){
-
+	while( !quit ) {
 		// MENU
-		if(!quit && openMenu){
+		if (!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
 
@@ -68,10 +67,11 @@ int main(){
 			// - AUMENTA ARMATURA a <70%> per 5$
 			// LIVELLO <numL>
 
-			M.open(totLvl, &numL);
+			input = M.open();
+			if (input == 1) numL = M.changeLevel(totLvl);
+			else if (input == 2) M.market(&P, &money, bottomWin);
 			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
-			
 			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 		}
 

@@ -110,6 +110,10 @@ double player::getArmor(){
 	return armor;
 }
 
+void player::setArmor(double ar) {
+	if (ar<100 && ar>=0) this->armor = ar;
+}
+
 void player::changeLevel(level* newLvl){
 	if( newLvl->number() > lvl->number() ){
 		box.a.x = 0;

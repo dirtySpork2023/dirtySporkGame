@@ -36,7 +36,7 @@ int main(){
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente;
 	int diff = numL;
-	int money = 0;
+	int money = 1000;
 	
 	// Lista di livelli
 	lvlList head = new lvlNode;
@@ -44,7 +44,7 @@ int main(){
 	head->next = NULL;
 	// Puntatore al livello corrente
 	level* currentLvl = head->lvl;
-	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
+	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0.05);
 	menu M = menu();
 	
 	while( !quit ){
@@ -53,8 +53,8 @@ int main(){
 		while(!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
-			if( input=='m' || input=='q' ) openMenu = false;
-			M.update(input, numL, head->lvl->number());
+			//if(input=='4')numL=4;
+			openMenu = M.update(input, money, numL, head->lvl->number(), &P);
 			M.print(numL);
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 		}
@@ -116,7 +116,6 @@ int main(){
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 
 			refresh();
-			wrefresh(bottomWin);
 		}
 	}
 	delwin(bottomWin);

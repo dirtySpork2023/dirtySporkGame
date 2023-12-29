@@ -58,6 +58,11 @@ bool player::hurt(int value){
 	return entity::hurt(value * (1-armor));
 }
 
+void player::heal(int value){
+	health+=value;
+	if(health>MAX_HEALTH) health=MAX_HEALTH;
+}
+
 void player::shoot(){
 	vector speed;
 	speed.x = 200;

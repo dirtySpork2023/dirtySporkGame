@@ -19,20 +19,20 @@ struct buyable{
     int cost;
 };
 
-bool addLife (player* P);
-
 class menu {
 protected:
     WINDOW* win;
     int selected;
+    buyable heal;
     buyable armor[N_ARMOR]; // value da 0 a 100
     int currArmor;
     buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, RIFLE
     int currGun;
     void option(int index, int y, const char* text);
+    const char* gunName(int id);
 public:
     menu();
-    void update(char input, int &numL, int totLvl);
+    bool update(char input, int &money, int &numL, int totLvl, player* P);
     void print(int numL);
     ~menu();
 };

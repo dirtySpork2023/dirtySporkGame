@@ -6,6 +6,7 @@ void init(){
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
+	keypad(stdscr, TRUE);
 	curs_set(0);
 
 	/*	COLOR_BLACK
@@ -183,4 +184,6 @@ void printResourceBar(WINDOW* w, int health, double armor, int money, int level,
 	mvwprintw(w, 4, COLS/2-56, "MONEY: <| %d $ |>", money);
 	mvwprintw(w, 5, COLS/2-56, "LEVEL: <| %d |>", level);
 	mvwprintw(w, 6, COLS/2-61, "DIFFICULTY: <| %d |>", difficulty);
+
+	wrefresh(w);
 }

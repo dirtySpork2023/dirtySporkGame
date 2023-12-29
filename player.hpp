@@ -15,7 +15,7 @@ class level;
 
 class player: public shooter {
 protected:
-	double armor; // 0-1 percentuale di riduzione dei danni subiti
+	double armor; // 0,XX percentuale di riduzione dei danni subiti 
 	double jumpSpeed;
 	int gunID;
 
@@ -24,6 +24,7 @@ public:
 	void update(char input, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	bool hurt(int value);
+	void heal(int value);
 	void shoot();
 	void setGun(int id);
 	int getGun();

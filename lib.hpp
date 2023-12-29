@@ -72,6 +72,7 @@ void posPrintW(point, char);
 
 void printBackground(int lvl);
 
+void printResourceBarLow(WINDOW* w, int health, double armor, int money);
 void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty);
 
 #endif //LIB_HPP

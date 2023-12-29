@@ -34,9 +34,9 @@ int main(){
 	char input;
 	bool quit = false;
 	bool openMenu = false;
-	int numL = 1; // numero del livello corrente;
+	int numL = 1; // numero del livello corrente
 	int diff = numL;
-	int money = 0;
+	int money = 300;
 	
 	// Lista di livelli
 	lvlList head = new lvlNode;
@@ -47,24 +47,23 @@ int main(){
 	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
-	while( !quit ){
-
+	while( !quit ) {
 		// MENU
-		while(!quit && openMenu){
+		if (!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
-			if( input=='m' || input=='q' ) openMenu = false;
-			// provvisorio
-			if(input=='1'){ numL=1; }
-			if(input=='2'){ numL=2; }
-			if(input=='3'){ numL=3; }
-			if(input=='4'){ numL=4; }
-			if(input=='5'){ numL=5; }
-			if(input=='6'){ numL=6; }
-			if(input=='7'){ numL=7; }
-			if(input=='8'){ numL=8; }
-			if(input=='9'){ numL=9; }
-			M.print();
+
+			// RIPRENDI
+			// MERCATO
+			// - ARMA <SHOTGUN> per 2$
+			// - AGGIUNGI HP per 2$
+			// - AUMENTA ARMATURA a <70%> per 5$
+			// LIVELLO <numL>
+
+			input = M.open();
+			if (input == 1) numL = M.changeLevel(head->lvl->number());
+			else if (input == 2) M.market(&P, &money, bottomWin);
+			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 		}
 
@@ -105,10 +104,12 @@ int main(){
 			if( input=='Q' ) quit = true;
 			if( input=='m' ) openMenu = true;
 
-			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
+			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				numL++;
+			}
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
+				
 
 		    currentLvl->update(&P, deltaTime);
 			P.update(input, deltaTime);

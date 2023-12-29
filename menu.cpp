@@ -1,46 +1,193 @@
-#include <ncurses.h>
-
 #include "menu.hpp"
 
-bool addLife (player* P) {
+using namespace std;
+
+bool addLife (player* P, int hp) {
     if (P->getHealth() >= 100) return false;
-    else {
-        //P->hurt(-int);
+    else if (P->getHealth() + hp > 100) {
+        hp = P->getHealth()-100;
+        P->hurt(hp);
+        return true;
+    } else {
+        hp = 0-hp;
+        P->hurt(hp);
         return true;
     }
 }
- 
+
+int changeGun (WINDOW* win) {
+    clear();
+    wclear(win);
+    wrefresh(win);
+    box(win, 0, 0);
+    int choice, highlight= 0;
+    string choices[3] = {"Pistol", "Shotgun", "Rifle"};
+
+    mvwprintw(win, 1, WIDTH/2-5, "CAMBIO ARMA");
+    
+    while (choice != 10) {      // choice =! 'invio'
+        for(int i=0; i<3; i++) {
+            if (i == highlight) {
+                wattron(win, A_REVERSE);
+                mvwprintw(win, i+3, 1, "%s", choices[i].c_str());
+            } else mvwprintw(win, i+3, 1, "%s", choices[i].c_str());
+            wattroff(win, A_REVERSE);
+        }
+        choice = wgetch(win);
+
+        if (choice == KEY_UP) {
+            if (highlight == 0) highlight = 2;
+            else highlight--;
+        } else if (choice == KEY_DOWN) {
+            if (highlight == 2) highlight = 0;
+            else highlight++;
+        }
+        wrefresh(win);
+    }
+    return highlight;
+}
+
 menu::menu(){
-    this->win = newwin(HEIGHT, WIDTH, 10, COLS/2-WIDTH);
 
     for(int i=0; i<N_ARMOR; i++){
-        armor[i].cost = i*50;
+        this->armor[i].cost = i*25;
+        this->armor[i].value = i*20-5;
     }
-    armor[0].value = 0;
-    armor[1].value = 25;
-    armor[2].value = 60;
-    armor[3].value = 80;
-    armor[4].value = 90;
-    armor[5].value = 95;
     for(int i=0; i<N_GUNS; i++){
-        gun[i].value = i;
-        gun[i].cost = i*50;
+        this->gun[i].value = i;
+        this->gun[i].cost = i*50;
+    }
+    this->armorIndex = 1;
+}
+
+int menu::open() {
+    this->win = newwin(HEIGHT, WIDTH, 6, COLS/2-WIDTH/2);
+
+    box(this->win, 0, 0);
+    keypad(this->win, true);
+
+    mvwprintw(this->win, 1, WIDTH/2-2, "MENU");
+    
+    bool close = false;
+    string choices[3] = {"Riprendi", "Cambia livello", "Mercato"};
+    int choice = 0, highlight = 0;
+
+    while (choice != 10) {      // choice =! 'invio'
+        for(int i=0; i<3; i++) {
+            if (i == highlight) {
+                wattron(this->win, A_REVERSE);
+                mvwprintw(this->win, i+3, 1, "%s", choices[i].c_str());
+            } else mvwprintw(this->win, i+3, 1, "%s", choices[i].c_str());
+            wattroff(this->win, A_REVERSE);
+        }
+        choice = wgetch(this->win);
+
+        if (choice == KEY_UP) {
+            if (highlight == 0) highlight = 2;
+            else highlight--;
+        } else if (choice == KEY_DOWN) {
+            if (highlight == 2) highlight = 0;
+            else highlight++;
+        }
+        wrefresh(this->win);
+    }
+
+    if (highlight == 1) return 1;
+    else if (highlight == 2) return 2;
+    else return 0;
+}
+
+int menu::changeLevel (int totLvl) {
+    clear();
+    wclear(this->win);
+    wrefresh(this->win);
+    box(this->win, 0, 0);
+    int i = 1;
+    int choice = 0;
+
+    mvwprintw(this->win, 1, WIDTH/2-6, "CAMBIO LIVELLO");
+    mvwprintw(this->win, 4, 1, "Livello da raggiungere -> ");
+
+    wattron(this->win, A_REVERSE);
+    while (choice != 10) {
+        mvwprintw(this->win, 4, 27, "%d", i);
+        choice = wgetch(this->win);
+        if (choice == KEY_UP) {
+            if (i == 1) i = totLvl;
+            else i--;
+        } else if (choice == KEY_DOWN) {
+            if (i == totLvl) i = 1;
+            else i++;
+        }
+        wrefresh(this->win);
+    }
+    wattroff(this->win, A_REVERSE);
+    return i;
+}
+
+void menu::market (player* P, int* money, WINDOW* bottomWin) {
+    clear();
+    wclear(this->win);
+    wrefresh(this->win);
+    int choice = 0;
+    int highlight = 0;
+    bool close = false;
+    string choices[3] = {"Riprendi", "Cambia arma", "Aggiungi 10 hp - costo: 10$"};
+
+    while (!close) {
+        mvwprintw(this->win, 1, WIDTH/2-3, "MERCATO");
+        box(this->win, 0, 0);
+
+        while (choice != 10) {      // choice =! 'invio'
+            for(int i=0; i<4; i++) {
+                if (i == highlight) wattron(this->win, A_REVERSE);
+                if (i==3) mvwprintw(this->win, i+3, 1, "Aumenta armatura al %d%%- costo: %d$", armor[armorIndex].value, armor[armorIndex].cost);
+                else mvwprintw(this->win, i+3, 1, "%s", choices[i].c_str());
+                wattroff(this->win, A_REVERSE);
+            }
+            choice = wgetch(this->win);
+
+            if (choice == KEY_UP) {
+                if (highlight == 0) highlight = 3;
+                else highlight--;
+            } else if (choice == KEY_DOWN) {
+                if (highlight == 3) highlight = 0;
+                else highlight++;
+            }
+            wrefresh(win);
+        }
+        
+        if (highlight==0) close = true;
+        else if (highlight==1) {
+            bool esc = false;
+            do {
+                choice = changeGun(win);
+                if (*money >= gun[choice].cost) {
+                    P->setGun(choice);
+                    *money -= gun[choice].cost;
+                    gun[choice].cost = 0;
+                    esc = true;
+                }
+                highlight=0;
+            } while (!esc);
+            clear();
+            wclear(win);
+        } else if (highlight==2) {
+            if (*money >= 10) if (addLife (P,10)) *money-=10;
+        } else if (*money >= armor[armorIndex].cost) {
+            *money -= armor[armorIndex].cost;
+            P->setArmor(this->armor[armorIndex].value);
+            armor[armorIndex].cost = 0;
+            this->armorIndex++;
+        }
+        printResourceBarLow(bottomWin, P->getHealth(), P->getArmor(), *money);
+        wrefresh(bottomWin);
+        choice = 0;
+        wrefresh(win);
     }
 }
 
-// RIPRENDI
-// MERCATO
-// - ARMA <SHOTGUN> per 2$
-// - AGGIUNGI HP per 2$
-// - AUMENTA ARMATURA a <70%> per 5$
-// LIVELLO <numL>
 
-// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
-
-void menu::print(){
-    box(win, 0, 0);
-    wrefresh(win);
-}
 
 menu::~menu(){
     delwin(win);

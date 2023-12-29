@@ -160,7 +160,7 @@ void printBackground(int lvl){
 	attroff(A_BOLD);
 }
 
-void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty){
+void printResourceBarLow(WINDOW* w, int health, double armor, int money) {
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	box(w, 0, 0);
 
@@ -179,6 +179,11 @@ void printResourceBar(WINDOW* w, int health, double armor, int money, int level,
 	wprintw(w, "|>");
 
 	mvwprintw(w, 4, COLS/2-56, "MONEY: <| %d $ |>", money);
+}
+
+void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty){
+	printResourceBarLow(w, health, armor, money);
+
 	mvwprintw(w, 5, COLS/2-56, "LEVEL: <| %d |>", level);
 	mvwprintw(w, 6, COLS/2-61, "DIFFICULTY: <| %d |>", difficulty);
 }

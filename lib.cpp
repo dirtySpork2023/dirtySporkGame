@@ -24,6 +24,7 @@ void init(){
 	init_color(COLOR_BLACK, 100, 100, 100);
 	init_color(COLOR_DARK, 170, 170, 170);
 	init_color(COLOR_TITLE, 300, 300, 300);
+	init_color(COLOR_SELECTED, 600, 600, 600);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
 	init_color(COLOR_BLUE, 200, 200, 700);
@@ -43,6 +44,7 @@ void init(){
 	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
 	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
 	init_pair(PAINT_TITLE, COLOR_TITLE, COLOR_BLACK);
+	init_pair(PAINT_SELECTION, COLOR_WHITE, COLOR_SELECTED);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }

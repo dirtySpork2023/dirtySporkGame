@@ -54,17 +54,8 @@ int main(){
 			input = getch();
 			if( input=='Q' ) quit = true;
 			if( input=='m' || input=='q' ) openMenu = false;
-			// provvisorio
-			if(input=='1'){ numL=1; }
-			if(input=='2'){ numL=2; }
-			if(input=='3'){ numL=3; }
-			if(input=='4'){ numL=4; }
-			if(input=='5'){ numL=5; }
-			if(input=='6'){ numL=6; }
-			if(input=='7'){ numL=7; }
-			if(input=='8'){ numL=8; }
-			if(input=='9'){ numL=9; }
-			M.print();
+			M.update(input, numL, head->lvl->number());
+			M.print(numL);
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 		}
 

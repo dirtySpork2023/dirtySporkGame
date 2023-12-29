@@ -65,7 +65,7 @@ bool isTouching (hitBox v1, hitBox v2, char d);
 
 point snap(vector);
 int random(int min, int max);
-vector randVector();
+vector randVector(); //da creare parametri o cambiare nome
 
 void posPrintW(point, const char*);
 void posPrintW(point, char);

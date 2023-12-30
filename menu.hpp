@@ -7,6 +7,8 @@
 
 #define HEIGHT 12
 #define WIDTH 50
+#define SELECT_TIMESPAN 0.1
+
 
 #define N_ARMOR 6
 #define N_GUNS 3
@@ -23,29 +25,23 @@ class menu {
 protected:
     WINDOW* win;
     int selected;
-    buyable heal;
     buyable armor[N_ARMOR]; // value da 0 a 100
-    int currArmor;
     buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, RIFLE
+    buyable heal;
+    int currArmor;
     int currGun;
-    void option(int index, int y, const char* text);
+    int currHeal;
+    bool error;
+    timeSpan lastSelect;
+
+    void printOption(int index, int y, const char* text);
     const char* gunName(int id);
 public:
     menu();
-    bool update(char input, int &money, int &numL, int totLvl, player* P);
+    bool update(char input, int &money, int &numL, int totLvl, player* P, timeSpan deltaTime);
+    void updateScroll(char type, buyable b[], int size, int &curr, char input, int &money, player* P);
     void print(int numL);
     ~menu();
 };
-
-
-
-
-
-
-
-
-
-
-
 
 #endif // MENU_HPP

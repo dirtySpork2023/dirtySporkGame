@@ -25,7 +25,8 @@ void init(){
 	init_color(COLOR_BLACK, 100, 100, 100);
 	init_color(COLOR_DARK, 170, 170, 170);
 	init_color(COLOR_TITLE, 300, 300, 300);
-	init_color(COLOR_SELECTED, 600, 600, 600);
+	init_color(COLOR_SELECTED, 200, 200, 200);
+	init_color(COLOR_ERROR, 1000, 0, 0);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
 	init_color(COLOR_BLUE, 200, 200, 700);
@@ -46,6 +47,8 @@ void init(){
 	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
 	init_pair(PAINT_TITLE, COLOR_TITLE, COLOR_BLACK);
 	init_pair(PAINT_SELECTION, COLOR_WHITE, COLOR_SELECTED);
+	init_pair(PAINT_ERROR, COLOR_ERROR, COLOR_SELECTED);
+	init_pair(PAINT_CHOSEN, COLOR_WHITE, COLOR_DARK);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
@@ -140,17 +143,7 @@ void printBackground(int lvl){
 		}
 	}
 	if(lvl==1) attrset(COLOR_PAIR(PAINT_TITLE));
-	/*
-	+------------------------------------------------------------------------------------------------------------------------------+
-	| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |
-	| |WWWWWWW| |WW\  |W| |WWWWW\   |W|     |WWWWWWW| /WWWWWWW| /WWWWWWW|         /WWWWW\  |W|   |W| |WWWWWWW| /WWWWWWW| |WWWWWWW| |
-	| |W|_____  |W*W\ |W| |W|  \WW  |W|     |W|_____  |W|____   |W|____          |W/   \W| |W|   |W| |W|_____  |W|____      |W|    |
-	| |WWWWWWW| |W|\W\|W| |W|   |W| |W|     |WWWWWWW| \WWWWWWW\ \WWWWWWW\        |W|  _|W| |W|   |W| |WWWWWWW| \WWWWWWW\    |W|    |
-	| |W|_____  |W| \W,W| |W|__/WW  |W|___, |W|_____   _____|W|  _____|W|        |W\__\W\' |W\___/W| |W|_____   _____|W|    |W|    |
-	| |WWWWWWW| |W|  \WW| |WWWWW/   |WWWWW| |WWWWWWW| |WWWWWWW/ |WWWWWWW/         \WWW,\W\  \WWWWW/  |WWWWWWW| |WWWWWWW/    |W|    |
-	+------------------------------------------------------------------------------------------------------------------------------+                       
-	*/
-	
+
 	attron(A_BOLD);
 	mvprintw(Y_OFFSET+0, X_OFFSET,  "+------------------------------------------------------------------------------------------------------------------------------+");
 	mvprintw(Y_OFFSET+1, X_OFFSET,  "| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |");
@@ -181,9 +174,9 @@ void printResourceBar(WINDOW* w, int health, double armor, int money, int level,
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
 
-	mvwprintw(w, 4, COLS/2-56, "MONEY: <| %d $ |>", money);
-	mvwprintw(w, 5, COLS/2-56, "LEVEL: <| %d |>", level);
-	mvwprintw(w, 6, COLS/2-61, "DIFFICULTY: <| %d |>", difficulty);
+	mvwprintw(w, 4, COLS/2-56, "MONEY: <| %d $ |>  ", money);
+	mvwprintw(w, 5, COLS/2-56, "LEVEL: <| %d |>  ", level);
+	mvwprintw(w, 6, COLS/2-61, "DIFFICULTY: <| %d |>  ", difficulty);
 
 	wrefresh(w);
 }

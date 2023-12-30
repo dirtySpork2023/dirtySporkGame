@@ -3,9 +3,7 @@
 menu::menu(){
     win = newwin(HEIGHT, WIDTH, 10, (COLS-WIDTH)/2);
     selected = 0;
-
-    heal.value = 10;
-    heal.cost = 10;
+    lastSelect = SELECT_TIMESPAN;
 
     currArmor = 0;
     for(int i=0; i<N_ARMOR; i++){
@@ -24,106 +22,108 @@ menu::menu(){
         gun[i].cost = i*50;
     }
 
-    
+    currHeal = 0;
+    heal.value = 20;
+    heal.cost = 5;
 }
 
-bool menu::update(char input, int &money, int &numL, int totLvl, player *P){
+bool menu::update(char input, int &money, int &numL, int totLvl, player *P, timeSpan deltaTime){
     bool keepOpen = true;
     if( input=='m' || input=='q' ) keepOpen = false;
+    lastSelect += deltaTime;
 
-    if( input=='w' )
+    if( input=='w' && selected>0 )
         selected--;
-    if( input=='s' )
+    if( input=='s' && selected<N_OPTIONS )
         selected++;
-
-    if( selected<0 ) selected = N_OPTIONS;
-    if( selected>N_OPTIONS ) selected = 0;
 
     // RIPRENDI
     if( selected==0 && input=='f' )
         keepOpen = false;
-    
+
     // LIVELLO
-    if( selected==1 && input=='a' && numL>1)
+    if( selected==1 && input=='a' && numL>1 )
         numL--;
-    if( selected==1 && input=='d' && numL<totLvl)
+    if( selected==1 && input=='d' && numL<totLvl )
         numL++;
     if( selected==1 && input=='f' )
         keepOpen = false;
+
+    if(selected==2)
+        updateScroll('g', gun, N_GUNS, currGun,input, money, P);
+
+    if( selected==3 )
+        updateScroll('a', armor, N_ARMOR, currArmor, input, money, P);
+
+    if( selected==4 )
+        updateScroll('h', &heal, 1, currHeal, input, money, P);
     
-    // GUN
-    if( selected==2 && input=='a' && currGun>0)
-        currGun--;
-    if( selected==2 && input=='d' && currGun<N_GUNS-1)
-        currGun++;
-    if( selected==2 && input=='f'){
-        //seleziona o compra currGun
-        if(gun[currGun].cost<=money){
-            money -= gun[currGun].cost;
-            gun[currGun].cost = 0;
-            P->setGun(gun[currGun].value);
-        }else{
-            //error animation ?
-        }
-    }
-
-    // HEALTH
-    if( selected==3 && input=='f' ){
-        if( P->getHealth()<100 && money>=heal.cost ){
-            P->heal(heal.value);
-            money -= heal.cost;
-        }else{
-            //error animation ?
-        }
-    }
-
-    // ARMOR
-    if( selected==4 && input=='a' && currArmor>0)
-        currArmor--;
-    if( selected==4 && input=='d' && currArmor<N_ARMOR-1)
-        currArmor++;
-    if( selected==4 && input=='f'){
-        //seleziona o compra currArmor
-        if(armor[currArmor].cost<=money){
-            money -= armor[currArmor].cost;
-            armor[currArmor].cost = 0;
-            P->setArmor(armor[currArmor].value);
-        }
-    }
     return keepOpen;
+}
+
+void menu::updateScroll(char type, buyable b[], int size, int &curr, char input, int &money, player* P){
+
+    //if type = 'a'  b = *armor size=N_ARMORs blablabla
+    // per togliere argomenti superflui
+
+    if( input=='a' && curr>0)
+        curr--;
+    if( input=='d' && curr<size-1)
+        curr++;
+    if( input=='f'){
+        lastSelect = 0;
+        if(b[curr].cost<=money && (type!='h' || P->getHealth()<100)){
+            money -= b[curr].cost;
+            b[curr].cost = 0;
+            if(type=='g')
+                P->setGun(b[curr].value);
+            if(type=='h')
+                P->heal(b[curr].value);
+            if(type=='a')
+                P->setArmor(b[curr].value);
+            error = false;
+        }else
+            error = true;
+    }
 }
 
 void menu::print(int numL){
     box(win, 0, 0);
     int y = 2;
 
-    option(0, y++, "RIPRENDI");
+    printOption(0, y++, "RIPRENDI");
     y++;
-    option(1, y++, "LIVELLO");
-    wprintw(win, " <%d> ", numL);
+    printOption(1, y++, "LIVELLO");
+        wprintw(win, " <%d> ", numL);
     y++;
-    mvwprintw(win, 3, y++, "MERCATO");
-    option(2, y++, "- ARMA");
+    mvwprintw(win, y++, 8, "MERCATO");
+    printOption(2, y++, "- ARMA");
         wprintw(win, " <%s> per %d$  ", gunName(currGun), gun[currGun].cost);
-    option(3, y++, "- AGGIUNGI");
-        wprintw(win, " %d HP per %d$", heal.value, heal.cost);
-    option(4, y++, "- ARMATURA");
+    printOption(3, y++, "- ARMATURA");
         wprintw(win, " <%d%> per %d$  ", armor[currArmor].value, armor[currArmor].cost);
+    printOption(4, y++, "- AGGIUNGI");
+        wprintw(win, " %d HP per %d$", heal.value, heal.cost);
     
     wrefresh(win);
 }
 
-void menu::option(int index, int y, const char* text){
-    if( index==selected ){
+void menu::printOption(int index, int y, const char* text){
+    if( index==selected && lastSelect>SELECT_TIMESPAN){
         mvwprintw(win, y, 2, ">");
-        wattron(win, A_REVERSE);
+        wattrset(win, COLOR_PAIR(PAINT_SELECTION));
+    }else if( index==selected && error==true){
+        mvwprintw(win, y, 2, "X");
+        wattrset(win, COLOR_PAIR(PAINT_ERROR));
+    }else if( index==selected && error==false){
+        mvwprintw(win, y, 2, "O");
+        wattrset(win, COLOR_PAIR(PAINT_CHOSEN));
     }else{
         mvwprintw(win, y, 2, " ");
     }
     
     mvwprintw(win, y, 4, text);
 
-    wattroff(win, A_REVERSE);
+    wattrset(win, COLOR_PAIR(PAINT_DEFAULT));
 }
 
 const char* menu::gunName(int id){

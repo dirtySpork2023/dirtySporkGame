@@ -36,7 +36,7 @@ int main(){
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente;
 	int diff = numL;
-	int money = 1000;
+	int money = 100;
 	
 	// Lista di livelli
 	lvlList head = new lvlNode;
@@ -50,11 +50,17 @@ int main(){
 	while( !quit ){
 
 		// MENU
+		auto lastTimePoint = high_resolution_clock::now();
 		while(!quit && openMenu){
+			auto thisTimePoint = high_resolution_clock::now();
+			auto elapsed = thisTimePoint - lastTimePoint;
+			lastTimePoint = thisTimePoint;
+			deltaTime = duration<double>(elapsed).count();
+
 			input = getch();
 			if( input=='Q' ) quit = true;
 			//if(input=='4')numL=4;
-			openMenu = M.update(input, money, numL, head->lvl->number(), &P);
+			openMenu = M.update(input, money, numL, head->lvl->number(), &P, deltaTime);
 			M.print(numL);
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 		}
@@ -83,7 +89,7 @@ int main(){
 		}
 
 		// CICLO PRINCIPALE
-		auto lastTimePoint = high_resolution_clock::now();
+		lastTimePoint = high_resolution_clock::now();
 		while( !quit && !openMenu && currentLvl->number()==numL){
 			auto thisTimePoint = high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;

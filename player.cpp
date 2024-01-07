@@ -16,7 +16,6 @@ player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float arm
 //aggiorna la posizione del player e/o spara
 void player::update(char input, timeSpan deltaTime){
 
-	// faccio un bM->check prima per usare l'override della funzione hurt
 	hurt(lvl->getBM()->check(box));
 	entity::update(deltaTime);
 
@@ -116,4 +115,13 @@ void player::changeLevel(level* newLvl){
 	box.a.y = LINES-WIN_HEIGHT-4;
 	box.b.y = LINES-WIN_HEIGHT-2;
 	this->lvl = newLvl;
+}
+
+void player::reset(level* newLvl){
+	box.a.x = 2;
+	box.b.x = 4;
+	box.a.y = -2;
+	box.b.y = 0;
+	this->lvl = newLvl;
+	health = 100;
 }

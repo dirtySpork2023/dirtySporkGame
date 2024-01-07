@@ -333,3 +333,7 @@ bool level::completed() {
 bulletManager* level::getBM(){
     return B;
 }
+
+level::~level(){
+    // elimina le liste dall'heap
+}

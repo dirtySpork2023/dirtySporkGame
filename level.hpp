@@ -81,6 +81,7 @@ public:
     int updateCoin (player* P);
     bool completed();
     bulletManager* getBM ();
+    ~level();
 };
 
 #endif // LEVEL_HPP

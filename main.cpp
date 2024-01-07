@@ -20,7 +20,48 @@ struct lvlNode {
 };
 typedef lvlNode* lvlList;
 
-int main(){
+// aggiunge livello nuovo in testa
+lvlList addLevel(lvlList h, int num, int diff){
+	lvlList tmp = new lvlNode;
+	tmp->lvl = new level(num, diff);
+	tmp->next = h;
+	return tmp;
+}
+
+void death(lvlList &head, int &numL, int diff, level *&currentLvl, player &P, timeSpan deltaTime){
+	static timeSpan lastDeath = -1; // countdown
+	static timeSpan lastBlood = 0;
+	if( lastDeath==-1 ) lastDeath = 2;
+	lastDeath -= deltaTime;
+	lastBlood -= deltaTime;
+
+	if( lastBlood<0 ){
+		point p = P.getPos();
+		p.y -= 3;
+		head->lvl->getBM()->add(p, randVector(), true, 0, 'X');
+		lastBlood += 0.05;
+	}
+
+	// reset dei livelli
+	if( lastDeath<0 ){
+		while ( head!=NULL ){
+			delete head->lvl;
+			lvlList tmp = head;
+			head = tmp->next;
+			delete tmp;
+		}
+		numL = 1;
+		// diff=menu.countBoughtItems
+		head = addLevel(head, numL, diff);
+
+		currentLvl = head->lvl;
+		P.reset(currentLvl);
+		lastDeath = -1;
+	}
+}
+
+int main()
+{
 	srand(time(NULL));
 	
 	//inizializza ncurses
@@ -38,13 +79,11 @@ int main(){
 	int diff = numL;
 	int money = 300;
 	
-	// Lista di livelli
-	lvlList head = new lvlNode;
-	head->lvl = new level (numL, diff);
-	head->next = NULL;
-	// Puntatore al livello corrente
+	// first setup
+	lvlList head = NULL;
+	head = addLevel(head, numL, diff);
 	level* currentLvl = head->lvl;
-	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
+	player P = player(4, 0, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
 	while( !quit ) {
@@ -52,14 +91,6 @@ int main(){
 		if (!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
-
-			// RIPRENDI
-			// MERCATO
-			// - ARMA <SHOTGUN> per 2$
-			// - AGGIUNGI HP per 2$
-			// - AUMENTA ARMATURA a <70%> per 5$
-			// LIVELLO <numL>
-
 			input = M.open();
 			if (input == 1) numL = M.changeLevel(head->lvl->number());
 			else if (input == 2) M.market(&P, &money, bottomWin);
@@ -70,11 +101,7 @@ int main(){
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
 			if( head->lvl->number() < numL ){
-				// livello nuovo aggiunto in testa
-				lvlNode* tmp = new lvlNode;
-				tmp->lvl = new level (head->lvl->number()+1, ++diff);
-				tmp->next = head;
-				head = tmp;
+				head = addLevel(head, head->lvl->number()+1, ++diff);
 			}
 
 			// cambia livello
@@ -104,12 +131,16 @@ int main(){
 			if( input=='Q' ) quit = true;
 			if( input=='m' ) openMenu = true;
 
+			if( P.getHealth()==0 ){
+				death(head, numL, diff, currentLvl, P, deltaTime);
+				input = ' ';
+			}
+
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				numL++;
 			}
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
-				
 
 		    currentLvl->update(&P, deltaTime);
 			P.update(input, deltaTime);

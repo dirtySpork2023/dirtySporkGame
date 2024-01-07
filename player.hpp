@@ -30,6 +30,7 @@ public:
 	void setArmor(int percentage);
 	double getArmor();
 	void changeLevel(level* newLvl);
+	void reset(level* newLvl);
 };
 
 #endif //PLAYER_HPP

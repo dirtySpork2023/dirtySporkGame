@@ -64,7 +64,7 @@ void entity::move(char input){
 
 // applica il colore con cui stampare
 void entity::setPrintColor(int paint){
-	if(lastDamage <= DAMAGE_TIMESPAN){
+	if(lastDamage <= DAMAGE_TIMESPAN || health == 0){
 		attrset(COLOR_PAIR( PAINT_DAMAGE ));
 	}else{
 		attrset(COLOR_PAIR( paint ));

@@ -62,7 +62,6 @@ bool menu::update(char input, int &money, int &numL, int totLvl, player *P, time
 }
 
 void menu::updateScroll(char type, buyable b[], int size, int &curr, char input, int &money, player* P){
-
     //if type = 'a'  b = *armor size=N_ARMORs blablabla
     // per togliere argomenti superflui
 
@@ -74,7 +73,8 @@ void menu::updateScroll(char type, buyable b[], int size, int &curr, char input,
         lastSelect = 0;
         if(b[curr].cost<=money && (type!='h' || P->getHealth()<100)){
             money -= b[curr].cost;
-            b[curr].cost = 0;
+            if(type=='g' || type=='a')
+                b[curr].cost = 0;
             if(type=='g')
                 P->setGun(b[curr].value);
             if(type=='h')

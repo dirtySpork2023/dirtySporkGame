@@ -26,6 +26,7 @@ void init(){
 	init_color(COLOR_DARK, 170, 170, 170);
 	init_color(COLOR_TITLE, 300, 300, 300);
 	init_color(COLOR_SELECTED, 200, 200, 200);
+	init_color(COLOR_CHOSEN, 400, 400, 400);
 	init_color(COLOR_ERROR, 1000, 0, 0);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
@@ -48,7 +49,7 @@ void init(){
 	init_pair(PAINT_TITLE, COLOR_TITLE, COLOR_BLACK);
 	init_pair(PAINT_SELECTION, COLOR_WHITE, COLOR_SELECTED);
 	init_pair(PAINT_ERROR, COLOR_ERROR, COLOR_SELECTED);
-	init_pair(PAINT_CHOSEN, COLOR_WHITE, COLOR_DARK);
+	init_pair(PAINT_CHOSEN, COLOR_WHITE, COLOR_CHOSEN);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }

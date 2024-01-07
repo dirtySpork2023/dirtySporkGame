@@ -15,6 +15,7 @@
 #define COLOR_TITLE 14
 #define COLOR_SELECTED 15
 #define COLOR_ERROR 16
+#define COLOR_CHOSEN 17
 
 // palette da 1 a 255
 #define PAINT_DEFAULT 1

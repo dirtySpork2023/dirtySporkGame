@@ -28,43 +28,10 @@ lvlList addLevel(lvlList h, int num, int diff){
 	return tmp;
 }
 
-void death(lvlList &head, int &numL, int diff, level *&currentLvl, player &P, timeSpan deltaTime){
-	static timeSpan lastDeath = -1; // countdown
-	static timeSpan lastBlood = 0;
-	if( lastDeath==-1 ) lastDeath = 2;
-	lastDeath -= deltaTime;
-	lastBlood -= deltaTime;
-
-	if( lastBlood<0 ){
-		point p = P.getPos();
-		p.y -= 3;
-		head->lvl->getBM()->add(p, randVector(), true, 0, 'X');
-		lastBlood += 0.05;
-	}
-
-	// reset dei livelli
-	if( lastDeath<0 ){
-		while ( head!=NULL ){
-			delete head->lvl;
-			lvlList tmp = head;
-			head = tmp->next;
-			delete tmp;
-		}
-		numL = 1;
-		// diff=menu.countBoughtItems
-		head = addLevel(head, numL, diff);
-
-		currentLvl = head->lvl;
-		P.reset(currentLvl);
-		lastDeath = -1;
-	}
-}
-
 int main()
 {
 	srand(time(NULL));
 	
-	//inizializza ncurses
 	init();
 
 	// bottom window setup
@@ -78,6 +45,9 @@ int main()
 	int numL = 1; // numero del livello corrente
 	int diff = numL;
 	int money = 300;
+
+	bool death = false;
+	timeSpan deathAnimation = 0;
 	
 	// first setup
 	lvlList head = NULL;
@@ -100,7 +70,7 @@ int main()
 
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
-			if( head->lvl->number() < numL ){
+			while( head->lvl->number() < numL ){
 				head = addLevel(head, head->lvl->number()+1, ++diff);
 			}
 
@@ -127,18 +97,34 @@ int main()
 
 			// UPDATE
 			
-			input = getch();
+			if( P.getHealth()>0 ) input = getch();
+
 			if( input=='Q' ) quit = true;
 			if( input=='m' ) openMenu = true;
-
+			if( P.getHealth()==0 && death==false ){
+				death = true;
+				deathAnimation = DEATH_TIMESPAN;
+			}
 			if( P.getHealth()==0 ){
-				death(head, numL, diff, currentLvl, P, deltaTime);
-				input = ' ';
+				deathAnimation -= deltaTime;
+				if( deathAnimation<0 ){
+					death = false;
+					// reset della lista di livelli
+					while( head!=NULL ){
+						delete head->lvl;
+						lvlList tmp = head;
+						head = tmp->next;
+						delete tmp;
+					}
+					numL = 1;
+					// diff=menu.countBoughtItems
+					head = addLevel(head, numL, diff);
+					currentLvl = head->lvl;
+					P.reset(currentLvl);
+				}
 			}
-
-			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
+			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
 				numL++;
-			}
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 

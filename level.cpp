@@ -151,7 +151,7 @@ level::level (int nl, int d) {
     tmp->next = createnPlat (numPlatsup, p1, lensup, dens);
 
     // Generazione nemici
-    int weight = this->nlevel;
+    int weight = this->diff;
     // Yuck 
     if (this->nlevel % 4 == 0) {    
         this->Y = new yuck(COLS-10, blevel-1, this);

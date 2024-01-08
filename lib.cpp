@@ -1,5 +1,6 @@
 #include "lib.hpp"
 
+//inizializza ncurses
 void init(){
 	initscr();
 	start_color();

@@ -31,6 +31,8 @@
 // posizione del titolo
 #define X_OFFSET COLS/2-64
 #define Y_OFFSET 4
+// death animation timeSpan
+#define DEATH_TIMESPAN 2
 
 typedef double timeSpan;
 

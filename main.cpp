@@ -141,6 +141,7 @@ int main()
 
 			currentLvl->printAll(deltaTime);
 			P.print(deltaTime);
+			if(death) mvprintw(LINES/2, COLS/2-6, "- SEI MORTO -");
 
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 

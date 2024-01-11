@@ -6,7 +6,7 @@
 #include "player.hpp"
 #include "lib.hpp"
 
-#define HEIGHT 10 /*(LINES-18)*/
+#define HEIGHT 11 /*(LINES-18)*/
 #define WIDTH 50 /*(COLS-75)*/
 
 #define N_ARMOR 6

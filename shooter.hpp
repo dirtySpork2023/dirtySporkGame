@@ -1,9 +1,9 @@
 #ifndef SHOOTER_HPP
 #define SHOOTER_HPP
 
+#include <ncurses.h>
 #include "lib.hpp"
 #include "bulletManager.hpp"
-
 #include "entity.hpp"
 
 class level;

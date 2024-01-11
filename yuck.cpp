@@ -1,13 +1,8 @@
 #include "yuck.hpp"
-
-#include "ncurses.h"
-
 #include "level.hpp"
-using namespace std;
 
 yuck::yuck(int x, int y, level* lvl, int h, double fr, int dm):
 	shooter(x,y,lvl,h,fr,dm,'+'){
-	chargeTime = 3; // secondi
 	laserTime = 1; // secondi
 	lastCharge = 0;
 	lastShot = 0;
@@ -27,23 +22,21 @@ yuck::yuck(int x, int y, level* lvl):
 
 void yuck::update(point target, timeSpan deltaTime){
 	if(!awake){
-		lvl->getBM()->check(box);		// non applico danni ma elimino comunque i proiettili che collidono
+		// non applico danni ma elimino comunque i proiettili che collidono
+		lvl->getBM()->check(box);
 		entity::update(deltaTime);
 	}else{
 		entity::update(deltaTime);
 		lastCharge += deltaTime;
 		if(target.x < box.a.x && facingRight){
 			facingRight = false;
-			//cleanup
-			mvprintw(box.a.y+2, box.b.x+1, " ");
 		}else if(target.x > box.b.x && !facingRight){
 			facingRight = true;
-			mvprintw(box.a.y+2, box.a.x-1, " ");
 		}
 
-		if(lastCharge < chargeTime){
+		if(lastCharge < CHARGE_TIME){
 			// caricamento
-		}else if(lastCharge < chargeTime+laserTime){
+		}else if(lastCharge < CHARGE_TIME+laserTime){
 			// laser
 			if( lastShot > fireRate ){
 				shoot();
@@ -53,7 +46,7 @@ void yuck::update(point target, timeSpan deltaTime){
 			}
 		}else{
 			//reset
-			lastCharge -= chargeTime+laserTime;
+			lastCharge -= CHARGE_TIME+laserTime;
 		}
 	}
 		
@@ -81,14 +74,14 @@ void yuck::print(timeSpan deltaTime){
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 
-	if(lastCharge < chargeTime && awake){
+	if(lastCharge < CHARGE_TIME && awake){
 		point pos;
 		pos.y = box.a.y+2;
 		if(facingRight) pos.x = box.b.x+1;
 		else pos.x = box.a.x-1;
 
 		switch ( (int)(lastCharge*4)%3 ){
-		case 0: posPrintW(pos, "_");
+		case 0: posPrintW(pos, "-");
 			break;
 		case 1: posPrintW(pos, "\\");
 			break;

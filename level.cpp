@@ -1,12 +1,4 @@
-#include <ncurses.h>
-#include <iostream>
-#include <chrono>
-#include <time.h>
-#include <cmath>
-#include <stdlib.h>
-
 #include "level.hpp"
-using namespace std;
 
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
 hitBox newRandomPlat (hitBox p1) {
@@ -156,10 +148,10 @@ level::level (int nl, int d) {
     tmp->next = createnPlat (numPlatsup, p1, lensup);
 
     // Generazione nemici
-    int weight = this->nlevel;
+    int weight = this->diff;
     // Yuck 
     if (this->nlevel % 4 == 0) {    
-        this->Y = new yuck(COLS-6, bLevel-1, this);
+        this->Y = new yuck(COLS-10, blevel-1, this);
         weight -= 1;
     } else this->Y = NULL;
     // Shooters
@@ -337,4 +329,8 @@ bool level::completed() {
 
 bulletManager* level::getBM(){
     return B;
+}
+
+level::~level(){
+    // elimina le liste dall'heap
 }

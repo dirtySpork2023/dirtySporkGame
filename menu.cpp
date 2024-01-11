@@ -1,13 +1,8 @@
-#include <ncurses.h>
-#include <string>
-
 #include "menu.hpp"
-#include "lib.hpp"
-#include "player.hpp"
 
 using namespace std;
 
-bool addLife (player* P, int hp) {
+bool menu::addLife (player* P, int hp) {
     if (P->getHealth() >= 100) return false;
     else if (P->getHealth() + hp > 100) {
         hp = P->getHealth()-100;
@@ -20,7 +15,8 @@ bool addLife (player* P, int hp) {
     }
 }
 
-int changeGun (WINDOW* win) {
+int menu::changeGun(){
+    clear();
     wclear(win);
     wrefresh(win);
     box(win, 0, 0);
@@ -55,12 +51,17 @@ int changeGun (WINDOW* win) {
 menu::menu(){
 
     for(int i=0; i<N_ARMOR; i++){
-        this->armor[i].cost = i*25;
-        this->armor[i].value = i*20-5;
+        armor[i].cost = i*50;
     }
+    armor[0].value = 5;
+    armor[1].value = 35;
+    armor[2].value = 60;
+    armor[3].value = 80;
+    armor[4].value = 90;
+    armor[5].value = 95;
     for(int i=0; i<N_GUNS; i++){
-        this->gun[i].value = i;
-        this->gun[i].cost = i*50;
+        gun[i].value = i;
+        gun[i].cost = i*50;
     }
     this->armorIndex = 1;
 }
@@ -165,7 +166,7 @@ void menu::market (player* P, int* money, WINDOW* bottomWin) {
         else if (highlight==1) {
             bool esc = false;
             do {
-                choice = changeGun(win);
+                choice = changeGun();
                 if (*money >= gun[choice].cost) {
                     P->setGun(choice);
                     *money -= gun[choice].cost;
@@ -180,7 +181,7 @@ void menu::market (player* P, int* money, WINDOW* bottomWin) {
             if (*money >= 10) if (addLife (P,10)) *money-=10;
         } else if (*money >= armor[armorIndex].cost) {
             *money -= armor[armorIndex].cost;
-            P->setArmor(this->armor[armorIndex].value/(double)100);
+            P->setArmor(this->armor[armorIndex].value);
             armor[armorIndex].cost = 0;
             this->armorIndex++;
         }
@@ -190,8 +191,6 @@ void menu::market (player* P, int* money, WINDOW* bottomWin) {
         wrefresh(win);
     }
 }
-
-
 
 menu::~menu(){
     delwin(win);

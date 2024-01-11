@@ -1,11 +1,11 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include <ncurses.h>
+#include <cmath> // sqrt
 #include "lib.hpp"
 #include "bulletManager.hpp"
-
 #include "shooter.hpp"
-
 class level;
 
 #define MAX_HEALTH 100
@@ -15,7 +15,7 @@ class level;
 
 class player: public shooter {
 protected:
-	double armor; // 0-1 riduce i danni subiti
+	double armor; // 0-1 percentuale di riduzione dei danni subiti
 	double jumpSpeed;
 	int gunID;
 
@@ -26,9 +26,11 @@ public:
 	bool hurt(int value);
 	void shoot();
 	void setGun(int id);
-	void changeLevel(level* newLvl);
+	int getGun();
+	void setArmor(int percentage);
 	double getArmor();
-	void setArmor(double ar);
+	void changeLevel(level* newLvl);
+	void reset(level* newLvl);
 };
 
 #endif //PLAYER_HPP

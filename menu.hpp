@@ -2,12 +2,12 @@
 #define MENU_HPP
 
 #include <ncurses.h>
+#include <string>
 #include "player.hpp"
 #include "lib.hpp"
 
-
-#define HEIGHT (LINES-18)
-#define WIDTH (COLS-75)
+#define HEIGHT 10 /*(LINES-18)*/
+#define WIDTH 50 /*(COLS-75)*/
 
 #define N_ARMOR 6
 #define N_GUNS 3
@@ -19,15 +19,14 @@ struct buyable{
     int cost;
 };
 
-bool addLife (player* P, int hp);
-int changeGun (WINDOW* win);
-
 class menu {
 protected:
     WINDOW* win;
     buyable armor[N_ARMOR]; // value da 0 a 100
     buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, RIFLE
     int armorIndex;
+    bool addLife (player* P, int hp);
+    int changeGun ();
 public:
     menu();
     int open();
@@ -35,16 +34,5 @@ public:
     void market(player* P, int* money, WINDOW* bottomWin);
     ~menu();
 };
-
-
-
-
-
-
-
-
-
-
-
 
 #endif // MENU_HPP

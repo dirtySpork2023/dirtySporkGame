@@ -1,21 +1,17 @@
 #include "shooter.hpp"
-
-#include <ncurses.h>
-#include <time.h>
-#include <stdlib.h>
-
-#include "entity.hpp"
 #include "level.hpp"
 
+// costruttore
 shooter::shooter(int x, int y, level* lvl, int h, double fireRate, int damage, char bullet):
 	entity(x,y,lvl,h){
 	this->facingRight = true;
 	this->fireRate = fireRate;
 	this->damage = damage;
 	this->texture = bullet;
-	this->lastShot = -rand()%100/(double)100;
+	this->lastShot = fireRate - random(0,100)/(double)100;
 }
 
+// costruttore secondario
 shooter::shooter(int x, int y, level* lvl):
 	shooter(x, y, lvl,
 		/* HEALTH */ 15+2*lvl->getDiff(),
@@ -51,7 +47,7 @@ void shooter::print(timeSpan deltaTime){
 		mvprintw(box.b.y,   box.a.x, "O=O");
 	}
 
-	attrset(COLOR_PAIR(1));
+	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
 
 void shooter::shoot(point p){

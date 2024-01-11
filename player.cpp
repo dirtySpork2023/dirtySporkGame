@@ -1,12 +1,5 @@
 #include "player.hpp"
-
-#include <ncurses.h>
-
-#include <cmath>
-#include "lib.hpp"
-#include "bulletManager.hpp"
 #include "level.hpp"
-using namespace std;
 
 player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float armor):
 	shooter(x,y,lvl,MAX_HEALTH,1,1,'?'){ //fireRate, damage e texture sono temporanei qui
@@ -23,8 +16,6 @@ player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float arm
 //aggiorna la posizione del player e/o spara
 void player::update(char input, timeSpan deltaTime){
 
-	// faccio un bM->check prima per usare l'override della funzione hurt
-	// quindi ci sarà un bM->check ridondante all'interno di entity
 	hurt(lvl->getBM()->check(box));
 	entity::update(deltaTime);
 
@@ -36,19 +27,14 @@ void player::update(char input, timeSpan deltaTime){
 		facingRight = true;
 		entity::move('d');
 	}
-	if( isGrounded && (upperCase(input) || input=='w' || input=='e' || input=='q')){
+	if( isGrounded() && (input=='F' || input=='w' || input=='e' || input=='q')){
 		ySpeed = jumpSpeed;
-		isGrounded = false;
 	}
+
+	lastShot += deltaTime;
 	if( (input=='f'||input=='F') && lastShot > fireRate ){
 		shoot();
 		lastShot = 0;
-	}else{
-		lastShot += deltaTime;
-	}
-	if( input=='g'){
-		gunID = (gunID+1)%3;
-		setGun(gunID);
 	}
 }
 
@@ -106,12 +92,16 @@ void player::setGun(int id){
 	}
 }
 
-double player::getArmor(){
-	return armor;
+int player::getGun(){
+	return gunID;
 }
 
-void player::setArmor(double ar) {
-	if (ar<100 && ar>=0) this->armor = ar;
+void player::setArmor(int percentage){
+	armor = (double)percentage/100;
+}
+
+double player::getArmor(){
+	return armor;
 }
 
 void player::changeLevel(level* newLvl){
@@ -125,4 +115,13 @@ void player::changeLevel(level* newLvl){
 	box.a.y = LINES-WIN_HEIGHT-4;
 	box.b.y = LINES-WIN_HEIGHT-2;
 	this->lvl = newLvl;
+}
+
+void player::reset(level* newLvl){
+	box.a.x = 2;
+	box.b.x = 4;
+	box.a.y = -2;
+	box.b.y = 0;
+	this->lvl = newLvl;
+	health = 100;
 }

@@ -1,15 +1,10 @@
 #include "entity.hpp"
-
-#include <ncurses.h>
-
-#include "lib.hpp"
 #include "level.hpp"
-using namespace std;
 
+// costruttore
 entity::entity(int x, int y, level* lvl, int hp){
 	this->yMod = 0;
 	this->ySpeed = 0;
-	this->isGrounded = false;
 
 	this->health = hp;
 	this->lastDamage = DAMAGE_TIMESPAN+1;
@@ -23,21 +18,13 @@ entity::entity(int x, int y, level* lvl, int hp){
 	this->box.b.y = y;
 }
 
-void entity::update(timeSpan deltaTime){
-	hurt(lvl->getBM()->check(box));
-	lastDamage += deltaTime;
-	applyGravity(deltaTime);
+bool entity::isGrounded(){
+	return (lvl->check(box, 's').type!=' ' && ySpeed>=0);
 }
 
 // muove entity in base alla forza di gravità e il tempo passato
 void entity::applyGravity(timeSpan deltaTime){
-	if( lvl->check(box, 's').type!=' ' && ySpeed>=0 ){
-		isGrounded = true;
-	}else{
-		isGrounded = false;
-	}
-
-	if( isGrounded ){
+	if( isGrounded() ){
 		ySpeed = 0;
 		yMod = 0;
 	}else{
@@ -72,18 +59,23 @@ void entity::move(char input){
 		}else{
 			ySpeed=0;
 		}
-		isGrounded = false;
 	}
 }
 
 // applica il colore con cui stampare
 void entity::setPrintColor(int paint){
-	if(lastDamage <= DAMAGE_TIMESPAN){
+	if(lastDamage <= DAMAGE_TIMESPAN || health == 0){
 		attrset(COLOR_PAIR( PAINT_DAMAGE ));
 	}else{
 		attrset(COLOR_PAIR( paint ));
 		attron(A_BOLD);
 	}
+}
+
+void entity::update(timeSpan deltaTime){
+	lastDamage += deltaTime;
+	hurt(lvl->getBM()->check(box));
+	applyGravity(deltaTime);
 }
 
 // ritorna la posizione più centrale alla base dell'entity
@@ -117,7 +109,7 @@ bool entity::hurt(int value){
 }
 
 entity::~entity(){
-	// esplosione
+	// genera un esplosione
 	for(int i=0; i<10; i++){
 		lvl->getBM()->add(this->getPos(), randVector(), true, 0, ':');
 	}

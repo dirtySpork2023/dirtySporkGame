@@ -1,8 +1,5 @@
 #include <ncurses.h>
-#include <iostream>
 #include <chrono>
-#include <time.h>
-#include <stdlib.h>
 
 #include "lib.hpp"
 #include "bulletManager.hpp"
@@ -15,10 +12,7 @@
 #include "platform.hpp"
 #include "level.hpp"
 #include "menu.hpp"
-
-using namespace std;
-
-#define COIN_SPACING 7
+using namespace std::chrono;
 
 struct lvlNode {
 	level* lvl;
@@ -26,10 +20,18 @@ struct lvlNode {
 };
 typedef lvlNode* lvlList;
 
-int main(){
+// aggiunge livello nuovo in testa
+lvlList addLevel(lvlList h, int num, int diff){
+	lvlList tmp = new lvlNode;
+	tmp->lvl = new level(num, diff);
+	tmp->next = h;
+	return tmp;
+}
+
+int main()
+{
 	srand(time(NULL));
 	
-	//inizializza ncurses
 	init();
 
 	// bottom window setup
@@ -40,17 +42,18 @@ int main(){
 	char input;
 	bool quit = false;
 	bool openMenu = false;
-	int numL = 1; // numero del livello corrente;
+	int numL = 1; // numero del livello corrente
 	int diff = numL;
 	int money = 300;
+
+	bool death = false;
+	timeSpan deathAnimation = 0;
 	
-	// Lista di livelli
-	lvlList head = new lvlNode;
-	head->lvl = new level (numL, diff);
-	head->next = NULL;
-	// Puntatore al livello corrente
+	// first setup
+	lvlList head = NULL;
+	head = addLevel(head, numL, diff);
 	level* currentLvl = head->lvl;
-	player P = player(2, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
+	player P = player(4, 0, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
 	while( !quit ) {
@@ -58,30 +61,17 @@ int main(){
 		if (!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
-
-			// RIPRENDI
-			// MERCATO
-			// - ARMA <SHOTGUN> per 2$
-			// - AGGIUNGI HP per 2$
-			// - AUMENTA ARMATURA a <70%> per 5$
-			// LIVELLO <numL>
-
 			input = M.open();
-			if (input == 1) numL = M.changeLevel(currentLvl->number());
+			if (input == 1) numL = M.changeLevel(head->lvl->number());
 			else if (input == 2) M.market(&P, &money, bottomWin);
 			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
-			// https://youtube.com/playlist?list=PL2U2TQ__OrQ8jTf0_noNKtHMuYlyxQl4v&si=F0BcWtcIV_qjJREG
 		}
 
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
-			if( head->lvl->number() < numL ){
-				// livello nuovo aggiunto in testa
-				lvlNode* tmp = new lvlNode;
-				tmp->lvl = new level (head->lvl->number()+1, ++diff);
-				tmp->next = head;
-				head = tmp;
+			while( head->lvl->number() < numL ){
+				head = addLevel(head, head->lvl->number()+1, ++diff);
 			}
 
 			// cambia livello
@@ -98,26 +88,45 @@ int main(){
 		}
 
 		// CICLO PRINCIPALE
-		auto lastTimePoint = std::chrono::high_resolution_clock::now();
+		auto lastTimePoint = high_resolution_clock::now();
 		while( !quit && !openMenu && currentLvl->number()==numL){
-			auto thisTimePoint = std::chrono::high_resolution_clock::now();
+			auto thisTimePoint = high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
-			deltaTime = std::chrono::duration<double>(elapsed).count();
+			deltaTime = duration<double>(elapsed).count();
 
 			// UPDATE
 			
-			input = getch();
+			if( P.getHealth()>0 ) input = getch();
+
 			if( input=='Q' ) quit = true;
 			if( input=='m' ) openMenu = true;
-
-			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
+			if( P.getHealth()==0 && death==false ){
+				death = true;
+				deathAnimation = DEATH_TIMESPAN;
+			}
+			if( P.getHealth()==0 ){
+				deathAnimation -= deltaTime;
+				if( deathAnimation<0 ){
+					death = false;
+					// reset della lista di livelli
+					while( head!=NULL ){
+						delete head->lvl;
+						lvlList tmp = head;
+						head = tmp->next;
+						delete tmp;
+					}
+					numL = 1;
+					// diff=menu.countBoughtItems
+					head = addLevel(head, numL, diff);
+					currentLvl = head->lvl;
+					P.reset(currentLvl);
+				}
+			}
+			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
 				numL++;
-			}
-			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
-				// apri menu
-				openMenu = true;
-			}
+			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
+				numL--;
 
 		    currentLvl->update(&P, deltaTime);
 			P.update(input, deltaTime);
@@ -125,24 +134,8 @@ int main(){
 
 			// OUTPUT
 
-			attrset(COLOR_PAIR(PAINT_BACKGROUND));
-			// background brick texture
-			for(int y=0; y<LINES-WIN_HEIGHT; y++){
-				for(int x=0; x<COLS; x++){
-					if( y%2==0 && x%6==1 || y%2==1 && x%6==4)
-						mvprintw(y, x, "|");
-					else
-						mvprintw(y, x, "_");
-				}
-			}
-			if(currentLvl->number()==1){
-				titleScreen();
-			}
-			attrset(COLOR_PAIR(PAINT_DEFAULT));
-			attron(A_DIM);
-			mvprintw(0, 3, "fps: %.0f | deltaTime: %f ", 1/deltaTime, deltaTime);
-			attroff(A_DIM);
-
+			printBackground(currentLvl->number());
+			mvprintw(0, 3, "[[fps: %.0f ]]", 1/deltaTime);
 
 			currentLvl->printAll(deltaTime);
 			P.print(deltaTime);

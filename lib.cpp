@@ -1,10 +1,6 @@
 #include "lib.hpp"
 
-#include <ncurses.h>
-#include <time.h>
-#include <stdlib.h>
-using namespace std;
-
+//inizializza ncurses
 void init(){
 	initscr();
 	start_color();
@@ -109,11 +105,16 @@ point snap(vector v){
 	return result;
 }
 
+// numero random tra min e max compresi
+int random(int min, int max){
+	return rand()%(max-min+1) + min;
+}
+
 // restituisce un vettore con inclinazione a caso e modulo compreso tra min e max
 vector randVector(){
 	vector result;
-	result.x = rand()%61 - 30;
-	result.y = -rand()%50 + 20;
+	result.x = random(-30, +30);
+	result.y = random(-20, -70);
 	return result;
 }
 
@@ -125,38 +126,30 @@ void posPrintW(point pos, char ch){
 	mvprintw(pos.y, pos.x, "%c", ch);
 }
 
-// ritorna true se il carattere è maiuscolo
-bool upperCase(char c){
-	return ('A'<=c && c<= 'Z');
-}
-
-void titleScreen(){
+void printBackground(int lvl){
+	attrset(COLOR_PAIR(PAINT_BACKGROUND));
+	// background brick texture
+	for(int y=0; y<LINES-WIN_HEIGHT; y++){
+		for(int x=0; x<COLS; x++){
+			if( y%2==0 && x%6==1 || y%2==1 && x%6==4)
+				mvprintw(y, x, "|");
+			else
+				mvprintw(y, x, "_");
+		}
+	}
+	if(lvl==1) attrset(COLOR_PAIR(PAINT_TITLE));
 	/*
-+------------------------------------------------------------------------------------------------------------------------------+
-| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |
-| |WWWWWWW| |WW\  |W| |WWWWW\   |W|     |WWWWWWW| /WWWWWWW| /WWWWWWW|         /WWWWW\  |W|   |W| |WWWWWWW| /WWWWWWW| |WWWWWWW| |
-| |W|_____  |W*W\ |W| |W|  \WW  |W|     |W|_____  |W|____   |W|____          |W/   \W| |W|   |W| |W|_____  |W|____      |W|    |
-| |WWWWWWW| |W|\W\|W| |W|   |W| |W|     |WWWWWWW| \WWWWWWW\ \WWWWWWW\        |W|  _|W| |W|   |W| |WWWWWWW| \WWWWWWW\    |W|    |
-| |W|_____  |W| \W,W| |W|__/WW  |W|___, |W|_____   _____|W|  _____|W|        |W\__\W\' |W\___/W| |W|_____   _____|W|    |W|    |
-| |WWWWWWW| |W|  \WW| |WWWWW/   |WWWWW| |WWWWWWW| |WWWWWWW/ |WWWWWWW/         \WWW,\W\  \WWWWW/  |WWWWWWW| |WWWWWWW/    |W|    |
-+------------------------------------------------------------------------------------------------------------------------------+
-                       |                           _______________________________________,  |
-                       |   =====-----....__  __,-""  [____] _.----------,_________________|  |
-                       |  |                ""   \___________(||||||||||||)_)                 |
-                       |  |                   ,-"(( ]        `----------'                    |
-                       |  |    ___....--,_  ,'    ""                                         |
-                       |   """"           /`                                                 |
-                       +---------------------------------------------------------------------+
-                ______                           
- ______________//_____) _______________/|        
-#######################H###############H#======HH
-########Y"""""/H#((_)##`""""""""""""""~ '        
-###Y"`       /H#/    ((                          
-            (H#{      "                          
-*/
-	attrset(COLOR_PAIR(PAINT_TITLE));
+	+------------------------------------------------------------------------------------------------------------------------------+
+	| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |
+	| |WWWWWWW| |WW\  |W| |WWWWW\   |W|     |WWWWWWW| /WWWWWWW| /WWWWWWW|         /WWWWW\  |W|   |W| |WWWWWWW| /WWWWWWW| |WWWWWWW| |
+	| |W|_____  |W*W\ |W| |W|  \WW  |W|     |W|_____  |W|____   |W|____          |W/   \W| |W|   |W| |W|_____  |W|____      |W|    |
+	| |WWWWWWW| |W|\W\|W| |W|   |W| |W|     |WWWWWWW| \WWWWWWW\ \WWWWWWW\        |W|  _|W| |W|   |W| |WWWWWWW| \WWWWWWW\    |W|    |
+	| |W|_____  |W| \W,W| |W|__/WW  |W|___, |W|_____   _____|W|  _____|W|        |W\__\W\' |W\___/W| |W|_____   _____|W|    |W|    |
+	| |WWWWWWW| |W|  \WW| |WWWWW/   |WWWWW| |WWWWWWW| |WWWWWWW/ |WWWWWWW/         \WWW,\W\  \WWWWW/  |WWWWWWW| |WWWWWWW/    |W|    |
+	+------------------------------------------------------------------------------------------------------------------------------+                       
+	*/
+	
 	attron(A_BOLD);
-
 	mvprintw(Y_OFFSET+0, X_OFFSET,  "+------------------------------------------------------------------------------------------------------------------------------+");
 	mvprintw(Y_OFFSET+1, X_OFFSET,  "| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |");
 	mvprintw(Y_OFFSET+2, X_OFFSET,  "| |WWWWWWW| |WW\\  |W| |WWWWW\\   |W|     |WWWWWWW| /WWWWWWW| /WWWWWWW|         /WWWWW\\  |W|   |W| |WWWWWWW| /WWWWWWW| |WWWWWWW| |");
@@ -165,7 +158,6 @@ void titleScreen(){
 	mvprintw(Y_OFFSET+5, X_OFFSET,  "| |W|_____  |W| \\W,W| |W|__/WW  |W|___, |W|_____   _____|W|  _____|W|        |W\\__\\W\\' |W\\___/W| |W|_____   _____|W|    |W|    |");
 	mvprintw(Y_OFFSET+6, X_OFFSET,  "| |WWWWWWW| |W|  \\WW| |WWWWW/   |WWWWW| |WWWWWWW| |WWWWWWW/ |WWWWWWW/         \\WWW,\\W\\  \\WWWWW/  |WWWWWWW| |WWWWWWW/    |W|    |");
 	mvprintw(Y_OFFSET+7, X_OFFSET,  "+------------------------------------------------------------------------------------------------------------------------------+");
-
 	attroff(A_BOLD);
 }
 
@@ -173,26 +165,26 @@ void printResourceBarLow(WINDOW* w, int health, double armor, int money) {
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	box(w, 0, 0);
 
-	mvwprintw(w, 2, WIN_OFFSET-7, "HEALTH: <|");
+	mvwprintw(w, 2, COLS/2-57, "HEALTH: <|");
 	wattrset(w, COLOR_PAIR(PAINT_HP));
 	for(int i=0; i<health; i++) wprintw(w, "M");
 	for(int i=health; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
 
-	mvwprintw(w, 3, WIN_OFFSET-6, "ARMOR: <|");
+	mvwprintw(w, 3, COLS/2-56, "ARMOR: <|");
 	wattrset(w, COLOR_PAIR(PAINT_ARMOR));
 	for(int i=0; i<armor*100 ; i++) wprintw(w, "M");
 	for(int i=armor*100; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	wprintw(w, "|>");
 
-	mvwprintw(w, 4, WIN_OFFSET-6, "MONEY: <| %d $ |>", money);
+	mvwprintw(w, 4, COLS/2-56, "MONEY: <| %d $ |>", money);
 }
 
 void printResourceBar(WINDOW* w, int health, double armor, int money, int level, int difficulty){
 	printResourceBarLow(w, health, armor, money);
 
-	mvwprintw(w, 5, WIN_OFFSET-6, "LEVEL: <| %d |>", level);
-	mvwprintw(w, 6, WIN_OFFSET-11, "DIFFICULTY: <| %d |>", difficulty);
+	mvwprintw(w, 5, COLS/2-56, "LEVEL: <| %d |>", level);
+	mvwprintw(w, 6, COLS/2-61, "DIFFICULTY: <| %d |>", difficulty);
 }

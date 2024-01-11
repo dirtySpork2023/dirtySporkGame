@@ -53,7 +53,7 @@ int main()
 	lvlList head = NULL;
 	head = addLevel(head, numL, diff);
 	level* currentLvl = head->lvl;
-	player P = player(4, 0, currentLvl, PISTOL, 12, 0);
+	player P = player(4, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
 	while( !quit ) {
@@ -131,9 +131,8 @@ int main()
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 
-		    currentLvl->update(&P, deltaTime);
+		    currentLvl->update(&P, deltaTime, &money);
 			P.update(input, deltaTime);
-			money += currentLvl->updateCoin(&P);
 
 			// OUTPUT
 

@@ -20,19 +20,13 @@ struct Pplatform
 };
 typedef Pplatform *lPlatform;
 
-hitBox newRandomPlat(hitBox where, int de);
-
-lPlatform createnPlat(int np, hitBox ht, int len, int d);
-
-struct Pkuba
-{
+struct Pkuba {
     kuba *K;
     Pkuba *next;
 };
 typedef Pkuba *lKuba;
 
-struct Pshooter
-{
+struct Pshooter {
     shooter *S;
     Pshooter *next;
 };
@@ -44,13 +38,6 @@ struct Pcoin {
 };
 typedef Pcoin* lCoin;
 
-lKuba dltKuba (lKuba lk);
-lShooter dltShooter (lShooter ls);
-lCoin dltCoin (lCoin lc, player* P, int* money);
-
-void print_platforms (lPlatform lsp);       // Funzione stampa lista di piattaforme
-hitBox hiboxPlatx (lPlatform lp, int x);   // Restituisce la hitBox della piattaforma x
-
 // Struct da restituire nella funzione check
 struct infoCrash
 {
@@ -58,8 +45,8 @@ struct infoCrash
     void *obj; // Puntatore void all'oggetto
 };
 
-class level
-{
+class level {
+
 protected:
     int nlevel;                 // Numero del livello
     int diff;                   // Difficoltà
@@ -71,15 +58,22 @@ protected:
     yuck* Y;                    // Yuck è al massimo 1
     lCoin coins;
 
+    hitBox newRandomPlat(hitBox where);
+    lPlatform createnPlat(int np, hitBox p1, int len);
+    lKuba dltKuba (lKuba lk);
+    lShooter dltShooter (lShooter ls);
+    lCoin dltCoin (lCoin lc, player* P, int* money);
+    void print_platforms (lPlatform lsp);
+    hitBox hiboxPlatx (lPlatform lp, int x); // hitbox della piattaforma x
+
 public:
     level (int nl, int d);
     void printAll (timeSpan deltaTime);
-    infoCrash check (hitBox ht, char d);  // d è la direzione in cui si sposta il giocatore:
-    int number ();                       // a: sinistra || w: sopra || d: destra || s: sotto 
-    int getDiff ();
-    void update (player* P, timeSpan deltaTime);
-    int updateCoin (player* P);
-    bool completed();
+    infoCrash check (hitBox ht, char d);  // d -> direzione in cui si sposta il giocatore (awsd)
+    int number (); // numero del livello
+    int getDiff (); // difficoltà del livello
+    void update (player* P, timeSpan deltaTime, int* money);
+    bool completed(); // true -> livello completato
     bulletManager* getBM ();
     ~level();
 };

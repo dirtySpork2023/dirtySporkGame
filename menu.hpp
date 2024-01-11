@@ -23,10 +23,10 @@ class menu {
 protected:
     WINDOW* win;
     buyable armor[N_ARMOR]; // value da 0 a 100
-    buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, RIFLE
+    int gun[N_GUNS];
     int armorIndex;
     bool addLife (player* P, int hp);
-    int changeGun ();
+    void changeGun (player* P, int* money);
 public:
     menu();
     int open();

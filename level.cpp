@@ -2,143 +2,44 @@
 
 using namespace std;
 
-// Funzione per generare una piattaforma casuale all'interno di un'area definita da w
-hitBox newRandomPlat (hitBox p1) {
-    hitBox nw;
-    nw.a.x = p1.a.x + (rand()%5);  
-    nw.a.y = p1.a.y + (rand()%4);
-    nw.b.x = nw.a.x + 18 + (rand()%(p1.b.x-nw.a.x-19));   // lunghezza compresa fra nw.a.x+18 e p1.b.x
-    nw.b.y = nw.a.y + 1;
-
-    return nw; 
-}
-
-// Funzione che genera una lista di n piattaforme in modo ricorsivo
-lPlatform createnPlat (int np, hitBox p1, int len) {
-    if (np > 0) {
-        lPlatform tmp1 = new Pplatform;
-        hitBox hpl = newRandomPlat (p1);
-        tmp1->plat = new platform(hpl.a.x, hpl.a.y, hpl.b.x, hpl.b.y);
-        p1.a.x = max(hpl.b.x+4, p1.a.x+len);
-        p1.b.x += len;
-        tmp1->next = createnPlat (np-1, p1, len);
-        return tmp1;
-    } else return NULL;
-}
-
-// Funzione che elimina i kuba morti
-lKuba dltKuba (lKuba lk) {
-    if (lk == NULL) return NULL;
-    else if (lk->K->getHealth() == 0) {
-        lKuba tmp = lk;
-        lk = dltKuba (lk->next);
-        delete tmp->K;
-        delete tmp;
-        tmp = NULL;
-        return lk;
-    } else {
-        lk->next = dltKuba (lk->next);
-        return lk;
-    }
-}
-
-// Funzione che elimina gli shooters morti
-lShooter dltShooters (lShooter ls) {
-    if (ls == NULL) return NULL;
-    else if (ls->S->getHealth() == 0) {
-        lShooter tmp = ls;
-        ls = dltShooters (ls->next);
-        delete tmp->S;
-        delete tmp;
-        tmp = NULL;
-        return ls;
-    } else {
-        ls->next = dltShooters (ls->next);
-        return ls;
-    }
-}
-
-lCoin dltCoin (lCoin lc, player* P, int* count) {
-    if (lc==NULL) return NULL;
-    else {
-        int value = lc->C->check(P->getHitBox());
-        if(value==-1){
-		    lc->next = dltCoin(lc->next, P, count);
-            return lc;
-	    } else {
-            *count += value;
-            lCoin tmp = lc;
-            lc=lc->next;
-            delete tmp->C;
-            delete tmp;
-            tmp=NULL;
-		    return dltCoin(lc, P, count);
-	    }
-    }
-}
-
-void print_platforms (lPlatform lsp) {
-    for (int i = 0; i < 4 && lsp != NULL; i++) {          // Stampa delle pareti
-        lsp->plat->printc('|');
-	    lsp = lsp->next;
-    }
-
-    lsp->plat->printc('"');                 // stampa della base
-    lsp = lsp->next;
-
-    while (lsp != NULL) {                   // Stampa delle piattaforme sospese
-        lsp->plat->printp();
-	    lsp = lsp->next;
-	}
-    lsp = NULL;
-    delete lsp;
-}
-
-hitBox hiboxPlatx (lPlatform lp, int x) {
-    while (x!=0) {
-        lp=lp->next;
-        x--;
-    }
-    return lp->plat->getHitbox();
-}
-
 level::level (int nl, int d) {
-    //generazione piattaforme inferiori
-    this->nlevel = nl;                      // Assegno il numero del livello 
-    this->diff = d;                         // Difficoltà
+
+    this->nlevel = nl;  // Numero del livello 
+    this->diff = d;  // Difficoltà
     this->B = new bulletManager();
     int bLevel = LINES-WIN_HEIGHT-1;
-    int numPlatInf = rand()%3 + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
-    int lenInf = (COLS-12) / numPlatInf;    // Larghezza massima delle piattaforme in base al loro numero
-    int heightInf = bLevel - 7;             // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
-    hitBox p1;                              // Hitbox della prima piattaforma
-    p1.a.x = 8;                             // valore arbitrario di distanza da tenere dal lato sinistro
-    p1.a.y = heightInf - 4;
-    p1.b.x = lenInf;
-    p1.b.y = heightInf;                            // base - altezza del player
     
     this->platforms = new Pplatform;
-    this->platforms->plat = new platform (0, 0, 1, bLevel - 5);// Parete sinistra
+    this->platforms->plat = new platform (0, 0, 1, bLevel - 5); // Parete sinistra
     this->platforms->next = new Pplatform;
     lPlatform tmp = this->platforms->next;
-    tmp->plat = new platform (COLS-2, 0, COLS-1, bLevel - 5);     // Parete destra
+    tmp->plat = new platform (COLS-2, 0, COLS-1, bLevel - 5); // Parete destra
     tmp->next = new Pplatform;
     tmp = tmp->next;
-    tmp->plat = new platform (-1, 0, -1, bLevel);               // Porta sinistra
+    tmp->plat = new platform (-1, 0, -1, bLevel); // Porta sinistra
     tmp->next = new Pplatform; 
     tmp = tmp->next;
-    tmp->plat = new platform (COLS, 0, COLS, bLevel);         // Porta destra
+    tmp->plat = new platform (COLS, 0, COLS, bLevel); // Porta destra
     tmp->next = new Pplatform; 
     tmp = tmp->next;
     tmp->plat = new platform (0, bLevel, COLS-1, bLevel); // Base del livello
     
-    tmp->next = createnPlat (numPlatInf, p1, lenInf);
+    // Generazione piattaforme inferiori
+    int numPlatInf = rand()%3 + 2;       // Numero di piattaforme inferiori del livello [2 - 4]
+    int lenInf = (COLS-12) / numPlatInf; // Larghezza massima delle piattaforme in base al loro numero
+    int heightInf = bLevel - 7;          // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
+    hitBox p1;
+    p1.a.x = 8;
+    p1.a.y = heightInf - 4;
+    p1.b.x = lenInf;
+    p1.b.y = heightInf;
+    tmp->next = createnPlat (numPlatInf, p1, lenInf); // Generazione random delle piattaforme
     
-    // generazione piattaforme superiori
+    // Generazione piattaforme superiori
     int numPlatsup = rand()%3 + 2;
     int lensup = (COLS-12) / numPlatsup;
     int heightsup = heightInf - 11;                   
-    p1.a.x = 8; 
+    p1.a.x = 10; 
     p1.a.y = heightsup - 2;
     p1.b.x = lensup;
     p1.b.y = heightsup;
@@ -147,12 +48,12 @@ level::level (int nl, int d) {
     while (tmp->next != NULL) {
 	    tmp = tmp->next;
 	}  
-    tmp->next = createnPlat (numPlatsup, p1, lensup);
+    tmp->next = createnPlat (numPlatsup, p1, lensup); 
 
     // Generazione nemici
-    int weight = this->diff;
+    int weight = this->diff;  // Nemici generati in base alla difficoltà del livello
     // Yuck 
-    if (this->nlevel % 4 == 0) {    
+    if (this->nlevel % 4 == 0) {
         this->Y = new yuck(COLS-10, bLevel-1, this);
         weight -= 1;
     } else this->Y = NULL;
@@ -190,6 +91,108 @@ level::level (int nl, int d) {
     tmp3=NULL;
 }
 
+// Funzione per generare una piattaforma casuale all'interno di un'area definita da w
+hitBox level::newRandomPlat (hitBox p1) {
+    hitBox nw;
+    nw.a.x = p1.a.x + (rand()%5);  
+    nw.a.y = p1.a.y + (rand()%4);
+    nw.b.x = nw.a.x + 18 + (rand()%(p1.b.x-nw.a.x-19));   // Lunghezza compresa fra nw.a.x + 18 e p1.b.x
+    nw.b.y = nw.a.y + 1;
+
+    return nw;
+}
+
+// Funzione che genera una lista di n piattaforme in modo ricorsivo
+lPlatform level::createnPlat (int np, hitBox p1, int len) {
+    if (np > 0) {
+        lPlatform tmp1 = new Pplatform;
+        hitBox hpl = newRandomPlat (p1);
+        tmp1->plat = new platform(hpl.a.x, hpl.a.y, hpl.b.x, hpl.b.y);
+        p1.a.x = max(hpl.b.x+4, p1.a.x+len);
+        p1.b.x += len;
+        tmp1->next = createnPlat (np-1, p1, len);
+        return tmp1;
+    } else return NULL;
+}
+
+// Funzione che elimina i kuba morti
+lKuba level::dltKuba (lKuba lk) {
+    if (lk == NULL) return NULL;
+    else if (lk->K->getHealth() == 0) {
+        lKuba tmp = lk;
+        lk = dltKuba (lk->next);
+        delete tmp->K;
+        delete tmp;
+        tmp = NULL;
+        return lk;
+    } else {
+        lk->next = dltKuba (lk->next);
+        return lk;
+    }
+}
+
+// Funzione che elimina gli shooters morti
+lShooter level::dltShooter (lShooter ls) {
+    if (ls == NULL) return NULL;
+    else if (ls->S->getHealth() == 0) {
+        lShooter tmp = ls;
+        ls = dltShooter (ls->next);
+        delete tmp->S;
+        delete tmp;
+        tmp = NULL;
+        return ls;
+    } else {
+        ls->next = dltShooter (ls->next);
+        return ls;
+    }
+}
+
+// Eliminazione delle monete acquisite con aggiornamento del valore
+lCoin level::dltCoin (lCoin lc, player* P, int* count) {
+    if (lc==NULL) return NULL;
+    else {
+        int value = lc->C->check(P->getHitBox());
+        if(value==-1){
+		    lc->next = dltCoin(lc->next, P, count);
+            return lc;
+	    } else {
+            *count += value;
+            lCoin tmp = lc;
+            lc=lc->next;
+            delete tmp->C;
+            delete tmp;
+            tmp=NULL;
+		    return dltCoin(lc, P, count);
+	    }
+    }
+}
+
+void level::print_platforms (lPlatform lsp) {
+    for (int i = 0; i < 4 && lsp != NULL; i++) {          // Stampa delle pareti
+        lsp->plat->printc('|');
+	    lsp = lsp->next;
+    }
+
+    lsp->plat->printc('"');                 // stampa della base
+    lsp = lsp->next;
+
+    while (lsp != NULL) {                   // Stampa delle piattaforme sospese
+        lsp->plat->printp();
+	    lsp = lsp->next;
+	}
+    lsp = NULL;
+    delete lsp;
+}
+
+hitBox level::hiboxPlatx (lPlatform lp, int x) {
+    while (x!=0) {
+        lp=lp->next;
+        x--;
+    }
+    return lp->plat->getHitbox();
+}
+
+// Stampa degli elementi del livello
 void level::printAll (timeSpan deltaTime) {
     print_platforms (this->platforms);
 
@@ -215,13 +218,7 @@ void level::printAll (timeSpan deltaTime) {
     B->print();
 }
 
-/*
-    ' ' : void
-    k   : kuba
-    s   : shooter
-    y   : yuck
-    #   : platform
-*/
+// Indica se 'pl' si sta scontrando con qualcosa muovendosi nella direzione 'd'
 infoCrash level::check (hitBox pl, char d) {
     infoCrash info;      // Variabile da restituire                             
     bool here = false;   // True se trovo qualcosa
@@ -284,7 +281,7 @@ int level::getDiff () {
     return this->diff;
 }
 
-void level::update (player* P, timeSpan deltaTime) {
+void level::update (player* P, timeSpan deltaTime, int* money) {
     B->update(deltaTime);
     // Update nemici
     if(this->kubas!=NULL) {
@@ -307,7 +304,7 @@ void level::update (player* P, timeSpan deltaTime) {
 
 	// Eliminazione entità morte
 	this->kubas = dltKuba (this->kubas);
-    this->shooters = dltShooters (this->shooters);
+    this->shooters = dltShooter (this->shooters);
 	
     if(this->shooters==NULL && this->kubas==NULL && this->Y!=NULL){
 		this->Y->wakeUp();
@@ -316,12 +313,8 @@ void level::update (player* P, timeSpan deltaTime) {
 		delete this->Y;
 		this->Y = NULL;
 	}
-}
-
-int level::updateCoin (player* P) {
-    int count=0;
-    this->coins = dltCoin (this->coins, P, &count);
-    return count;
+    // update delle monete
+    this->coins = dltCoin (this->coins, P, money);
 }
 
 bool level::completed() {

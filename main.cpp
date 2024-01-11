@@ -51,7 +51,7 @@ int main(){
 
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
-			if( head->lvl->number() < numL ){
+			while( head->lvl->number() < numL ){
 				// livello nuovo aggiunto in testa
 				lvlNode* tmp = new lvlNode;
 				tmp->lvl = new level (head->lvl->number()+1, ++diff);

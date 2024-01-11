@@ -25,6 +25,7 @@ menu::menu(){
     currHeal = 0;
     heal.value = 20;
     heal.cost = 5;
+    error = false;
 }
 
 bool menu::update(char input, int &money, int &numL, int totLvl, player *P, timeSpan deltaTime){
@@ -61,7 +62,7 @@ bool menu::update(char input, int &money, int &numL, int totLvl, player *P, time
 }
 
 void menu::updateScroll(char type, buyable b[], int size, int &curr, char input, int &money, player* P){
-    //if type = 'a'  b = *armor size=N_ARMORs blablabla
+    // if type = 'a'  b = *armor size=N_ARMORs blablabla
     // per togliere argomenti superflui
 
     if( input=='a' && curr>0)

@@ -29,7 +29,6 @@ menu::menu(){
 
 bool menu::update(char input, int &money, int &numL, int totLvl, player *P, timeSpan deltaTime){
     bool keepOpen = true;
-    if( input=='m' || input=='q' ) keepOpen = false;
     lastSelect += deltaTime;
 
     if( input=='w' && selected>0 )

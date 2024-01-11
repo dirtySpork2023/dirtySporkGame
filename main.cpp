@@ -49,22 +49,6 @@ int main(){
 	
 	while( !quit ){
 
-		// MENU
-		auto lastTimePoint = high_resolution_clock::now();
-		while(!quit && openMenu){
-			auto thisTimePoint = high_resolution_clock::now();
-			auto elapsed = thisTimePoint - lastTimePoint;
-			lastTimePoint = thisTimePoint;
-			deltaTime = duration<double>(elapsed).count();
-
-			input = getch();
-			if( input=='Q' ) quit = true;
-			//if(input=='4')numL=4;
-			openMenu = M.update(input, money, numL, head->lvl->number(), &P, deltaTime);
-			M.print(numL);
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
-		}
-
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
 			if( head->lvl->number() < numL ){
@@ -89,8 +73,8 @@ int main(){
 		}
 
 		// CICLO PRINCIPALE
-		lastTimePoint = high_resolution_clock::now();
-		while( !quit && !openMenu && currentLvl->number()==numL){
+		auto lastTimePoint = high_resolution_clock::now();
+		while( !quit && currentLvl->number()==numL){
 			auto thisTimePoint = high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
@@ -100,25 +84,32 @@ int main(){
 			
 			input = getch();
 			if( input=='Q' ) quit = true;
-			if( input=='m' ) openMenu = true;
+			if( input=='m' ) openMenu = !openMenu;
 
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed())
 				numL++;
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 
-		    currentLvl->update(&P, deltaTime);
-			P.update(input, deltaTime);
-			money += currentLvl->updateCoin(&P);
-
+			if(openMenu){
+				openMenu = M.update(input, money, numL, head->lvl->number(), &P, deltaTime);
+			}else{
+				currentLvl->update(&P, deltaTime);
+				P.update(input, deltaTime);
+				money += currentLvl->updateCoin(&P);
+			}
+			
 			// OUTPUT
 
-			printBackground(currentLvl->number());
-			mvprintw(0, 3, "[[fps: %.0f ]]", 1/deltaTime);
+			if(openMenu){
+				M.print(numL);
+			}else{
+				printBackground(currentLvl->number());
+				mvprintw(0, 3, "[[fps: %.0f ]]", 1/deltaTime);
 
-			currentLvl->printAll(deltaTime);
-			P.print(deltaTime);
-
+				currentLvl->printAll(deltaTime);
+				P.print(deltaTime);
+			}
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 
 			refresh();

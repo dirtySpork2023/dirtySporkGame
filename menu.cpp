@@ -2,6 +2,23 @@
 
 using namespace std;
 
+menu::menu(){
+
+    for(int i=0; i<N_ARMOR; i++){
+        armor[i].cost = i*50;
+    }
+    armor[0].value = 5;
+    armor[1].value = 35;
+    armor[2].value = 60;
+    armor[3].value = 80;
+    armor[4].value = 90;
+    armor[5].value = 95;
+    
+    this->armorIndex = 1;
+    
+    for (int i=0; i<N_GUNS; i++) gun[i] = i*20;
+}
+
 bool menu::addLife (player* P, int hp) {
     if (P->getHealth() >= 100) return false;
     else if (P->getHealth() + hp > 100) {
@@ -15,22 +32,22 @@ bool menu::addLife (player* P, int hp) {
     }
 }
 
-int menu::changeGun(){
+void menu::changeGun(player* P, int* money){
     clear();
     wclear(win);
     wrefresh(win);
     box(win, 0, 0);
-    int choice, highlight= 0;
+    int choice = 0; 
+    bool close = false;
+    int highlight = 0;
     string choices[3] = {"Pistol", "Shotgun", "Rifle"};
 
     mvwprintw(win, 1, WIDTH/2-5, "CAMBIO ARMA");
     
-    while (choice != 10) {      // choice =! 'invio'
+    while (!close) {      // choice =! 'invio'
         for(int i=0; i<3; i++) {
-            if (i == highlight) {
-                wattron(win, A_REVERSE);
-                mvwprintw(win, i+3, 1, "%s", choices[i].c_str());
-            } else mvwprintw(win, i+3, 1, "%s", choices[i].c_str());
+            if (i == highlight) wattron(win, A_REVERSE);
+            mvwprintw(win, i+4, 1, "%s - costo: %d", choices[i].c_str(), gun[i]);
             wattroff(win, A_REVERSE);
         }
         choice = wgetch(win);
@@ -42,31 +59,20 @@ int menu::changeGun(){
             if (highlight == 2) highlight = 0;
             else highlight++;
         }
+        
+        if (choice== 10 && *money >= gun[highlight]) {
+            P->setGun(highlight);
+            *money -= gun[highlight];
+            gun[highlight] = 0;
+            close =  true;
+        }
         wrefresh(win);
     }
-    return highlight;
-}
-
-menu::menu(){
-
-    for(int i=0; i<N_ARMOR; i++){
-        armor[i].cost = i*50;
-    }
-    armor[0].value = 5;
-    armor[1].value = 35;
-    armor[2].value = 60;
-    armor[3].value = 80;
-    armor[4].value = 90;
-    armor[5].value = 95;
-    for(int i=0; i<N_GUNS; i++){
-        gun[i].value = i;
-        gun[i].cost = i*50;
-    }
-    this->armorIndex = 1;
+    
 }
 
 int menu::open() {
-    this->win = newwin(HEIGHT, WIDTH, 6, COLS/2-WIDTH/2);
+    this->win = newwin(HEIGHT, WIDTH, 9, COLS/2-WIDTH/2);
 
     box(this->win, 0, 0);
     keypad(this->win, true);
@@ -75,14 +81,13 @@ int menu::open() {
     
     bool close = false;
     string choices[3] = {"Riprendi", "Cambia livello", "Mercato"};
-    int choice = 0, highlight = 0;
+    int choice = 0;
+    int highlight = 0;
 
-    while (choice != 10) {      // choice =! 'invio'
+    while (choice != 10 && choice != 'm') {      // choice =! 'invio'
         for(int i=0; i<3; i++) {
-            if (i == highlight) {
-                wattron(this->win, A_REVERSE);
-                mvwprintw(this->win, i+3, 1, "%s", choices[i].c_str());
-            } else mvwprintw(this->win, i+3, 1, "%s", choices[i].c_str());
+            if (i == highlight) wattron(this->win, A_REVERSE);
+            mvwprintw(this->win, i+4, 1, "%s", choices[i].c_str());
             wattroff(this->win, A_REVERSE);
         }
         choice = wgetch(this->win);
@@ -103,7 +108,6 @@ int menu::open() {
 }
 
 int menu::changeLevel (int totLvl) {
-    clear();
     wclear(this->win);
     wrefresh(this->win);
     box(this->win, 0, 0);
@@ -111,11 +115,11 @@ int menu::changeLevel (int totLvl) {
     int choice = 0;
 
     mvwprintw(this->win, 1, WIDTH/2-6, "CAMBIO LIVELLO");
-    mvwprintw(this->win, 4, 1, "Livello da raggiungere -> ");
+    mvwprintw(this->win, 5, 1, "Livello da raggiungere -> ");
 
     wattron(this->win, A_REVERSE);
     while (choice != 10) {
-        mvwprintw(this->win, 4, 27, "%d", i);
+        mvwprintw(this->win, 5, 27, "%d", i);
         choice = wgetch(this->win);
         if (choice == KEY_UP) {
             if (i == 1) i = totLvl;
@@ -131,7 +135,6 @@ int menu::changeLevel (int totLvl) {
 }
 
 void menu::market (player* P, int* money, WINDOW* bottomWin) {
-    clear();
     wclear(this->win);
     wrefresh(this->win);
     int choice = 0;
@@ -146,8 +149,8 @@ void menu::market (player* P, int* money, WINDOW* bottomWin) {
         while (choice != 10) {      // choice =! 'invio'
             for(int i=0; i<4; i++) {
                 if (i == highlight) wattron(this->win, A_REVERSE);
-                if (i==3) mvwprintw(this->win, i+3, 1, "Aumenta armatura al %d%%- costo: %d$", armor[armorIndex].value, armor[armorIndex].cost);
-                else mvwprintw(this->win, i+3, 1, "%s", choices[i].c_str());
+                if (i==3) mvwprintw(this->win, i+4, 1, "Aumenta armatura al %d%%- costo: %d$", armor[armorIndex].value, armor[armorIndex].cost);
+                else mvwprintw(this->win, i+4, 1, "%s", choices[i].c_str());
                 wattroff(this->win, A_REVERSE);
             }
             choice = wgetch(this->win);
@@ -164,17 +167,8 @@ void menu::market (player* P, int* money, WINDOW* bottomWin) {
         
         if (highlight==0) close = true;
         else if (highlight==1) {
-            bool esc = false;
-            do {
-                choice = changeGun();
-                if (*money >= gun[choice].cost) {
-                    P->setGun(choice);
-                    *money -= gun[choice].cost;
-                    gun[choice].cost = 0;
-                    esc = true;
-                }
-                highlight=0;
-            } while (!esc);
+            changeGun(P, money);
+            highlight = 0;
             clear();
             wclear(win);
         } else if (highlight==2) {

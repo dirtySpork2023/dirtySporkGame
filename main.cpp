@@ -53,7 +53,7 @@ int main()
 	lvlList head = NULL;
 	head = addLevel(head, numL, diff);
 	level* currentLvl = head->lvl;
-	player P = player(4, 0, currentLvl, PISTOL, 12, 0);
+	player P = player(4, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
 	menu M = menu();
 	
 	while( !quit ) {
@@ -61,9 +61,12 @@ int main()
 		if (!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
+
 			input = M.open();
+
 			if (input == 1) numL = M.changeLevel(head->lvl->number());
 			else if (input == 2) M.market(&P, &money, bottomWin);
+			
 			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 		}
@@ -128,9 +131,8 @@ int main()
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 
-		    currentLvl->update(&P, deltaTime);
+		    currentLvl->update(&P, deltaTime, &money);
 			P.update(input, deltaTime);
-			money += currentLvl->updateCoin(&P);
 
 			// OUTPUT
 

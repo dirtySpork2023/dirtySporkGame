@@ -2,31 +2,32 @@
 #include <iostream>
 #include <chrono>
 #include <time.h>
+#include <cmath>
 #include <stdlib.h>
 
 #include "level.hpp"
 using namespace std;
 
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
-hitBox newRandomPlat (hitBox w, int de) {
+hitBox newRandomPlat (hitBox p1) {
     hitBox nw;
-    nw.a.x = w.a.x + (rand()%5);  
-    nw.a.y = w.a.y + (rand()%4);
-    nw.b.x = nw.a.x + (15 + rand()%(35 - 12));    //(nw.a.x + 2) + (rand()%(w.b.x - nw.a.x - 6));  8 + rand()%(w.b.x - nw.a.x - 8)
+    nw.a.x = p1.a.x + (rand()%5);  
+    nw.a.y = p1.a.y + (rand()%4);
+    nw.b.x = nw.a.x + 18 + (rand()%(p1.b.x-nw.a.x-19));   // lunghezza compresa fra nw.a.x+18 e p1.b.x
     nw.b.y = nw.a.y + 1;
 
     return nw; 
 }
 
 // Funzione che genera una lista di n piattaforme in modo ricorsivo
-lPlatform createnPlat (int np, hitBox ht, int len, int d) {
+lPlatform createnPlat (int np, hitBox p1, int len) {
     if (np > 0) {
         lPlatform tmp1 = new Pplatform;
-        hitBox hpl = newRandomPlat (ht, d);
+        hitBox hpl = newRandomPlat (p1);
         tmp1->plat = new platform(hpl.a.x, hpl.a.y, hpl.b.x, hpl.b.y);
-        ht.a.x += len;
-        ht.b.x += len;
-        tmp1->next = createnPlat (np-1, ht, len, d);
+        p1.a.x = max(hpl.b.x+4, p1.a.x+len);
+        p1.b.x += len;
+        tmp1->next = createnPlat (np-1, p1, len);
         return tmp1;
     } else return NULL;
 }
@@ -112,56 +113,53 @@ level::level (int nl, int d) {
     this->nlevel = nl;                      // Assegno il numero del livello 
     this->diff = d;                         // Difficoltà
     this->B = new bulletManager();
-    int numPlatinf = (rand()%3) + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
-    int leninf = (COLS-10) / numPlatinf;    // Larghezza massima delle piattaforme in base al loro numero
-    int blevel = LINES-WIN_HEIGHT-1;
-    int heightinf = blevel - 7;             // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
+    int bLevel = LINES-WIN_HEIGHT-1;
+    int numPlatInf = rand()%3 + 2;        // Genero un valore fra 2 e 4 che rappresenta il numero di piattaforme inferiori in quel livello
+    int lenInf = (COLS-12) / numPlatInf;    // Larghezza massima delle piattaforme in base al loro numero
+    int heightInf = bLevel - 7;             // Altezza massima delle piattaforme fissata alla massima capacità di salto del player
     hitBox p1;                              // Hitbox della prima piattaforma
     p1.a.x = 8;                             // valore arbitrario di distanza da tenere dal lato sinistro
-    p1.a.y = heightinf - 4;
-    p1.b.x = leninf + 5;
-    p1.b.y = heightinf;                            // base - altezza del player
-    int dens = 8 - numPlatinf;
+    p1.a.y = heightInf - 4;
+    p1.b.x = lenInf;
+    p1.b.y = heightInf;                            // base - altezza del player
     
     this->platforms = new Pplatform;
-    this->platforms->plat = new platform (0, 0, 1, blevel - 5);// Parete sinistra
+    this->platforms->plat = new platform (0, 0, 1, bLevel - 5);// Parete sinistra
     this->platforms->next = new Pplatform;
-    lPlatform bs = this->platforms->next;
-    bs->plat = new platform (COLS-2, 0, COLS-1, blevel - 5);     // Parete destra
-    bs->next = new Pplatform;
-    bs = bs->next;
-    bs->plat = new platform (-1, 0, -1, blevel);               // Porta sinistra
-    bs->next = new Pplatform; 
-    bs = bs->next;
-    bs->plat = new platform (COLS, 0, COLS, blevel);         // Porta destra
-    bs->next = new Pplatform; 
-    bs = bs->next;
-    bs->plat = new platform (0, blevel, COLS-1, blevel); // Base del livello
+    lPlatform tmp = this->platforms->next;
+    tmp->plat = new platform (COLS-2, 0, COLS-1, bLevel - 5);     // Parete destra
+    tmp->next = new Pplatform;
+    tmp = tmp->next;
+    tmp->plat = new platform (-1, 0, -1, bLevel);               // Porta sinistra
+    tmp->next = new Pplatform; 
+    tmp = tmp->next;
+    tmp->plat = new platform (COLS, 0, COLS, bLevel);         // Porta destra
+    tmp->next = new Pplatform; 
+    tmp = tmp->next;
+    tmp->plat = new platform (0, bLevel, COLS-1, bLevel); // Base del livello
     
-    bs->next = createnPlat (numPlatinf, p1, leninf, dens);
+    tmp->next = createnPlat (numPlatInf, p1, lenInf);
     
     // generazione piattaforme superiori
-    int numPlatsup = (rand()%3) + 2;
-    int lensup = (COLS-10) / numPlatsup;
-    int heightsup = heightinf - 10;                   
+    int numPlatsup = rand()%3 + 2;
+    int lensup = (COLS-12) / numPlatsup;
+    int heightsup = heightInf - 11;                   
     p1.a.x = 8; 
     p1.a.y = heightsup - 2;
-    p1.b.x = lensup + 5;
+    p1.b.x = lensup;
     p1.b.y = heightsup;
-    dens = 12 - numPlatsup;
-    this->numplat = 5 + numPlatsup + numPlatinf;
+    this->numplat = 5 + numPlatsup + numPlatInf;
     
-    lPlatform tmp = this->platforms;
     while (tmp->next != NULL) {
 	    tmp = tmp->next;
 	}  
-    tmp->next = createnPlat (numPlatsup, p1, lensup, dens);
+    tmp->next = createnPlat (numPlatsup, p1, lensup);
 
     // Generazione nemici
     int weight = this->nlevel;
     // Yuck 
     if (this->nlevel % 4 == 0) {    
-        this->Y = new yuck(COLS-6, blevel-1, this);
+        this->Y = new yuck(COLS-6, bLevel-1, this);
         weight -= 1;
     } else this->Y = NULL;
     // Shooters

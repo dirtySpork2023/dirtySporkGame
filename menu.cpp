@@ -21,11 +21,11 @@ bool addLife (player* P, int hp) {
 }
 
 int changeGun (WINDOW* win) {
-    clear();
     wclear(win);
     wrefresh(win);
     box(win, 0, 0);
-    int choice, highlight= 0;
+    int choice = 0; 
+    int highlight= 0;
     string choices[3] = {"Pistol", "Shotgun", "Rifle"};
 
     mvwprintw(win, 1, WIDTH/2-5, "CAMBIO ARMA");
@@ -75,7 +75,8 @@ int menu::open() {
     
     bool close = false;
     string choices[3] = {"Riprendi", "Cambia livello", "Mercato"};
-    int choice = 0, highlight = 0;
+    int choice = 0;
+    int highlight = 0;
 
     while (choice != 10) {      // choice =! 'invio'
         for(int i=0; i<3; i++) {
@@ -103,7 +104,6 @@ int menu::open() {
 }
 
 int menu::changeLevel (int totLvl) {
-    clear();
     wclear(this->win);
     wrefresh(this->win);
     box(this->win, 0, 0);
@@ -131,7 +131,6 @@ int menu::changeLevel (int totLvl) {
 }
 
 void menu::market (player* P, int* money, WINDOW* bottomWin) {
-    clear();
     wclear(this->win);
     wrefresh(this->win);
     int choice = 0;

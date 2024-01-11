@@ -41,7 +41,6 @@ int main(){
 	bool quit = false;
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente;
-	int totLvl = 1; // Numero livelli totali
 	int diff = numL;
 	int money = 300;
 	
@@ -68,7 +67,7 @@ int main(){
 			// LIVELLO <numL>
 
 			input = M.open();
-			if (input == 1) numL = M.changeLevel(totLvl);
+			if (input == 1) numL = M.changeLevel(currentLvl->number());
 			else if (input == 2) M.market(&P, &money, bottomWin);
 			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
@@ -114,7 +113,6 @@ int main(){
 
 			if(P.getPos().x==COLS-2 && input=='d' && currentLvl->completed()){
 				numL++;
-				if (totLvl < numL) totLvl ++;
 			}
 			if( (P.getPos().x==1 && input=='a' || input=='m') && currentLvl->completed() ){
 				// apri menu

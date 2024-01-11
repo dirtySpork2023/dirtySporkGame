@@ -21,7 +21,7 @@ int menu::changeGun(){
     wrefresh(win);
     box(win, 0, 0);
     int choice = 0; 
-    int highlight= 0;
+    int highlight = 0;
     string choices[3] = {"Pistol", "Shotgun", "Rifle"};
 
     mvwprintw(win, 1, WIDTH/2-5, "CAMBIO ARMA");

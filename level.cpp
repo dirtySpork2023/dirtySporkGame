@@ -1,5 +1,7 @@
 #include "level.hpp"
 
+using namespace std;
+
 // Funzione per generare una piattaforma casuale all'interno di un'area definita da w
 hitBox newRandomPlat (hitBox p1) {
     hitBox nw;
@@ -151,7 +153,7 @@ level::level (int nl, int d) {
     int weight = this->diff;
     // Yuck 
     if (this->nlevel % 4 == 0) {    
-        this->Y = new yuck(COLS-10, blevel-1, this);
+        this->Y = new yuck(COLS-10, bLevel-1, this);
         weight -= 1;
     } else this->Y = NULL;
     // Shooters

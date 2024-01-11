@@ -61,9 +61,12 @@ int main()
 		if (!quit && openMenu){
 			input = getch();
 			if( input=='Q' ) quit = true;
+
 			input = M.open();
+
 			if (input == 1) numL = M.changeLevel(head->lvl->number());
 			else if (input == 2) M.market(&P, &money, bottomWin);
+			
 			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
 		}

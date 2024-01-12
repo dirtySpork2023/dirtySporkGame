@@ -51,7 +51,7 @@ level::level (int nl, int d) {
     tmp->next = createnPlat (numPlatsup, p1, lensup); 
 
     // Generazione nemici
-    int weight = this->diff;  // Nemici generati in base alla difficoltà del livello
+    int weight = this->nlevel;
     // Yuck 
     if (this->nlevel % 4 == 0) {
         this->Y = new yuck(COLS-10, bLevel-1, this);
@@ -148,21 +148,22 @@ lShooter level::dltShooter (lShooter ls) {
 }
 
 // Eliminazione delle monete acquisite con aggiornamento del valore
-lCoin level::dltCoin (lCoin lc, player* P, int* count) {
+lCoin level::dltCoin (lCoin lc, player* P, int* count, int* points) {
     if (lc==NULL) return NULL;
     else {
         int value = lc->C->check(P->getHitBox());
         if(value==-1){
-		    lc->next = dltCoin(lc->next, P, count);
+		    lc->next = dltCoin(lc->next, P, count, points);
             return lc;
 	    } else {
             *count += value;
+            *points += value;
             lCoin tmp = lc;
             lc=lc->next;
             delete tmp->C;
             delete tmp;
             tmp=NULL;
-		    return dltCoin(lc, P, count);
+		    return dltCoin(lc, P, count, points);
 	    }
     }
 }
@@ -281,7 +282,7 @@ int level::getDiff () {
     return this->diff;
 }
 
-void level::update (player* P, timeSpan deltaTime, int* money) {
+void level::update (player* P, timeSpan deltaTime, int* money, int* points) {
     B->update(deltaTime);
     // Update nemici
     if(this->kubas!=NULL) {
@@ -314,7 +315,7 @@ void level::update (player* P, timeSpan deltaTime, int* money) {
 		this->Y = NULL;
 	}
     // update delle monete
-    this->coins = dltCoin (this->coins, P, money);
+    this->coins = dltCoin (this->coins, P, money, points);
 }
 
 bool level::completed() {

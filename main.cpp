@@ -44,7 +44,8 @@ int main()
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente
 	int diff = numL;
-	int money = 300;
+	int money = 100;
+	int points = 0;
 
 	bool death = false;
 	timeSpan deathAnimation = 0;
@@ -65,10 +66,10 @@ int main()
 			input = M.open();
 
 			if (input == 1) numL = M.changeLevel(head->lvl->number());
-			else if (input == 2) M.market(&P, &money, bottomWin);
+			else if (input == 2) M.market(&P, &money, &points, bottomWin);
 			
 			openMenu = false;
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, points, currentLvl->number(), diff);
 		}
 
 		// LEVEL SETUP
@@ -137,7 +138,7 @@ int main()
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 
-		    currentLvl->update(&P, deltaTime, &money);
+		    currentLvl->update(&P, deltaTime, &money, &points);
 			P.update(input, deltaTime);
 
 			// OUTPUT
@@ -149,7 +150,7 @@ int main()
 			P.print(deltaTime);
 			if(death) mvprintw(LINES/2, COLS/2-6, "- SEI MORTO -");
 
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, currentLvl->number(), diff);
+			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, points, currentLvl->number(), diff);
 
 			refresh();
 			wrefresh(bottomWin);

@@ -85,15 +85,15 @@ void player::setGun(int id){
 		texture = '-';
 	}
 	if( id==SHOTGUN ){
-		// DPS = 40
+		// DPS = 80
 		fireRate = 1;
-		damage = 40;
+		damage = 80;
 		texture = 'E';
 	}
 	if( id==RIFLE ){
-		// DPS = 100
+		// DPS = 160
 		fireRate = 0.1;
-		damage = 10;
+		damage = 16;
 		texture = 'o';
 	}
 }

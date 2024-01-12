@@ -31,7 +31,7 @@ public:
     menu();
     int open();
     int changeLevel(int totLvl);
-    void market(player* P, int* money, WINDOW* bottomWin);
+    void market(player* P, int* money, int* points, WINDOW* bottomWin);
     ~menu();
 };
 

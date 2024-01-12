@@ -72,6 +72,7 @@ int main()
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, points, currentLvl->number(), diff);
 		}
 		diff = M.count();
+		
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
 			if( head->lvl->number() < numL ){

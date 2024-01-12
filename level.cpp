@@ -83,7 +83,7 @@ level::level (int nl, int d) {
         hitBox ht = hiboxPlatx(this->platforms, p);
         for(int j=0; j<3; j++) {
             tmp3 = new Pcoin;
-            tmp3->C = new coin(ht.a.x+(ht.b.x-ht.a.x)/2-5+j*5, ht.a.y-2, this->nlevel); // Monete stampate sopra le piattaforme
+            tmp3->C = new coin(ht.a.x+(ht.b.x-ht.a.x)/2-5+j*5, ht.a.y-2, 10); // Monete stampate sopra le piattaforme
             tmp3->next = this->coins;
             this->coins = tmp3;
         } 
@@ -327,5 +327,5 @@ bulletManager* level::getBM(){
 }
 
 level::~level(){
-    // elimina le liste dall'heap
+    // elimina le liste dall'heap ?
 }

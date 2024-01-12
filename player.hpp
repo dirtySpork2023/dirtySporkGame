@@ -24,6 +24,7 @@ public:
 	void update(char input, timeSpan deltaTime);
 	void print(timeSpan deltaTime);
 	bool hurt(int value);
+	void heal(int value);
 	void shoot();
 	void setGun(int id);
 	int getGun();

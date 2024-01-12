@@ -21,13 +21,8 @@ menu::menu(){
 
 bool menu::addLife (player* P, int hp) {
     if (P->getHealth() >= 100) return false;
-    else if (P->getHealth() + hp > 100) {
-        hp = P->getHealth()-100;
-        P->hurt(hp);
-        return true;
-    } else {
-        hp = 0-hp;
-        P->hurt(hp);
+    else {
+        P->heal(hp);
         return true;
     }
 }

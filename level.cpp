@@ -51,7 +51,7 @@ level::level (int nl, int d) {
     tmp->next = createnPlat (numPlatsup, p1, lensup); 
 
     // Generazione nemici
-    int weight = this->nlevel+this->diff;
+    int weight = this->nlevel+this->diff/2;
     // Yuck 
     if (this->nlevel % 4 == 0) {
         this->Y = new yuck(COLS-10, bLevel-1, this);
@@ -116,33 +116,35 @@ lPlatform level::createnPlat (int np, hitBox p1, int len) {
 }
 
 // Funzione che elimina i kuba morti
-lKuba level::dltKuba (lKuba lk) {
+lKuba level::dltKuba (lKuba lk, int* points) {
     if (lk == NULL) return NULL;
     else if (lk->K->getHealth() == 0) {
         lKuba tmp = lk;
-        lk = dltKuba (lk->next);
+        lk = dltKuba (lk->next, points);
         delete tmp->K;
         delete tmp;
         tmp = NULL;
+        *points += 1;
         return lk;
     } else {
-        lk->next = dltKuba (lk->next);
+        lk->next = dltKuba (lk->next, points);
         return lk;
     }
 }
 
 // Funzione che elimina gli shooters morti
-lShooter level::dltShooter (lShooter ls) {
+lShooter level::dltShooter (lShooter ls, int* points) {
     if (ls == NULL) return NULL;
     else if (ls->S->getHealth() == 0) {
         lShooter tmp = ls;
-        ls = dltShooter (ls->next);
+        ls = dltShooter (ls->next, points);
         delete tmp->S;
         delete tmp;
         tmp = NULL;
+        *points += 1;
         return ls;
     } else {
-        ls->next = dltShooter (ls->next);
+        ls->next = dltShooter (ls->next, points);
         return ls;
     }
 }
@@ -157,7 +159,7 @@ lCoin level::dltCoin (lCoin lc, player* P, int* count, int* points) {
             return lc;
 	    } else {
             *count += value;
-            *points += value;
+            *points += 1;
             lCoin tmp = lc;
             lc=lc->next;
             delete tmp->C;
@@ -302,10 +304,9 @@ void level::update (player* P, timeSpan deltaTime, int* money, int* points) {
         delete tmps;
     }
 	if(this->Y!=NULL) this->Y->update(P->getPos(), deltaTime);
-
-	// Eliminazione entità morte
-	this->kubas = dltKuba (this->kubas);
-    this->shooters = dltShooter (this->shooters);
+    // Eliminazione entità morte
+	this->kubas = dltKuba (this->kubas, points);
+    this->shooters = dltShooter (this->shooters, points);
 	
     if(this->shooters==NULL && this->kubas==NULL && this->Y!=NULL){
 		this->Y->wakeUp();
@@ -313,6 +314,7 @@ void level::update (player* P, timeSpan deltaTime, int* money, int* points) {
 	if(this->Y!=NULL && this->Y->getHealth()==0){
 		delete this->Y;
 		this->Y = NULL;
+        *points += 10;
 	}
     // update delle monete
     this->coins = dltCoin (this->coins, P, money, points);
@@ -325,8 +327,4 @@ bool level::completed() {
 
 bulletManager* level::getBM(){
     return B;
-}
-
-level::~level(){
-    // elimina le liste dall'heap ?
 }

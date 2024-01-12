@@ -44,7 +44,7 @@ int main()
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente
 	int diff = 0;
-	int money = 100;
+	int money = 0;
 	int points = 0;
 
 	bool death = false;

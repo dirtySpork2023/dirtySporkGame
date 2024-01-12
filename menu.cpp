@@ -5,7 +5,7 @@ using namespace std;
 menu::menu(){
 
     for(int i=0; i<N_ARMOR; i++){
-        armor[i].cost = i*50;
+        armor[i].cost = i*15;
     }
     armor[0].value = 5;
     armor[1].value = 35;
@@ -16,7 +16,7 @@ menu::menu(){
     
     this->armorIndex = 1;
     
-    for (int i=0; i<N_GUNS; i++) gun[i] = i*20;
+    for (int i=0; i<N_GUNS; i++) gun[i] = i*15;
 }
 
 bool menu::addLife (player* P, int hp) {

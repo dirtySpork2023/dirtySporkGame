@@ -54,7 +54,7 @@ int main()
 	lvlList head = NULL;
 	head = addLevel(head, numL, diff);
 	level* currentLvl = head->lvl;
-	player P = player(4, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0);
+	player P = player(4, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0.05);
 	menu M = menu();
 	
 	while( !quit ) {

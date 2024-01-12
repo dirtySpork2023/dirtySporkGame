@@ -1,2 +1,3 @@
-# dirtySporkGame
-C++ ASCII game made as a school project
+## dirtySporkGame
+C++ ASCII game
+per compilare si può usare il comando `make` e per eseguire `./game`

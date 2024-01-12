@@ -129,7 +129,7 @@ int menu::changeLevel (int totLvl) {
     return i;
 }
 
-void menu::market (player* P, int* money, WINDOW* bottomWin) {
+void menu::market (player* P, int* money, int* points, WINDOW* bottomWin) {
     wclear(this->win);
     wrefresh(this->win);
     int choice = 0;
@@ -174,7 +174,7 @@ void menu::market (player* P, int* money, WINDOW* bottomWin) {
             armor[armorIndex].cost = 0;
             this->armorIndex++;
         }
-        printResourceBarLow(bottomWin, P->getHealth(), P->getArmor(), *money);
+        printResourceBarLow(bottomWin, P->getHealth(), P->getArmor(), *money, *points);
         wrefresh(bottomWin);
         choice = 0;
         wrefresh(win);

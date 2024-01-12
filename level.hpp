@@ -62,7 +62,7 @@ protected:
     lPlatform createnPlat(int np, hitBox p1, int len);
     lKuba dltKuba (lKuba lk);
     lShooter dltShooter (lShooter ls);
-    lCoin dltCoin (lCoin lc, player* P, int* money);
+    lCoin dltCoin (lCoin lc, player* P, int* money, int* points);
     void print_platforms (lPlatform lsp);
     hitBox hiboxPlatx (lPlatform lp, int x); // hitbox della piattaforma x
 
@@ -72,7 +72,7 @@ public:
     infoCrash check (hitBox ht, char d);  // d -> direzione in cui si sposta il giocatore (awsd)
     int number (); // numero del livello
     int getDiff (); // difficoltà del livello
-    void update (player* P, timeSpan deltaTime, int* money);
+    void update (player* P, timeSpan deltaTime, int* money, int* points);
     bool completed(); // true -> livello completato
     bulletManager* getBM ();
     ~level();

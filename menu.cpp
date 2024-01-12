@@ -87,7 +87,7 @@ int menu::open() {
         }
         choice = wgetch(this->win);
 
-        if (choice == KEY_UP) {
+        if (choice == KEY_UP ) {
             if (highlight == 0) highlight = 2;
             else highlight--;
         } else if (choice == KEY_DOWN) {

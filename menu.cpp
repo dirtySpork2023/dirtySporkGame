@@ -5,7 +5,7 @@ using namespace std;
 menu::menu(){
 
     for(int i=0; i<N_ARMOR; i++){
-        armor[i].cost = i*15;
+        armor[i].cost = i*20;
     }
     armor[0].value = 5;
     armor[1].value = 35;
@@ -16,7 +16,7 @@ menu::menu(){
     
     this->armorIndex = 1;
     
-    for (int i=0; i<N_GUNS; i++) gun[i] = i*15;
+    for (int i=0; i<N_GUNS; i++) gun[i] = i*25;
 }
 
 bool menu::addLife (player* P, int hp) {
@@ -42,7 +42,7 @@ void menu::changeGun(player* P, int* money){
     while (!close) {      // choice =! 'invio'
         for(int i=0; i<3; i++) {
             if (i == highlight) wattron(win, A_REVERSE);
-            mvwprintw(win, i+4, 1, "%s - costo: %d", choices[i].c_str(), gun[i]);
+            mvwprintw(win, i+4, 1, "%s - costo: %d$  ", choices[i].c_str(), gun[i]);
             wattroff(win, A_REVERSE);
         }
         choice = wgetch(win);
@@ -114,7 +114,7 @@ int menu::changeLevel (int totLvl) {
 
     wattron(this->win, A_REVERSE);
     while (choice != 10) {
-        mvwprintw(this->win, 5, 27, "%d", i);
+        mvwprintw(this->win, 5, 27, "%d  ", i);
         choice = wgetch(this->win);
         if (choice == KEY_UP) {
             if (i == 1) i = totLvl;
@@ -135,7 +135,7 @@ void menu::market (player* P, int* money, int* points, WINDOW* bottomWin) {
     int choice = 0;
     int highlight = 0;
     bool close = false;
-    string choices[3] = {"Riprendi", "Cambia arma", "Aggiungi 10 hp - costo: 10$"};
+    string choices[3] = {"Riprendi", "Cambia arma", "Aggiungi 10 hp - costo: 10$ "};
 
     while (!close) {
         mvwprintw(this->win, 1, WIDTH/2-3, "MERCATO");
@@ -144,7 +144,7 @@ void menu::market (player* P, int* money, int* points, WINDOW* bottomWin) {
         while (choice != 10) {      // choice =! 'invio'
             for(int i=0; i<4; i++) {
                 if (i == highlight) wattron(this->win, A_REVERSE);
-                if (i==3) mvwprintw(this->win, i+4, 1, "Aumenta armatura al %d%%- costo: %d$", armor[armorIndex].value, armor[armorIndex].cost);
+                if (i==3) mvwprintw(this->win, i+4, 1, "Aumenta armatura al %d%%- costo: %d$  ", armor[armorIndex].value, armor[armorIndex].cost);
                 else mvwprintw(this->win, i+4, 1, "%s", choices[i].c_str());
                 wattroff(this->win, A_REVERSE);
             }

@@ -16,10 +16,10 @@ level::level (int nl, int d) {
     tmp->plat = new platform (COLS-2, 0, COLS-1, bLevel - 5); // Parete destra
     tmp->next = new Pplatform;
     tmp = tmp->next;
-    tmp->plat = new platform (-1, 0, -1, bLevel); // Porta sinistra
+    tmp->plat = new platform (-1, -5, -1, bLevel); // Porta sinistra
     tmp->next = new Pplatform; 
     tmp = tmp->next;
-    tmp->plat = new platform (COLS, 0, COLS, bLevel); // Porta destra
+    tmp->plat = new platform (COLS, -5, COLS, bLevel); // Porta destra
     tmp->next = new Pplatform; 
     tmp = tmp->next;
     tmp->plat = new platform (0, bLevel, COLS-1, bLevel); // Base del livello

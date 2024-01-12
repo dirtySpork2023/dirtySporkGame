@@ -175,6 +175,6 @@ void printResourceBarLow(WINDOW* w, int health, double armor, int money, int poi
 void printResourceBar(WINDOW* w, int health, double armor, int money, int points, int level, int difficulty){
 	printResourceBarLow(w, health, armor, money, points);
 
-	mvwprintw(w, 6, COLS/2-56, "LEVEL: <| %d |>", level);
-	mvwprintw(w, 7, COLS/2-61, "DIFFICULTY: <| %d |>", difficulty);
+	mvwprintw(w, 6, COLS/2-56, "LEVEL: <| %d |>   ", level);
+	mvwprintw(w, 7, COLS/2-61, "DIFFICULTY: <| %d |>   ", difficulty);
 }

@@ -128,7 +128,6 @@ int main()
 						delete tmp;
 					}
 					numL = 1;
-					// diff=menu.countBoughtItems
 					head = addLevel(head, numL, diff);
 					currentLvl = head->lvl;
 					P.reset(currentLvl);

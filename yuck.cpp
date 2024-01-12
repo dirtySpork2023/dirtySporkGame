@@ -3,7 +3,7 @@
 
 yuck::yuck(int x, int y, level* lvl, int h, double fr, int dm):
 	shooter(x,y,lvl,h,fr,dm,'+'){
-	laserTime = 1;
+	laserTime = 0.5; // secondi
 	lastCharge = 0;
 	lastShot = 0;
 	awake = false;
@@ -15,9 +15,9 @@ yuck::yuck(int x, int y, level* lvl, int h, double fr, int dm):
 
 yuck::yuck(int x, int y, level* lvl):
 	yuck(x,y,lvl,
-		/* HEALTH */ 180+5*lvl->getDiff(),
-		/* FIRE_RATE */ 0.004,
-		/* DAMAGE */ 1 + 1*lvl->getDiff()){
+		/* HEALTH */ 180+20*lvl->getDiff(),
+		/* FIRE_RATE */ 0.008,
+		/* DAMAGE */ 8 + 6*lvl->getDiff()){
 }
 
 void yuck::update(point target, timeSpan deltaTime){

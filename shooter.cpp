@@ -14,9 +14,9 @@ shooter::shooter(int x, int y, level* lvl, int h, double fireRate, int damage, c
 // costruttore secondario
 shooter::shooter(int x, int y, level* lvl):
 	shooter(x, y, lvl,
-		/* HEALTH */ 15+2*lvl->getDiff(),
+		/* HEALTH */ 15+4*lvl->getDiff(),
 		/* FIRE_RATE */ 1/(0.5 + 0.1*lvl->getDiff()),
-		/* DAMAGE */ 10 + 5*lvl->getDiff(),
+		/* DAMAGE */ 10 + 7*lvl->getDiff(),
 		/* TEXTURE */ 'G'){
 }
 

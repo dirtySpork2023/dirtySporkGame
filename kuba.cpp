@@ -15,8 +15,8 @@ kuba::kuba(int x, int y, level* lvl, int h, int damage):
 // costruttore secondario
 kuba::kuba(int x, int y, level* lvl):
 	kuba(x, y, lvl,
-		/* HEALTH */ 30+10*lvl->getDiff(),
-		/* DAMAGE */ 15+5*lvl->getDiff()){
+		/* HEALTH */ 30+15*lvl->getDiff(),
+		/* DAMAGE */ 15+8*lvl->getDiff()){
 }
 
 // direzione in cui si muove kuba in formato WASD

@@ -167,11 +167,11 @@ void menu::market (player* P, int* money, int* points, WINDOW* bottomWin) {
             wclear(win);
         } else if (highlight==2) {
             if (*money >= 10) if (addLife (P,10)) *money-=10;
-        } else if (*money >= armor[armorIndex].cost) {
+        } else if (*money >= armor[armorIndex].cost && armorIndex<N_ARMOR) {
             *money -= armor[armorIndex].cost;
             P->setArmor(this->armor[armorIndex].value);
             armor[armorIndex].cost = 0;
-            this->armorIndex++;
+            if(armorIndex<N_ARMOR-1) this->armorIndex++;
         }
         printResourceBarLow(bottomWin, P->getHealth(), P->getArmor(), *money, *points);
         wrefresh(bottomWin);

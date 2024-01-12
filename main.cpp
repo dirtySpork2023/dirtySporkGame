@@ -43,7 +43,7 @@ int main()
 	bool quit = false;
 	bool openMenu = false;
 	int numL = 1; // numero del livello corrente
-	int diff = numL;
+	int diff = 0;
 	int money = 100;
 	int points = 0;
 
@@ -71,11 +71,11 @@ int main()
 			openMenu = false;
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, points, currentLvl->number(), diff);
 		}
-
+		diff = M.count();
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
-			while( head->lvl->number() < numL ){
-				head = addLevel(head, head->lvl->number()+1, ++diff);
+			if( head->lvl->number() < numL ){
+				head = addLevel(head, head->lvl->number()+1, diff);
 			}
 
 			// cambia livello

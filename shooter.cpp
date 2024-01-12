@@ -16,7 +16,7 @@ shooter::shooter(int x, int y, level* lvl):
 	shooter(x, y, lvl,
 		/* HEALTH */ 15+2*lvl->getDiff(),
 		/* FIRE_RATE */ 1/(0.5 + 0.1*lvl->getDiff()),
-		/* DAMAGE */ 20 + 5*lvl->getDiff(),
+		/* DAMAGE */ 10 + 5*lvl->getDiff(),
 		/* TEXTURE */ 'G'){
 }
 

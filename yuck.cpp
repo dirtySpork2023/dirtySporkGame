@@ -17,7 +17,7 @@ yuck::yuck(int x, int y, level* lvl):
 	yuck(x,y,lvl,
 		/* HEALTH */ 180+5*lvl->getDiff(),
 		/* FIRE_RATE */ 0.004,
-		/* DAMAGE */ 2 + 1*lvl->getDiff()){
+		/* DAMAGE */ 1 + 1*lvl->getDiff()){
 }
 
 void yuck::update(point target, timeSpan deltaTime){

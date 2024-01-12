@@ -32,7 +32,7 @@ public:
     int open();
     int changeLevel(int totLvl);
     void market(player* P, int* money, int* points, WINDOW* bottomWin);
-    ~menu();
+    int count();
 };
 
 #endif // MENU_HPP

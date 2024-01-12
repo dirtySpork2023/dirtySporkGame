@@ -164,7 +164,6 @@ void menu::market (player* P, int* money, int* points, WINDOW* bottomWin) {
         else if (highlight==1) {
             changeGun(P, money);
             highlight = 0;
-            clear();
             wclear(win);
         } else if (highlight==2) {
             if (*money >= 10) if (addLife (P,10)) *money-=10;
@@ -181,6 +180,9 @@ void menu::market (player* P, int* money, int* points, WINDOW* bottomWin) {
     }
 }
 
-menu::~menu(){
-    delwin(win);
+int menu::count () {
+    int c = armorIndex;
+    if(gun[1] == 0) c += 1;
+    if(gun[2] == 0) c += 2;
+    return c;
 }

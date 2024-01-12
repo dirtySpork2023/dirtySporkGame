@@ -107,6 +107,12 @@ int main()
 			if( P.getHealth()==0 && death==false ){
 				death = true;
 				deathAnimation = DEATH_TIMESPAN;
+				// esplosione
+				point boom = P.getPos();
+				boom.y -= 3;
+				for(int i=0; i<20; i++){
+					currentLvl->getBM()->add(boom, randVector(), true, 0, ':');
+				}
 			}
 			if( P.getHealth()==0 ){
 				deathAnimation -= deltaTime;

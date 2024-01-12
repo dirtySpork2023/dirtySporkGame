@@ -3,7 +3,7 @@
 
 yuck::yuck(int x, int y, level* lvl, int h, double fr, int dm):
 	shooter(x,y,lvl,h,fr,dm,'+'){
-	laserTime = 1; // secondi
+	laserTime = 1;
 	lastCharge = 0;
 	lastShot = 0;
 	awake = false;

@@ -2,7 +2,7 @@
 #include "level.hpp"
 
 player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float armor):
-	shooter(x,y,lvl,MAX_HEALTH,1,1,'?'){ //fireRate, damage e texture sono temporanei qui
+	shooter(x,y,lvl,MAX_HEALTH,1,1,'1'){ //fireRate, damage e texture sono temporanei qui
 
 	lastShot = 0;
 
@@ -10,7 +10,7 @@ player::player(int x, int y, level* lvl, int weapon, float jumpHeight, float arm
 	this->gunID = weapon;
 
 	this->jumpSpeed = -sqrt(jumpHeight * ENTITY_G * 2.1);
-	this->armor = armor; // 0-1 moltiplica i danni subiti
+	this->armor = armor; // 0-1
 }
 
 //aggiorna la posizione del player e/o spara

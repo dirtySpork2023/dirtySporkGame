@@ -69,7 +69,7 @@ void shooter::shoot(point p){
 	if( facingRight ) speed.x = 100;
 	else speed.x = -100;
 	speed.y = -0.5*BULLET_G*Dx / speed.x  +  Dy*speed.x / Dx;
-	*/	
+	*/
 	
 	if( box.a.x-2<p.x && p.x<2+box.b.x ){
 		//evito traiettoie che possono colpire lo shooter stesso

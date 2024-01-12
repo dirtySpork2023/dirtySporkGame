@@ -110,7 +110,7 @@ int random(int min, int max){
 	return rand()%(max-min+1) + min;
 }
 
-// restituisce un vettore con inclinazione a caso e modulo compreso tra min e max
+// restituisce un vettore con valori casuali
 vector randVector(){
 	vector result;
 	result.x = random(-30, +30);
@@ -138,17 +138,6 @@ void printBackground(int lvl){
 		}
 	}
 	if(lvl==1) attrset(COLOR_PAIR(PAINT_TITLE));
-	/*
-	+------------------------------------------------------------------------------------------------------------------------------+
-	| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |
-	| |WWWWWWW| |WW\  |W| |WWWWW\   |W|     |WWWWWWW| /WWWWWWW| /WWWWWWW|         /WWWWW\  |W|   |W| |WWWWWWW| /WWWWWWW| |WWWWWWW| |
-	| |W|_____  |W*W\ |W| |W|  \WW  |W|     |W|_____  |W|____   |W|____          |W/   \W| |W|   |W| |W|_____  |W|____      |W|    |
-	| |WWWWWWW| |W|\W\|W| |W|   |W| |W|     |WWWWWWW| \WWWWWWW\ \WWWWWWW\        |W|  _|W| |W|   |W| |WWWWWWW| \WWWWWWW\    |W|    |
-	| |W|_____  |W| \W,W| |W|__/WW  |W|___, |W|_____   _____|W|  _____|W|        |W\__\W\' |W\___/W| |W|_____   _____|W|    |W|    |
-	| |WWWWWWW| |W|  \WW| |WWWWW/   |WWWWW| |WWWWWWW| |WWWWWWW/ |WWWWWWW/         \WWW,\W\  \WWWWW/  |WWWWWWW| |WWWWWWW/    |W|    |
-	+------------------------------------------------------------------------------------------------------------------------------+                       
-	*/
-	
 	attron(A_BOLD);
 	mvprintw(Y_OFFSET+0, X_OFFSET,  "+------------------------------------------------------------------------------------------------------------------------------+");
 	mvprintw(Y_OFFSET+1, X_OFFSET,  "| ,_______, ,__,  ,_, ,____     ,_,     ,_______    ______,   ______,           ___    ,_,   ,_, ,_______    ______, ,_______, |");

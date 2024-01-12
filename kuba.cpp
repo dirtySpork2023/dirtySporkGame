@@ -40,12 +40,7 @@ void kuba::move(){
 	if(i.type=='k' || i.type=='s' || i.type=='y' || lvl->check(step, 's').type==' ')
 		movingRight = !movingRight;
 
-
-	if(movingRight)
-		entity::move('d');
-	else
-		entity::move('a');
-	
+	entity::move(direction());
 }
 
 void kuba::update(player* target, timeSpan deltaTime){

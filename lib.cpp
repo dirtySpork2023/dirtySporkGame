@@ -159,14 +159,14 @@ void printResourceBarLow(WINDOW* w, int health, double armor, int money, int poi
 	for(int i=0; i<health; i++) wprintw(w, "M");
 	for(int i=health; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	wprintw(w, "|>");
+	wprintw(w, "|> ");
 
 	mvwprintw(w, 3, COLS/2-56, "ARMOR: <|");
 	wattrset(w, COLOR_PAIR(PAINT_ARMOR));
 	for(int i=0; i<armor*100 ; i++) wprintw(w, "M");
 	for(int i=armor*100; i<100; i++) wprintw(w, "-");
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
-	wprintw(w, "|>");
+	wprintw(w, "|> ");
 
 	mvwprintw(w, 4, COLS/2-56, "MONEY: <| %d $ |>  ", money);
 	mvwprintw(w, 5, COLS/2-57, "POINTS: <| %d |>  ", points);

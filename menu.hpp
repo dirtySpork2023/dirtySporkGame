@@ -2,15 +2,16 @@
 #define MENU_HPP
 
 #include <ncurses.h>
-#include <string>
 #include "player.hpp"
 #include "lib.hpp"
 
-#define HEIGHT 11 /*(LINES-18)*/
-#define WIDTH 50 /*(COLS-75)*/
+#define HEIGHT 12
+#define WIDTH 50
+#define SELECT_TIMESPAN 0.1
 
 #define N_ARMOR 6
 #define N_GUNS 3
+#define N_OPTIONS 4
 
 //value dipende dall'oggetto
 //cost è zero quando l'oggetto è già acquistato
@@ -22,17 +23,24 @@ struct buyable{
 class menu {
 protected:
     WINDOW* win;
+    int selected;
     buyable armor[N_ARMOR]; // value da 0 a 100
-    int gun[N_GUNS];
-    int armorIndex;
-    bool addLife (player* P, int hp);
-    void changeGun (player* P, int* money);
+    buyable gun[N_GUNS]; // values PISTOL, SHOTGUN, RIFLE
+    buyable heal;
+    int currArmor;
+    int currGun;
+    int currHeal;
+    bool error;
+    timeSpan lastSelect;
+
+    void printOption(int index, int y, const char* text);
+    const char* gunName(int id);
 public:
     menu();
-    int open();
-    int changeLevel(int totLvl);
-    void market(player* P, int* money, int* points, WINDOW* bottomWin);
-    int count();
+    bool update(char input, int &money, int &numL, int totLvl, player* P, timeSpan deltaTime);
+    void updateScroll(char type, buyable b[], int size, int &curr, char input, int &money, player* P);
+    void print(int numL);
+    ~menu();
 };
 
 #endif // MENU_HPP

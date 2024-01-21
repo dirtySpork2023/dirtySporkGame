@@ -57,25 +57,16 @@ int main()
 	player P = player(4, LINES-WIN_HEIGHT-2, currentLvl, PISTOL, 12, 0.05);
 	menu M = menu();
 	
-	while( !quit ) {
-		// MENU
-		if (!quit && openMenu){
-			input = getch();
-			if( input=='Q' ) quit = true;
+	while( !quit ){
 
-			input = M.open();
-
-			if (input == 1) numL = M.changeLevel(head->lvl->number());
-			else if (input == 2) M.market(&P, &money, &points, bottomWin);
-			
-			openMenu = false;
-			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, points, currentLvl->number(), diff);
-		}
-		
 		// LEVEL SETUP
 		if(currentLvl->number() != numL){
-			if( head->lvl->number() < numL ){
-				head = addLevel(head, head->lvl->number()+1, diff++);
+			while( head->lvl->number() < numL ){
+				// livello nuovo aggiunto in testa
+				lvlNode* tmp = new lvlNode;
+				tmp->lvl = new level (head->lvl->number()+1, ++diff);
+				tmp->next = head;
+				head = tmp;
 			}
 
 			// cambia livello
@@ -93,7 +84,7 @@ int main()
 
 		// CICLO PRINCIPALE
 		auto lastTimePoint = high_resolution_clock::now();
-		while( !quit && !openMenu && currentLvl->number()==numL){
+		while( !quit && currentLvl->number()==numL){
 			auto thisTimePoint = high_resolution_clock::now();
 			auto elapsed = thisTimePoint - lastTimePoint;
 			lastTimePoint = thisTimePoint;
@@ -104,7 +95,7 @@ int main()
 			if( P.getHealth()>0 ) input = getch();
 
 			if( input=='Q' ) quit = true;
-			if( input=='m' ) openMenu = true;
+			if( input=='m' ) openMenu = !openMenu;
 			if( P.getHealth()==0 && death==false ){
 				death = true;
 				deathAnimation = DEATH_TIMESPAN;
@@ -138,22 +129,29 @@ int main()
 			if(P.getPos().x==1 && input=='a' && currentLvl->number()>1)
 				numL--;
 
-		    currentLvl->update(&P, deltaTime, &money, &points);
-			P.update(input, deltaTime);
-
+			if(openMenu){
+				openMenu = M.update(input, money, numL, head->lvl->number(), &P, deltaTime);
+			}else{
+				currentLvl->update(&P, deltaTime, &money, &points);
+				P.update(input, deltaTime);
+				money += currentLvl->updateCoin(&P); //??
+			}
+			
 			// OUTPUT
 
-			printBackground(currentLvl->number());
-			mvprintw(0, 3, "[[fps: %.0f ]]", 1/deltaTime);
+			if(openMenu){
+				M.print(numL);
+			}else{
+				printBackground(currentLvl->number());
+				mvprintw(0, 3, "[[fps: %.0f ]]", 1/deltaTime);
 
-			currentLvl->printAll(deltaTime);
-			P.print(deltaTime);
-			if(death) mvprintw(LINES/2, COLS/2-6, "- SEI MORTO -");
-
+				currentLvl->printAll(deltaTime);
+				P.print(deltaTime);
+				if(death) mvprintw(LINES/2, COLS/2-6, "- SEI MORTO -");
+			}
 			printResourceBar(bottomWin, P.getHealth(), P.getArmor(), money, points, currentLvl->number(), diff);
 
 			refresh();
-			wrefresh(bottomWin);
 		}
 	}
 	delwin(bottomWin);

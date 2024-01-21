@@ -13,6 +13,9 @@
 #define COLOR_HP 12
 #define COLOR_DARK 13
 #define COLOR_TITLE 14
+#define COLOR_SELECTED 15
+#define COLOR_ERROR 16
+#define COLOR_CHOSEN 17
 
 // palette da 1 a 255
 #define PAINT_DEFAULT 1
@@ -25,6 +28,9 @@
 #define PAINT_ARMOR 8
 #define PAINT_BACKGROUND 9
 #define PAINT_TITLE 10
+#define PAINT_SELECTION 11
+#define PAINT_ERROR 12
+#define PAINT_CHOSEN 13
 
 // altezza resource bar
 #define WIN_HEIGHT 9

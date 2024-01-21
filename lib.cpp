@@ -7,6 +7,7 @@ void init(){
 	noecho();
 	cbreak();
 	nodelay(stdscr, TRUE);
+	keypad(stdscr, TRUE);
 	curs_set(0);
 
 	/*	COLOR_BLACK
@@ -25,6 +26,9 @@ void init(){
 	init_color(COLOR_BLACK, 100, 100, 100);
 	init_color(COLOR_DARK, 170, 170, 170);
 	init_color(COLOR_TITLE, 300, 300, 300);
+	init_color(COLOR_SELECTED, 200, 200, 200);
+	init_color(COLOR_CHOSEN, 400, 400, 400);
+	init_color(COLOR_ERROR, 1000, 0, 0);
 	init_color(COLOR_WHITE, 1000, 1000, 1000);
 	init_color(COLOR_RED, 1000, 0, 0);
 	init_color(COLOR_BLUE, 200, 200, 700);
@@ -44,6 +48,9 @@ void init(){
 	init_pair(PAINT_ARMOR, COLOR_BLUE, COLOR_BLACK);
 	init_pair(PAINT_BACKGROUND, COLOR_DARK, COLOR_BLACK);
 	init_pair(PAINT_TITLE, COLOR_TITLE, COLOR_BLACK);
+	init_pair(PAINT_SELECTION, COLOR_WHITE, COLOR_SELECTED);
+	init_pair(PAINT_ERROR, COLOR_ERROR, COLOR_SELECTED);
+	init_pair(PAINT_CHOSEN, COLOR_WHITE, COLOR_CHOSEN);
 
 	attrset(COLOR_PAIR(PAINT_DEFAULT));
 }
@@ -150,7 +157,7 @@ void printBackground(int lvl){
 	attroff(A_BOLD);
 }
 
-void printResourceBarLow(WINDOW* w, int health, double armor, int money, int points) {
+void printResourceBar(WINDOW* w, int health, double armor, int money, int points) {
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	box(w, 0, 0);
 
@@ -169,12 +176,8 @@ void printResourceBarLow(WINDOW* w, int health, double armor, int money, int poi
 	wprintw(w, "|> ");
 
 	mvwprintw(w, 4, COLS/2-56, "MONEY: <| %d $ |>  ", money);
-	mvwprintw(w, 5, COLS/2-57, "POINTS: <| %d |>  ", points);
-}
+	mvwprintw(w, 5, COLS/2-56, "LEVEL: <| %d |>  ", level);
+	mvwprintw(w, 6, COLS/2-61, "DIFFICULTY: <| %d |>  ", difficulty);
 
-void printResourceBar(WINDOW* w, int health, double armor, int money, int points, int level, int difficulty){
-	printResourceBarLow(w, health, armor, money, points);
-
-	mvwprintw(w, 6, COLS/2-56, "LEVEL: <| %d |>   ", level);
-	mvwprintw(w, 7, COLS/2-61, "DIFFICULTY: <| %d |>   ", difficulty);
+	wrefresh(w);
 }

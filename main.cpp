@@ -117,8 +117,9 @@ int main()
 						head = tmp->next;
 						delete tmp;
 					}
+					diff = numL/2;
 					numL = 1;
-					diff = M.count();
+					//diff = M.count();
 					head = addLevel(head, numL, diff);
 					currentLvl = head->lvl;
 					P.reset(currentLvl);
@@ -134,7 +135,6 @@ int main()
 			}else{
 				currentLvl->update(&P, deltaTime, &money, &points);
 				P.update(input, deltaTime);
-				money += currentLvl->updateCoin(&P); //??
 			}
 			
 			// OUTPUT

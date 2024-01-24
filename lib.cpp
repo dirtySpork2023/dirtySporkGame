@@ -157,7 +157,7 @@ void printBackground(int lvl){
 	attroff(A_BOLD);
 }
 
-void printResourceBar(WINDOW* w, int health, double armor, int money, int points) {
+void printResourceBar(WINDOW* w, int health, double armor, int money, int points, int level, int difficulty) {
 	wattrset(w, COLOR_PAIR(PAINT_DEFAULT));
 	box(w, 0, 0);
 

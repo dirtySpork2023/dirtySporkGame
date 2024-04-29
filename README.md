@@ -1,3 +1,4 @@
 ## dirtySporkGame
+progetto di programmazione
 C++ ASCII game
-per compilare si può usare il comando `make` e per eseguire `./game`
+`make` to compile and `./game` to execute
